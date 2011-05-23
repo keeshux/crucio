@@ -1,0 +1,44 @@
+#ifndef __WORD_COMPILER_H
+#define __WORD_COMPILER_H
+
+#include <algorithm>
+#include <iostream>
+#include <list>
+#include <set>
+#include <stack>
+#include <vector>
+
+#include "Backjumper.h"
+#include "Compiler.h"
+
+namespace crucio {
+	class WordCompiler : public Compiler {
+	public:
+		WordCompiler();
+
+	protected:
+		virtual void configure(const Walk&);
+		virtual void reset();
+		virtual bool compileFrom(const uint32_t);
+
+	private:
+
+		// internal objects
+		std::vector<std::set<uint32_t> > m_domains;
+		std::vector<uint32_t> m_order;
+		std::vector<uint32_t> m_revOrder;
+		std::vector<std::list<std::pair<uint32_t, WordCrossing> > > m_deps;
+		std::vector<std::list<std::pair<uint32_t, WordCrossing> > > m_revDeps;
+		Backjumper m_bj;
+
+		// subproblems
+		void choose(const uint32_t, std::set<uint32_t>* const, std::string* const);
+		bool assign(const uint32_t, const std::string&, std::string* const,
+				std::stack<std::pair<uint32_t, uint32_t> >* const,
+				std::set<uint32_t>* const);
+		void retire(const uint32_t, const std::string&,
+				std::stack<std::pair<uint32_t, uint32_t> >* const);
+	};
+}
+
+#endif

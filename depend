@@ -1,0 +1,28 @@
+Backjumper.o: src/Backjumper.cc src/Backjumper.h src/Model.h \
+  src/Dictionary.h src/common.h src/Grid.h src/Letter.h src/Word.h \
+  src/Walk.h
+Compiler.o: src/Compiler.cc src/Compiler.h src/Model.h src/Dictionary.h \
+  src/common.h src/Grid.h src/Letter.h src/Word.h src/Output.h \
+  src/endian.h src/Walk.h
+Dictionary.o: src/Dictionary.cc src/Dictionary.h src/common.h
+Grid.o: src/Grid.cc src/Grid.h src/common.h
+LetterCompiler.o: src/LetterCompiler.cc src/LetterCompiler.h \
+  src/Backjumper.h src/Model.h src/Dictionary.h src/common.h src/Grid.h \
+  src/Letter.h src/Word.h src/Walk.h src/Compiler.h src/Output.h \
+  src/endian.h
+Model.o: src/Model.cc src/Model.h src/Dictionary.h src/common.h \
+  src/Grid.h src/Letter.h src/Word.h
+Output.o: src/Output.cc src/Output.h src/endian.h src/Model.h \
+  src/Dictionary.h src/common.h src/Grid.h src/Letter.h src/Word.h
+Walk.o: src/Walk.cc src/Walk.h src/common.h src/Model.h src/Dictionary.h \
+  src/Grid.h src/Letter.h src/Word.h
+WordCompiler.o: src/WordCompiler.cc src/WordCompiler.h src/Backjumper.h \
+  src/Model.h src/Dictionary.h src/common.h src/Grid.h src/Letter.h \
+  src/Word.h src/Walk.h src/Compiler.h src/Output.h src/endian.h
+crucio.o: src/crucio.cc src/crucio.h src/Dictionary.h src/common.h \
+  src/Grid.h src/LetterCompiler.h src/Backjumper.h src/Model.h \
+  src/Letter.h src/Word.h src/Walk.h src/Compiler.h src/Output.h \
+  src/endian.h src/WordCompiler.h
+cruciotex.o: src/cruciotex.cc src/cruciotex.h src/endian.h src/Output.h \
+  src/Model.h src/Dictionary.h src/common.h src/Grid.h src/Letter.h \
+  src/Word.h
