@@ -9,118 +9,118 @@
 #include "Grid.h"
 
 namespace crucio {
-	class Word {
-	public:
-		Word(const Dictionary* const dict, const Definition* defRef) :
-				m_dictionary(dict),
-				m_defRef(defRef),
-				m_mask(defRef->getLength(),
-						Dictionary::ANY_CHAR),
-				m_wildcards(defRef->getLength()),
-				m_letterMasks(defRef->getLength(),
-						ABMask(Dictionary::ANY_MASK)),
-				m_matchings(dict->createMatchingResult(defRef->getLength())),
-				m_excluded() {
-		}
-		~Word() {
-			m_dictionary->destroyMatchingResult(m_matchings);
-		}
+    class Word {
+    public:
+        Word(const Dictionary* const dict, const Definition* defRef) :
+                m_dictionary(dict),
+                m_defRef(defRef),
+                m_mask(defRef->getLength(),
+                        Dictionary::ANY_CHAR),
+                m_wildcards(defRef->getLength()),
+                m_letterMasks(defRef->getLength(),
+                        ABMask(Dictionary::ANY_MASK)),
+                m_matchings(dict->createMatchingResult(defRef->getLength())),
+                m_excluded() {
+        }
+        ~Word() {
+            m_dictionary->destroyMatchingResult(m_matchings);
+        }
 
-		// referred definition
-		const Definition* getDefinition() const {
-			return m_defRef;
-		}
-		uint32_t getLength() const {
-			return m_defRef->getLength();
-		}
+        // referred definition
+        const Definition* getDefinition() const {
+            return m_defRef;
+        }
+        uint32_t getLength() const {
+            return m_defRef->getLength();
+        }
 
-		// assignment
-		const std::string& get() const {
-			return m_mask;
-		}
-		void set(const std::string& mask) {
-			m_mask = mask;
-			m_wildcards = count(m_mask.begin(), m_mask.end(),
-					Dictionary::ANY_CHAR);
-		}
-		void unset() {
-			std::fill(m_mask.begin(), m_mask.end(), Dictionary::ANY_CHAR);
-			m_wildcards = m_mask.length();
-		}
+        // assignment
+        const std::string& get() const {
+            return m_mask;
+        }
+        void set(const std::string& mask) {
+            m_mask = mask;
+            m_wildcards = count(m_mask.begin(), m_mask.end(),
+                    Dictionary::ANY_CHAR);
+        }
+        void unset() {
+            std::fill(m_mask.begin(), m_mask.end(), Dictionary::ANY_CHAR);
+            m_wildcards = m_mask.length();
+        }
 
-		// pattern I/O
-		char getAt(const uint32_t i) const {
-			return m_mask[i];
-		}
-		void setAt(const uint32_t i, const char ch) {
-			if (m_mask[i] == Dictionary::ANY_CHAR) {
-				--m_wildcards;
-			}
-			m_mask[i] = ch;
-		}
-		void unsetAt(const uint32_t i) {
-			if (m_mask[i] != Dictionary::ANY_CHAR) {
-				++m_wildcards;
-			}
-			m_mask[i] = Dictionary::ANY_CHAR;
-		}
+        // pattern I/O
+        char getAt(const uint32_t i) const {
+            return m_mask[i];
+        }
+        void setAt(const uint32_t i, const char ch) {
+            if (m_mask[i] == Dictionary::ANY_CHAR) {
+                --m_wildcards;
+            }
+            m_mask[i] = ch;
+        }
+        void unsetAt(const uint32_t i) {
+            if (m_mask[i] != Dictionary::ANY_CHAR) {
+                ++m_wildcards;
+            }
+            m_mask[i] = Dictionary::ANY_CHAR;
+        }
 
-		// rematches pattern and updates letters masks
-		void doMatch(const bool updateLetters = false) {
-			m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
+        // rematches pattern and updates letters masks
+        void doMatch(const bool updateLetters = false) {
+            m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
 
-			// updates letters masks
-			if (updateLetters) {
-				m_dictionary->getPossible(m_matchings, &m_letterMasks);
-			}
-		}
+            // updates letters masks
+            if (updateLetters) {
+                m_dictionary->getPossible(m_matchings, &m_letterMasks);
+            }
+        }
 
-		// exclusion list management for doMatch()
-		void exclude(const uint32_t id) {
-			m_excluded.insert(id);
-		}
-		void include(const uint32_t id) {
-			m_excluded.erase(id);
-		}
+        // exclusion list management for doMatch()
+        void exclude(const uint32_t id) {
+            m_excluded.insert(id);
+        }
+        void include(const uint32_t id) {
+            m_excluded.erase(id);
+        }
 
-		// current domains
-		const std::vector<ABMask>& getAllowed() const {
-			return m_letterMasks;
-		}
-		ABMask getAllowed(const uint32_t i) const {
-			return m_letterMasks[i];
-		}
+        // current domains
+        const std::vector<ABMask>& getAllowed() const {
+            return m_letterMasks;
+        }
+        ABMask getAllowed(const uint32_t i) const {
+            return m_letterMasks[i];
+        }
 
-		// current matchings (from last doMatch())
-		const Dictionary::MatchingResult* getMatchingResult() const {
-			return m_matchings;
-		}
+        // current matchings (from last doMatch())
+        const Dictionary::MatchingResult* getMatchingResult() const {
+            return m_matchings;
+        }
 
-		// true if one only matching (implies pattern is a fixed word)
-		bool isComplete() const {
-			return ((m_wildcards == 0) && (m_matchings->getSize() == 1));
-		}
+        // true if one only matching (implies pattern is a fixed word)
+        bool isComplete() const {
+            return ((m_wildcards == 0) && (m_matchings->getSize() == 1));
+        }
 
-		// retrieves first matching word (only useful if isComplete())
-		const uint32_t getFirstId() const {
-			return m_matchings->getFirstWordId();
-		}
-		const std::string& getFirst() const {
-			return m_matchings->getFirstWord();
-		}
+        // retrieves first matching word (only useful if isComplete())
+        const uint32_t getFirstId() const {
+            return m_matchings->getFirstWordId();
+        }
+        const std::string& getFirst() const {
+            return m_matchings->getFirstWord();
+        }
 
-	private:
+    private:
 
-		// dictionary and definition references
-		const Dictionary* const m_dictionary;
-		const Definition* const m_defRef;
+        // dictionary and definition references
+        const Dictionary* const m_dictionary;
+        const Definition* const m_defRef;
 
-		std::string m_mask;
-		uint32_t m_wildcards;
-		std::vector<ABMask> m_letterMasks;
-		Dictionary::MatchingResult* m_matchings;
-		std::set<uint32_t> m_excluded;
-	};
+        std::string m_mask;
+        uint32_t m_wildcards;
+        std::vector<ABMask> m_letterMasks;
+        Dictionary::MatchingResult* m_matchings;
+        std::set<uint32_t> m_excluded;
+    };
 }
 
 #endif
