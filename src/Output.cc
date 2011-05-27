@@ -545,7 +545,7 @@ void Output::printLatex(ostream& out, const bool solution,
                 find_if(m_defsData.begin(), m_defsData.end(), IsDown());
 
         // prints across
-        cluesOut << "\t\\begin{PuzzleClues}{\\textbf{Orizzontali --}}" << endl;
+        cluesOut << "\t\\begin{PuzzleClues}{\\textbf{Across --}}" << endl;
         for (defIt = m_defsData.begin(); defIt != dDefIt; ++defIt) {
             const DefinitionData& dData = *defIt;
             cluesOut << "\t\t\\Clue{" << dData.getNumber() << "}{" <<
@@ -554,7 +554,7 @@ void Output::printLatex(ostream& out, const bool solution,
         cluesOut << "\t\\end{PuzzleClues}" << endl;
 
         // prints down
-        cluesOut << "\t\\begin{PuzzleClues}{\\textbf{Verticali --}}" << endl;
+        cluesOut << "\t\\begin{PuzzleClues}{\\textbf{Down --}}" << endl;
         for (; defIt != m_defsData.end(); ++defIt) {
             const DefinitionData& dData = *defIt;
             cluesOut << "\t\t\\Clue{" << dData.getNumber() << "}{" <<
@@ -579,7 +579,7 @@ void Output::printLatex(ostream& out, const bool solution,
     out << "\\usepackage[small]{cwpuzzle}" << endl;
     out << "\\renewcommand{\\PuzzleBlackBox}{" \
             "\\rule{.75\\PuzzleUnitlength}{.75\\PuzzleUnitlength}}" << endl;
-    out << "\\renewcommand{\\PuzzleWordsText}[1]{\\textbf{#1 lettere} -- }" <<
+    out << "\\renewcommand{\\PuzzleWordsText}[1]{\\textbf{#1 letters} -- }" <<
             endl;
 
     // begin
