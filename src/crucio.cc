@@ -9,6 +9,10 @@ int main(int argc, char* argv[]) {
     // defaults to failure
     int status = -1;
 
+    // compiler and walk
+    Compiler* inCpl = 0;
+    Walk* inWalk = 0;
+
     try {
 
         // command line object
@@ -98,7 +102,6 @@ int main(int argc, char* argv[]) {
         }
 
         // compiler setup
-        Compiler* inCpl = 0;
         if (fillArg.getValue() == "letter") {
             inCpl = new LetterCompiler();
         } else if (fillArg.getValue() == "word") {
@@ -109,11 +112,12 @@ int main(int argc, char* argv[]) {
         inCpl->setVerbose(verboseArg.getValue(), &cout);
 
         // walk selection
-        const Walk* inWalk = 0;
         if (walkArg.getValue() == "bfs") {
             inWalk = new BFSWalk();
         } else if (walkArg.getValue() == "dfs") {
             inWalk = new DFSWalk();
+        } else {
+            // assert(false)
         }
 
         // pseudorandom generator initialization
@@ -158,18 +162,22 @@ int main(int argc, char* argv[]) {
         }
         }
 
-        // deallocates compiler and walk
-        delete inCpl;
-        delete inWalk;
-
 #ifndef USE_BENCHMARK
-        // closes output file
+        // closes output file (FIXME: leaks here on CrucioException)
         outFile.close();
 #endif
     } catch (ArgException& e) {
         cerr << "error: " << e.error() << " for arg " << e.argId() << endl;
     } catch (CrucioException& e) {
         cerr << e.what() << endl;
+    }
+
+    // deallocates compiler and walk
+    if (inCpl) {
+        delete inCpl;
+    }
+    if (inWalk) {
+        delete inWalk;
     }
 
     // exit status
