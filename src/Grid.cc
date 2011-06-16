@@ -130,6 +130,23 @@ void Definition::calculateCrossingDefinitions() {
 
 /* Grid */
 
+Grid::Grid(const char** charsGrid,
+           const uint32_t rows, const uint32_t columns) :
+        m_filename(""),
+        m_rows(0),
+        m_columns(0),
+        m_whiteCells(0),
+        m_blackCells(0),
+        m_fixedCells(0),
+        m_words(0),
+        m_crossings(0),
+        m_cells(0),
+        m_acrossDefinitions(),
+        m_downDefinitions() {
+
+    initGrid(charsGrid, rows, columns);
+}
+
 Grid::Grid(const string& filename) :
         m_filename(filename),
         m_rows(0),
@@ -148,93 +165,113 @@ Grid::Grid(const string& filename) :
     string rowLine, columnLine;
     string line;
     istringstream* dataIn = 0;
-
+    uint32_t rows, columns;
+    
     // temporary characters matrix
-    vector<vector<char> > charsGrid;
-
-    // cells indexes and definitions iterator
+    char** charsGrid;
+    
+    // cells indexes
     uint32_t i, j;
-    vector<Definition*>::iterator defIt;
-
+    
     // opens grid file
     gridIn.open(filename.c_str());
     if (!gridIn.is_open()) {
         throw GridException("grid: unable to open grid file");
     }
-
-    // fills matrices through file content
-    try {
-
-        // reads rows and columns count
-        if (gridIn.eof()) {
-            throw GridException("grid: unexpected EOF");
+    
+    // reads rows and columns count
+    if (gridIn.eof()) {
+        throw GridException("grid: unexpected EOF");
+    }
+    getline(gridIn, rowLine);
+    if (gridIn.eof()) {
+        throw GridException("grid: unexpected EOF");
+    }
+    getline(gridIn, columnLine);
+    
+    // converts strings to integers
+    dataIn = new istringstream(rowLine);
+    *dataIn >> rows;
+    delete dataIn;
+    dataIn = new istringstream(columnLine);
+    *dataIn >> columns;
+    delete dataIn;
+    
+    // size range check
+    if ((rows < MIN_SIZE) || (rows > MAX_SIZE) ||
+        (columns < MIN_SIZE) || (columns > MAX_SIZE)) {
+        throw GridException("grid: size out of [MIN_SIZE, MAX_SIZE]");
+    }
+    
+    // allocates a (rows, columns) chars matrix
+    charsGrid = (char**) malloc(rows * sizeof(char*));
+    for (i = 0; i < rows; ++i) {
+        charsGrid[i] = (char*) malloc(columns * sizeof(char));
+        for (j = 0; j < columns; ++j) {
+            charsGrid[i][j] = '\0';
         }
-        getline(gridIn, rowLine);
-        if (gridIn.eof()) {
-            throw GridException("grid: unexpected EOF");
-        }
-        getline(gridIn, columnLine);
-
-        // converts strings to integers
-        dataIn = new istringstream(rowLine);
-        *dataIn >> m_rows;
-        delete dataIn;
-        dataIn = new istringstream(columnLine);
-        *dataIn >> m_columns;
-        delete dataIn;
-
-        // size range check
-        if ((m_rows < MIN_SIZE) || (m_rows > MAX_SIZE) ||
-                (m_columns < MIN_SIZE) || (m_columns > MAX_SIZE)) {
-            throw GridException("grid: size out of [MIN_SIZE, MAX_SIZE]");
-        }
-
-        // allocates a (rows, columns) chars matrix
-        charsGrid.resize(m_rows);
-        for (i = 0; i < m_rows; ++i) {
-            charsGrid[i].resize(m_columns);
-            for (j = 0; j < m_columns; ++j) {
-                charsGrid[i][j] = '\0';
-            }
-        }
-
-        // reads by row
-        i = 0;
-        while (getline(gridIn, line)) {
-            if (i == m_rows) {
-                throw GridException("grid: bad rows count");
-            }
-            if (line.length() != m_columns) {
-                throw GridException("grid: bad row length");
-            }
-
-            // current row
-            j = 0;
-            string::const_iterator rowIt;
-            for (rowIt = line.begin(); rowIt != line.end(); ++rowIt) {
-                const char ch = *rowIt;
-
-                // checks format
-                if (!Cell::isLegal(ch)) {
-                    throw GridException("grid: illegal character");
-                }
-
-                // stores character
-                charsGrid[i][j] = ch;
-
-                // next column
-                ++j;
-            }
-
-            // next row
-            ++i;
-        }
-        if (i != m_rows) {
+    }
+    
+    // reads by row
+    i = 0;
+    while (getline(gridIn, line)) {
+        if (i == rows) {
             throw GridException("grid: bad rows count");
         }
+        if (line.length() != columns) {
+            throw GridException("grid: bad row length");
+        }
+        
+        // current row
+        j = 0;
+        string::const_iterator rowIt;
+        for (rowIt = line.begin(); rowIt != line.end(); ++rowIt) {
+            const char ch = *rowIt;
+            
+            // checks format
+            if (!Cell::isLegal(ch)) {
+                throw GridException("grid: illegal character");
+            }
+            
+            // stores character
+            charsGrid[i][j] = ch;
+            
+            // next column
+            ++j;
+        }
+        
+        // next row
+        ++i;
+    }
+    if (i != rows) {
+        throw GridException("grid: bad rows count");
+    }
+    
+    // closes file
+    gridIn.close();
+    
+    // complete initialization
+    initGrid((const char**) charsGrid, rows, columns);
+    
+    // deallocate temporary matrix
+    for (i = 0; i < rows; ++i) {
+        free(charsGrid[i]);
+    }
+    free(charsGrid);
+}
 
-        // closes file
-        gridIn.close();
+void Grid::initGrid(const char** charsGrid,
+                    const uint32_t rows, const uint32_t columns) {
+
+    // save size
+    m_rows = rows;
+    m_columns = columns;
+
+    // cells indexes and definitions iterator
+    uint32_t i, j;
+    vector<Definition*>::iterator defIt;
+
+    try {
 
         // allocates a matrix to contain detailed info on each cell
         m_cells.resize(m_rows);

@@ -206,6 +206,9 @@ namespace crucio {
         static const uint32_t MIN_SIZE = 2;
         static const uint32_t MAX_SIZE = 666;
 
+        Grid(const uint32_t rows, const uint32_t columns);
+        Grid(const char** charsGrid,
+             const uint32_t rows, const uint32_t columns);
         Grid(const std::string&);
         ~Grid();
 
@@ -284,6 +287,8 @@ namespace crucio {
         }
 
     private:
+        void initGrid(const char** charsGrid,
+                      const uint32_t rows, const uint32_t columns);
         static uint32_t getReachableFrom(const Cell* const,
                 std::set<const Cell*, CellCompare>* const);
 
