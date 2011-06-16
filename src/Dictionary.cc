@@ -67,15 +67,9 @@ Dictionary::Dictionary(const set<string>& words) :
     }
 }
 
-Dictionary::Dictionary(const string& filename) :
+Dictionary::Dictionary(const string& filename, const size_t reserved) :
         m_filename(filename),
         m_index(MIN_LENGTH, MAX_LENGTH) {
-
-    // temporary string vector to load words
-    vector<string> sortedWords;
-
-    // reserves 500k entries
-    sortedWords.reserve(500000);
 
     // opens words list file
     ifstream wordsIn(filename.c_str());
@@ -83,10 +77,16 @@ Dictionary::Dictionary(const string& filename) :
         throw DictionaryException("dictionary: unable to open words list");
     }
 
+    // temporary string vector (reserve space for efficiency)
+    vector<string> sortedWords;
+    sortedWords.reserve(reserved);
+
 #ifdef USE_BENCHMARK
     // loads words directly (a word each line)
     string word;
     while (getline(wordsIn, word)) {
+
+        // checks word's length and format
         if (isValidWord(word)) {
             for_each(word.begin(), word.end(), MakeUpper());
 

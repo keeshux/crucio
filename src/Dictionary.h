@@ -263,7 +263,7 @@ namespace crucio {
         static const ABMask ANY_MASK;
 
         Dictionary(const std::set<std::string>&);
-        Dictionary(const std::string&);
+        Dictionary(const std::string&, const size_t = 200000);
         ~Dictionary();
 
         const std::string& getFilename() const {
