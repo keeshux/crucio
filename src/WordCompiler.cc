@@ -16,7 +16,8 @@ WordCompiler::WordCompiler() :
 }
 
 void WordCompiler::configure(const Walk& w) {
-    uint32_t wi, ordWi;
+//    uint32_t wi, ordWi;
+    uint32_t wi;
 
     // words count
     const uint32_t wordsNum = m_model->getWordsNum();
@@ -32,8 +33,8 @@ void WordCompiler::configure(const Walk& w) {
     // direct and reverse dependencies
     for (wi = 0; wi < wordsNum; ++wi) {
 
-        // current word index within ordering
-        ordWi = m_revOrder[wi];
+//        // current word index within ordering
+//        ordWi = m_revOrder[wi];
 
         // computes dependencies from related words
         const list<pair<uint32_t, WordCrossing> >& neighbours =

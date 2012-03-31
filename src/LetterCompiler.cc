@@ -16,7 +16,8 @@ LetterCompiler::LetterCompiler() :
 }
 
 void LetterCompiler::configure(const Walk& w) {
-    uint32_t li, ordLi;
+//    uint32_t li, ordLi;
+    uint32_t li;
 
     // letters count
     const uint32_t lettersNum = m_model->getLettersNum();
@@ -32,8 +33,8 @@ void LetterCompiler::configure(const Walk& w) {
     // direct and reverse dependencies
     for (li = 0; li < lettersNum; ++li) {
 
-        // current letter index within ordering
-        ordLi = m_revOrder[li];
+//        // current letter index within ordering
+//        ordLi = m_revOrder[li];
 
         // computes dependencies from related letters
         const list<pair<uint32_t, LetterPosition> >& neighbours =
