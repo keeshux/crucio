@@ -87,7 +87,7 @@ Dictionary::Dictionary(const set<string>& words) :
     }
 }
 
-Dictionary::Dictionary(const string& filename, const size_t reserved) :
+Dictionary::Dictionary(const string& filename) :
         m_filename(filename),
         m_index(MIN_LENGTH, MAX_LENGTH) {
 
@@ -99,7 +99,13 @@ Dictionary::Dictionary(const string& filename, const size_t reserved) :
 
     // temporary string vector (reserve space for efficiency)
     vector<string> sortedWords;
+
+    // reserve enough space
+    const uint32_t reserved = count(istreambuf_iterator<char>(wordsIn), istreambuf_iterator<char>(), '\n');
     sortedWords.reserve(reserved);
+
+    // reset file pointer
+    wordsIn.seekg(0, ios::beg);
 
 #ifdef USE_BENCHMARK
     // loads words directly (a word each line)
