@@ -107,6 +107,9 @@ Dictionary::Dictionary(const string& filename) :
     // reset file pointer
     wordsIn.seekg(0, ios::beg);
 
+    // uppercase
+    MakeUpper upper;
+
 #ifdef USE_BENCHMARK
     // loads words directly (a word each line)
     string word;
@@ -114,7 +117,7 @@ Dictionary::Dictionary(const string& filename) :
 
         // checks word's length and format
         if (isValidWord(word)) {
-            for_each(word.begin(), word.end(), MakeUpper());
+            for_each(word.begin(), word.end(), upper);
 
             // selects wordset for insertion
             WordSet* const ws = m_index.getWordSet(word.length());
@@ -133,7 +136,7 @@ Dictionary::Dictionary(const string& filename) :
         if (isValidWord(word)) {
 
             // IMPORTANT: turns to uppercase
-            for_each(word.begin(), word.end(), MakeUpper());
+            for_each(word.begin(), word.end(), upper);
 
             // adds word into the vector
             sortedWords.push_back(word);
