@@ -125,7 +125,7 @@ namespace crucio {
         const uint32_t getFirstId() const {
             return m_matchings->getFirstWordId();
         }
-        const std::string& getFirst() const {
+        const std::string getFirst() const {
             return m_matchings->getFirstWord();
         }
 
