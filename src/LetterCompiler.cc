@@ -23,8 +23,8 @@
 using namespace crucio;
 using namespace std;
 
-#define USE_BJ
-#define USE_BJ_FAST
+#define CRUCIO_BJ
+#define CRUCIO_BJ_FAST
 
 LetterCompiler::LetterCompiler() :
         m_domains(),
@@ -152,7 +152,7 @@ bool LetterCompiler::compileFrom(const uint32_t i) {
         // removal stack through forward checking
         stack<pair<uint32_t, ABMask> > remStack;
 
-#ifdef USE_BJ_FAST
+#ifdef CRUCIO_BJ_FAST
         // FC failures ignored
         set<uint32_t>* const failedPtr = 0;
 #else
@@ -191,7 +191,7 @@ bool LetterCompiler::compileFrom(const uint32_t i) {
                 // retires variable
                 retire(li, &remStack);
 
-#ifdef USE_BJ
+#ifdef CRUCIO_BJ
                 // returns if there are no more jumps or last
                 // jump gets past current variable
                 if (m_bj.isExhausted() ||
@@ -208,7 +208,7 @@ bool LetterCompiler::compileFrom(const uint32_t i) {
 
         // algorithm fails iff first variable backtracks
         if (i > 0) {
-#ifdef USE_BJ
+#ifdef CRUCIO_BJ
             m_bj.jump(i, failedPtr);
 #endif
 
@@ -226,7 +226,7 @@ bool LetterCompiler::compileFrom(const uint32_t i) {
 char LetterCompiler::choose(ABMask* const domainMask) {
     uint32_t vi = 0;
 
-#ifdef USE_BENCHMARK
+#ifdef CRUCIO_BENCHMARK
     // ordered choice, no randomness
     while (!(*domainMask)[vi]) {
         ++vi;
@@ -349,7 +349,7 @@ bool LetterCompiler::assign(const uint32_t li, const char v,
 
                     // an empty domain implies failure
                     if (slwDom->none()) {
-#ifndef USE_BJ_FAST
+#ifndef CRUCIO_BJ_FAST
                         // adds failed variable order
                         failed->insert(m_revOrder[slwLi]);
 #endif
@@ -394,7 +394,7 @@ bool LetterCompiler::assign(const uint32_t li, const char v,
 
         // an empty domain implies failure
         if (dDom->none()) {
-#ifndef USE_BJ_FAST
+#ifndef CRUCIO_BJ_FAST
             // adds failed variable order
             failed->insert(m_revOrder[dLi]);
 #endif

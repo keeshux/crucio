@@ -59,7 +59,7 @@ namespace crucio {
 
     /* dictionary implementation */
 
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
     // wordset of fixed length
     class WordSet {
     public:
@@ -427,7 +427,7 @@ namespace crucio {
             }
         };
 
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
         class MinSizePtr {
         public:
             bool operator()(const IDArray* const v1, const IDArray* const v2) const {

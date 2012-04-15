@@ -45,7 +45,7 @@ bool isValidWord(const std::string& word) {
 
 /* WordSet */
 
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
 
 WordSet::WordSet(const uint32_t len) : m_length(len), m_size(0), m_words(NULL), m_pointers(NULL),
                                        m_cpBuckets(m_length * ALPHABET_SIZE), m_cpMatrix(NULL) {
@@ -211,7 +211,7 @@ Dictionary::Dictionary(const set<string>& words) : m_filename(), m_index(MIN_LEN
     // uppercase
     MakeUpper upper;
 
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
     map<uint32_t, vector<string> > wordsets;
     
     // loads words into vector (a word each line)
@@ -293,7 +293,7 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(M
     // uppercase
     MakeUpper upper;
 
-#ifdef USE_BENCHMARK
+#ifdef CRUCIO_BENCHMARK
     // loads words directly (a word each line)
     string word;
     while (getline(wordsIn, word)) {
@@ -313,7 +313,7 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(M
     // closes file
     wordsIn.close();
 #else
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
     map<uint32_t, vector<string> > wordsets;
 
     // loads words into vector (a word each line)
@@ -404,7 +404,7 @@ bool Dictionary::getMatchings(const string& pattern,
 
     // single letters matching
     const WordSet* const ws = m_index.getWordSet(len);
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
     list<const IDArray* > cpVectors;
 #else
     list<const vector<uint32_t>* > cpVectors;
@@ -432,7 +432,7 @@ bool Dictionary::getMatchings(const string& pattern,
         return true;
     }
 
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
     // intersects matchings; set intersection is at most large as smallest set,
     // so other sets are filtered on this one; smallest set search cost is a
     // good tradeoff for subsequent computation
@@ -555,7 +555,7 @@ bool Dictionary::getPossible(const MatchingResult* const res,
         vector<uint32_t>::const_iterator idIt;
         for (idIt = ids.begin(); idIt != ids.end(); ++idIt) {
             const uint32_t id = *idIt;
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
             const char* word = ws->getWordPtr(id);
 #else
             const string& word = ws->getWord(id);
@@ -608,7 +608,7 @@ bool Dictionary::getPossible(const MatchingResult* const res,
         vector<uint32_t>::const_iterator idIt;
         for (idIt = ids.begin(); idIt != ids.end(); ++idIt) {
             const uint32_t id = *idIt;
-#ifdef USE_ARRAYS
+#ifdef CRUCIO_C_ARRAYS
             const char* word = ws->getWordPtr(id);
 #else
             const string& word = ws->getWord(id);
