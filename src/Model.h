@@ -87,6 +87,10 @@ namespace crucio {
             return m_grid;
         }
 
+        // domains
+        void computeLetterDomains();
+        void computeWordDomains();
+
         // letters
         uint32_t getLettersNum() const {
             return m_letters.size();

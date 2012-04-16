@@ -135,6 +135,14 @@ void WordCompiler::reset() {
     m_domains = m_model->getInitWordsDomains();
 }
 
+Compiler::Result WordCompiler::compile(Model* const m, const Walk& w) {
+    
+    // use word-based domains
+    m->computeWordDomains();
+
+    return Compiler::compile(m, w);
+}
+
 bool WordCompiler::compileFrom(const uint32_t i) {
 
     // all variables instantiated?

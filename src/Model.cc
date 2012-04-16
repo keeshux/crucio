@@ -300,38 +300,20 @@ Model::Model(const Dictionary* const d, const Grid* const g) :
         }
     }
 
-    // initial domains
+    // first matchings
     for (wi = 0; wi < wordsNum; ++wi) {
         Word* const w = m_words[wi];
-        const uint32_t wLen = w->getLength();
-
+        
         // calculates words/letters domains
         w->doMatch(true);
-
-        // word domain
-        set<uint32_t>* const wDom = &m_initWordsDomains[wi];
-        const Dictionary::MatchingResult* const wRes = w->getMatchingResult();
-        wRes->getIdsUnion(wDom);
-
-        // empty word domain
-        if (!m_overConstrained) {
-            m_overConstrained = wDom->empty();
-        }
-
-        // updates domains of owned letters (initially ANY_MASK)
-        const vector<uint32_t>& wiLetters = m_wordsLetters[wi];
-        for (pos = 0; pos < wLen; ++pos) {
-            const uint32_t wLi = wiLetters[pos];
-            ABMask* const wlDom = &m_initLettersDomains[wLi];
-
-            // intersects domain
-            *wlDom &= w->getAllowed(pos);
-
-            // empty letter domain
-            if (!m_overConstrained) {
-                m_overConstrained = wlDom->none();
-            }
-        }
+        
+        // empty domain
+//        m_overConstrained |= w->getAllowed()->empty();
+        
+//        // XXX: shortcut
+//        if (m_overConstrained) {
+//            return;
+//        }
     }
 }
 
@@ -347,5 +329,49 @@ Model::~Model() {
     vector<Word*>::iterator wIt;
     for (wIt = m_words.begin(); wIt != m_words.end(); ++wIt) {
         delete *wIt;
+    }
+}
+
+void Model::computeLetterDomains() {
+    const int wordsNum = m_words.size();
+    int wi;
+    uint32_t pos;
+
+    // initial domains
+    for (wi = 0; wi < wordsNum; ++wi) {
+        Word* const w = m_words[wi];
+        const uint32_t wLen = w->getLength();
+        
+        // updates domains of owned letters (initially ANY_MASK)
+        const vector<uint32_t>& wiLetters = m_wordsLetters[wi];
+        for (pos = 0; pos < wLen; ++pos) {
+            const uint32_t wLi = wiLetters[pos];
+            ABMask* const wlDom = &m_initLettersDomains[wLi];
+            
+            // intersects domain
+            *wlDom &= w->getAllowed(pos);
+            
+            // empty letter domain
+            m_overConstrained |= wlDom->none();
+        }
+    }
+}
+
+// WARNING: very high memory usage
+void Model::computeWordDomains() {
+    const int wordsNum = m_words.size();
+    int wi;
+    
+    // initial domains
+    for (wi = 0; wi < wordsNum; ++wi) {
+        Word* const w = m_words[wi];
+        
+        // word domain
+        set<uint32_t>* const wDom = &m_initWordsDomains[wi];
+        const Dictionary::MatchingResult* const wRes = w->getMatchingResult();
+        wRes->getIdsUnion(wDom);
+        
+        // empty word domain
+        m_overConstrained |= wDom->empty();
     }
 }

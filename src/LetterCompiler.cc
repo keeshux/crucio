@@ -133,6 +133,14 @@ void LetterCompiler::reset() {
     m_domains = m_model->getInitLettersDomains();
 }
 
+Compiler::Result LetterCompiler::compile(Model* const m, const Walk& w) {
+
+    // use letter-based domains
+    m->computeLetterDomains();
+    
+    return Compiler::compile(m, w);
+}
+
 bool LetterCompiler::compileFrom(const uint32_t i) {
 
     // all variables instantiated?
