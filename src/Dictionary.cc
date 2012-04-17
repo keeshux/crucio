@@ -84,7 +84,7 @@ void WordSet::load(const vector<string>& words) {
     vector<string>::const_iterator wIt;
     for (wIt = words.begin(); wIt != words.end(); ++wIt) {
         const string& word = *wIt;
-        const size_t len = word.size();
+        const size_t len = word.length();
 
         // words MUST have fixed length
         if (len != m_length) {
@@ -249,7 +249,7 @@ Dictionary::Dictionary(const set<string>& words) : m_filename(), m_index(MIN_LEN
         WordSet *ws = m_index.getWordSet(length);
         ws->load(subwords);
         
-        cout << "length " << length << " = " << subwords.size() << " words (" << ws->getSize() << " loaded)" << endl;
+//        cout << "length " << length << " = " << subwords.size() << " words (" << ws->getSize() << " loaded)" << endl;
     }
 #else
     // loads words
@@ -280,24 +280,37 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(M
         throw DictionaryException("dictionary: unable to open words list");
     }
 
-    // temporary string vector (reserve space for efficiency)
-    vector<string> sortedWords;
-
-    // reserve enough space
-    const uint32_t reserved = count(istreambuf_iterator<char>(wordsIn), istreambuf_iterator<char>(), '\n');
-    sortedWords.reserve(reserved);
-
-    // reset file pointer
-    wordsIn.seekg(0, ios::beg);
-
     // uppercase
     MakeUpper upper;
 
+//    const time_t timeBegin = time(NULL);
+
 #ifdef CRUCIO_C_ARRAYS
-    map<uint32_t, vector<string> > wordsets;
+    map<uint32_t, size_t> wordCount;
+    map<uint32_t, vector<string>* > wordSets;
+    string word;
+
+    // count words by length
+    while (getline(wordsIn, word)) {
+
+        // checks word's length and format
+        if (isValidWord(word)) {
+            const size_t len = word.length();
+            ++wordCount[len];
+        }
+    }
+
+//    cout << "non-empty lenghts = " << wordCount.size() << endl;
+//    map<uint32_t, size_t>::const_iterator wcIt;
+//    for (wcIt = wordCount.begin(); wcIt != wordCount.end(); ++wcIt) {
+//        cout << "predicted count for length " << wcIt->first << " = " << wcIt->second << " words" << endl;
+//    }
+
+    // reset file pointer
+    wordsIn.clear();
+    wordsIn.seekg(0, ios::beg);
 
     // loads words into vector (a word each line)
-    string word;
     while (getline(wordsIn, word)) {
         
         // checks word's length and format
@@ -308,11 +321,14 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(M
 
             // put into same length set (create if non-existing)
             const size_t len = word.length();
-            map<uint32_t, vector<string> >::iterator refSet = wordsets.find(word.length());
-            if (refSet == wordsets.end()) {
-                refSet = wordsets.insert(make_pair(len, vector<string>())).first;
+            map<uint32_t, vector<string>* >::iterator refSet = wordSets.find(len);
+            if (refSet == wordSets.end()) {
+                vector<string>* subwords = new vector<string>();
+                subwords->reserve(wordCount[len]);
+
+                refSet = wordSets.insert(make_pair(len, subwords)).first;
             }
-            refSet->second.push_back(word);
+            refSet->second->push_back(word);
         }
     }
     
@@ -320,24 +336,39 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(M
     wordsIn.close();
 
     // load word sets
-    map<uint32_t, vector<string> >::iterator refSet;
-    for (refSet = wordsets.begin(); refSet != wordsets.end(); ++refSet) {
-        const uint32_t length = refSet->first;
-        vector<string>& subwords = refSet->second;
+    map<uint32_t, vector<string>* >::iterator refSet;
+    for (refSet = wordSets.begin(); refSet != wordSets.end(); ++refSet) {
+        const uint32_t len = refSet->first;
+        vector<string>* subwords = refSet->second;
 
         // never count on an already sorted-and-unique word list (in order to do binary search)
-        sort(subwords.begin(), subwords.end());
-        unique(subwords.begin(), subwords.end());
+        sort(subwords->begin(), subwords->end());
+        unique(subwords->begin(), subwords->end());
 
         // load into word set
-        WordSet *ws = m_index.getWordSet(length);
-        ws->load(subwords);
+        WordSet *ws = m_index.getWordSet(len);
+        ws->load(*subwords);
 
-        cout << "length " << length << " = " << subwords.size() << " words (" << ws->getSize() << " loaded)" << endl;
+//        cout << "length " << len << " = " << subwords->size() << " words (" << ws->getSize() << " loaded)" << endl;
+
+        // release temporary vector immediately afterwards
+        // reduces overall memory usage, there's no need to
+        // keep all of them in memory at the same time
+        delete subwords;
     }
 #else
-    // loads words into vector (a word each line)
+    vector<string> sortedWords;
     string word;
+
+    // reserve enough space (for efficiency)
+    const uint32_t reserved = count(istreambuf_iterator<char>(wordsIn), istreambuf_iterator<char>(), '\n');
+    sortedWords.reserve(reserved);
+
+    // reset file pointer
+    wordsIn.clear();
+    wordsIn.seekg(0, ios::beg);
+    
+    // loads words into vector (a word each line)
     while (getline(wordsIn, word)) {
 
         // checks word's length and format
@@ -376,6 +407,10 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(M
     }
 #endif
 #endif
+
+//    const time_t timeEnd = time(NULL);
+//    const double timeElapsed = difftime(timeEnd, timeBegin);
+//    cout << "dictionary loaded in " << timeElapsed << " seconds" << endl;
 }
 
 Dictionary::~Dictionary() {
