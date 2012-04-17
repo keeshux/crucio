@@ -62,7 +62,7 @@ WordSet::~WordSet() {
     }
 }
 
-void WordSet::load(vector<string>& words) {
+void WordSet::load(const vector<string>& words) {
 
     if (m_words) {
         free(m_words);

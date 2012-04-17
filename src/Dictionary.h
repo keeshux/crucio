@@ -67,7 +67,7 @@ namespace crucio {
         ~WordSet();
 
         // load a words array (must be uppercase)
-        void load(std::vector<std::string>&);
+        void load(const std::vector<std::string>&);
         
 //        bool contains(const std::string& word) const {
 //            return std::binary_search(m_words.begin(),
