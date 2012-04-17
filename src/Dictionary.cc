@@ -293,26 +293,6 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(M
     // uppercase
     MakeUpper upper;
 
-#ifdef CRUCIO_BENCHMARK
-    // loads words directly (a word each line)
-    string word;
-    while (getline(wordsIn, word)) {
-
-        // checks word's length and format
-        if (isValidWord(word)) {
-
-            // IMPORTANT: make uppercase
-            for_each(word.begin(), word.end(), upper);
-
-            // selects wordset for insertion
-            WordSet* const ws = m_index.getWordSet(word.length());
-            ws->insert(word);
-        }
-    }
-
-    // closes file
-    wordsIn.close();
-#else
 #ifdef CRUCIO_C_ARRAYS
     map<uint32_t, vector<string> > wordsets;
 
@@ -366,16 +346,22 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(M
             // IMPORTANT: make uppercase
             for_each(word.begin(), word.end(), upper);
 
-            // adds word into the vector
+#ifdef CRUCIO_BENCHMARK
+            // loads word directly (assume word list is sorted and unique)
+            WordSet* const ws = m_index.getWordSet(word.length());
+            ws->insert(word);
+#else
+            // adds word to vector
             sortedWords.push_back(word);
+#endif
         }
     }
 
     // closes file
     wordsIn.close();
 
-    // IMPORTANT: never count on an already sorted-and-unique word
-    // list (in order to do binary search)
+#ifndef CRUCIO_BENCHMARK
+    // never count on an already sorted-and-unique word list (in order to do binary search)
     sort(sortedWords.begin(), sortedWords.end());
     unique(sortedWords.begin(), sortedWords.end());
     
