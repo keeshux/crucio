@@ -63,6 +63,10 @@ namespace crucio {
                 std::set<uint32_t>* const);
         void retire(const uint32_t,
                 std::stack<std::pair<uint32_t, ABMask> >* const);
+
+        // alphabet pointers
+        char (*m_index2Char)(const uint32_t i);
+        uint32_t (*m_char2Index)(const char ch);
     };
 }
 

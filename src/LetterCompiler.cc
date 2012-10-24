@@ -38,9 +38,13 @@ LetterCompiler::LetterCompiler(const Type type) :
     switch (type) {
         case Compiler::WORDS:
             m_alphabetSize = LETTERS_COUNT;
+            m_index2Char = &alphabet;
+            m_char2Index = &reverseAlphabet;
             break;
         case Compiler::NUMBERS:
             m_alphabetSize = 10;
+            m_index2Char = &numberAlphabet;
+            m_char2Index = &reverseNumberAlphabet;
             break;
     }
 }
@@ -279,7 +283,7 @@ char LetterCompiler::choose(ABMask* const domainMask) {
     domainMask->reset(vi);
 
     // alphabetic mapping for vi
-    return alphabet(vi);
+    return m_index2Char(vi);
 }
 
 bool LetterCompiler::assign(const uint32_t li, const char v,
