@@ -87,6 +87,10 @@ namespace crucio {
 
         // rematches pattern and updates letters masks
         void doMatch(const bool updateLetters = false) {
+            if (!m_dictionary) {
+                return;
+            }
+
             m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
 
             // updates letters masks

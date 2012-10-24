@@ -313,9 +313,7 @@ bool LetterCompiler::assign(const uint32_t li, const char v,
         w->setAt(pos, v);
 
         // recalculates possible letters within the word
-        if (m_model->type() == Model::WORDS) {
-            w->doMatch(true);
-        }
+        w->doMatch(true);
 
         // word completed, constrains remaining words having same length
         if (isUnique() && w->isComplete()) {
@@ -343,9 +341,7 @@ bool LetterCompiler::assign(const uint32_t li, const char v,
 
                 // excludes completed word and rematches pattern
                 slw->exclude(excludedId);
-                if (m_model->type() == Model::WORDS) {
-                    slw->doMatch(true);
-                }
+                slw->doMatch(true);
 
                 // domains update
                 const vector<uint32_t>& wordLetters =
@@ -354,8 +350,7 @@ bool LetterCompiler::assign(const uint32_t li, const char v,
                     const int slwLi = wordLetters[slwPos];
 
                     // skips fixed and previously instantiated letters
-                    if ((slwLi == -1) ||
-                            (m_revOrder[slwLi] < m_revOrder[li])) {
+                    if ((slwLi == -1) || (m_revOrder[slwLi] < m_revOrder[li])) {
                         continue;
                     }
 
