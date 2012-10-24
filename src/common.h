@@ -21,6 +21,14 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+#ifndef CRUCIO_C_ARRAYS
+#define CRUCIO_C_ARRAYS
+#endif
+
+//#define CRUCIO_BENCHMARK
+#define CRUCIO_BJ
+#define CRUCIO_BJ_FAST
+
 namespace crucio {
 #ifdef WIN32
     typedef unsigned int uint;

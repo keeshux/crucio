@@ -28,6 +28,7 @@
 #include <stack>
 #include <vector>
 
+#include "common.h"
 #include "Backjumper.h"
 #include "Compiler.h"
 

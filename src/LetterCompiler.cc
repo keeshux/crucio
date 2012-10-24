@@ -23,9 +23,6 @@
 using namespace crucio;
 using namespace std;
 
-#define CRUCIO_BJ
-#define CRUCIO_BJ_FAST
-
 LetterCompiler::LetterCompiler() :
         m_domains(),
         m_order(),
