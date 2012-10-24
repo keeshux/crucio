@@ -82,7 +82,7 @@ namespace crucio {
             NUMBERS
         };
         
-        Model(const Type, const Dictionary* const, const Grid* const);
+        Model(const Type, const Grid* const, const Dictionary* const = NULL);
         ~Model();
         
         // model type
@@ -90,11 +90,11 @@ namespace crucio {
             return m_type;
         }
 
-        const Dictionary* getDictionary() const {
-            return m_dictionary;
-        }
         const Grid* getGrid() const {
             return m_grid;
+        }
+        const Dictionary* getDictionary() const {
+            return m_dictionary;
         }
 
         // domains
@@ -219,9 +219,9 @@ namespace crucio {
         // model type
         const Type m_type;
 
-        // dictionary and grid references
-        const Dictionary* const m_dictionary;
+        // grid and dictionary references
         const Grid* const m_grid;
+        const Dictionary* const m_dictionary;
 
         // helper data structure
         std::vector<std::vector<LWInfo> > m_mappings;
