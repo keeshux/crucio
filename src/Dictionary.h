@@ -57,6 +57,16 @@ namespace crucio {
         return (ch - 'A');
     }
 
+    // maps i to i-th numeric character (0 -> '0', 1 -> '1', ...)
+    inline char numberAlphabet(const uint32_t i) {
+        return (char)('0' + i);
+    }
+    
+    // maps ch to its numeric value ('0' -> 0, '1' -> 1, ...)
+    inline uint32_t reverseNumberAlphabet(const char ch) {
+        return (ch - '0');
+    }
+
     /* dictionary implementation */
 
 #ifdef CRUCIO_C_ARRAYS
