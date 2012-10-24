@@ -77,8 +77,18 @@ namespace crucio {
 
     class Model {
     public:
-        Model(const Dictionary* const, const Grid* const);
+        enum Type {
+            WORDS,
+            NUMBERS
+        };
+        
+        Model(const Type, const Dictionary* const, const Grid* const);
         ~Model();
+        
+        // model type
+        Type type() const {
+            return m_type;
+        }
 
         const Dictionary* getDictionary() const {
             return m_dictionary;
@@ -205,6 +215,9 @@ namespace crucio {
                     m_wiDown(-1) {
             }
         };
+        
+        // model type
+        const Type m_type;
 
         // dictionary and grid references
         const Dictionary* const m_dictionary;

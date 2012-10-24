@@ -34,7 +34,7 @@
 namespace crucio {
     class LetterCompiler : public Compiler {
     public:
-        LetterCompiler(const Type = Compiler::WORDS);
+        LetterCompiler();
 
         Compiler::Result compile(Model* const, const Walk&);
 

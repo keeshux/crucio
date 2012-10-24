@@ -26,28 +26,13 @@ using namespace std;
 #define CRUCIO_BJ
 #define CRUCIO_BJ_FAST
 
-LetterCompiler::LetterCompiler(const Type type) :
-        Compiler(type),
+LetterCompiler::LetterCompiler() :
         m_domains(),
         m_order(),
         m_revOrder(),
         m_deps(),
         m_revDeps(),
         m_bj() {
-
-    switch (type) {
-        case Compiler::WORDS:
-            m_alphabetSize = LETTERS_COUNT;
-            m_index2Char = &index2Letter;
-            m_char2Index = &letter2Index;
-            break;
-
-        case Compiler::NUMBERS:
-            m_alphabetSize = DIGITS_COUNT;
-            m_index2Char = &index2Number;
-            m_char2Index = &number2Index;
-            break;
-    }
 }
 
 void LetterCompiler::configure(const Walk& w) {
@@ -149,6 +134,21 @@ void LetterCompiler::reset() {
 }
 
 Compiler::Result LetterCompiler::compile(Model* const m, const Walk& w) {
+
+    // prepare alphabet conversions
+    switch (m->type()) {
+        case Model::WORDS:
+            m_alphabetSize = LETTERS_COUNT;
+            m_index2Char = &index2Letter;
+            m_char2Index = &letter2Index;
+            break;
+            
+        case Model::NUMBERS:
+            m_alphabetSize = DIGITS_COUNT;
+            m_index2Char = &index2Number;
+            m_char2Index = &number2Index;
+            break;
+    }
 
     // use letter-based domains
     m->computeLetterDomains();
@@ -313,7 +313,9 @@ bool LetterCompiler::assign(const uint32_t li, const char v,
         w->setAt(pos, v);
 
         // recalculates possible letters within the word
-        w->doMatch(true);
+        if (m_model->type() == Model::WORDS) {
+            w->doMatch(true);
+        }
 
         // word completed, constrains remaining words having same length
         if (isUnique() && w->isComplete()) {
@@ -341,7 +343,9 @@ bool LetterCompiler::assign(const uint32_t li, const char v,
 
                 // excludes completed word and rematches pattern
                 slw->exclude(excludedId);
-                slw->doMatch(true);
+                if (m_model->type() == Model::WORDS) {
+                    slw->doMatch(true);
+                }
 
                 // domains update
                 const vector<uint32_t>& wordLetters =

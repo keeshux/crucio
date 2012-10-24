@@ -23,8 +23,7 @@
 using namespace crucio;
 using namespace std;
 
-Compiler::Compiler(const Type type) :
-        m_type(type),
+Compiler::Compiler() :
         m_unique(false),
         m_deterministic(false),
         m_verbose(false),
