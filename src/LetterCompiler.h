@@ -52,6 +52,9 @@ namespace crucio {
         std::vector<std::list<std::pair<uint32_t, LetterPosition> > > m_deps;
         std::vector<std::list<std::pair<uint32_t, LetterPosition> > > m_revDeps;
         Backjumper m_bj;
+        
+        // depending on compiler type
+        uint32_t m_alphabetLength;
 
         // subproblems
         char choose(ABMask* const);
