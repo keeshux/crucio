@@ -38,13 +38,13 @@ LetterCompiler::LetterCompiler(const Type type) :
     switch (type) {
         case Compiler::WORDS:
             m_alphabetSize = LETTERS_COUNT;
-            m_index2Char = &alphabet;
-            m_char2Index = &reverseAlphabet;
+            m_index2Char = &index2Letter;
+            m_char2Index = &letter2Index;
             break;
         case Compiler::NUMBERS:
             m_alphabetSize = 10;
-            m_index2Char = &numberAlphabet;
-            m_char2Index = &reverseNumberAlphabet;
+            m_index2Char = &index2Number;
+            m_char2Index = &number2Index;
             break;
     }
 }

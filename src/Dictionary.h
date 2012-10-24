@@ -48,22 +48,22 @@ namespace crucio {
     } IDArray;
 
     // maps i to i-th letter of alphabet (0 -> 'A', 1 -> 'B', ...)
-    inline char alphabet(const uint32_t i) {
+    inline char index2Letter(const uint32_t i) {
         return (char)('A' + i);
     }
 
     // maps ch to its alphabet index ('A' -> 0, 'B' -> 1, ...)
-    inline uint32_t reverseAlphabet(const char ch) {
+    inline uint32_t letter2Index(const char ch) {
         return (ch - 'A');
     }
 
     // maps i to i-th numeric character (0 -> '0', 1 -> '1', ...)
-    inline char numberAlphabet(const uint32_t i) {
+    inline char index2Number(const uint32_t i) {
         return (char)('0' + i);
     }
     
     // maps ch to its numeric value ('0' -> 0, '1' -> 1, ...)
-    inline uint32_t reverseNumberAlphabet(const char ch) {
+    inline uint32_t number2Index(const char ch) {
         return (ch - '0');
     }
 
@@ -149,7 +149,7 @@ namespace crucio {
         
         // hash function for m_cpMatrix buckets addressing
         uint32_t getHash(const uint32_t pos, const char ch) const {
-            return (pos * LETTERS_COUNT + reverseAlphabet(ch));
+            return (pos * LETTERS_COUNT + letter2Index(ch));
         }
     };
 #else

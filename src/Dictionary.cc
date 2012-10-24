@@ -583,7 +583,7 @@ bool Dictionary::getPossible(const MatchingResult* const res,
 #endif
 
             // letter index at position pos in the word
-            const uint32_t chIndex = reverseAlphabet(word[pos]);
+            const uint32_t chIndex = letter2Index(word[pos]);
 
             // puts letter into letter mask
             possible->set(chIndex);
@@ -640,7 +640,7 @@ bool Dictionary::getPossible(const MatchingResult* const res,
                 ABMask* const possible = &(*possibleVector)[pos];
 
                 // letter index at position pos in the word
-                const uint32_t chIndex = reverseAlphabet(word[pos]);
+                const uint32_t chIndex = letter2Index(word[pos]);
 
                 // puts letter into letter mask
                 possible->set(chIndex);
@@ -658,7 +658,7 @@ ostream& operator<<(ostream& out, const ABMask& m) {
     uint32_t i;
     for (i = 0; i < m.size(); ++i) {
         if (m[i]) {
-            out << alphabet(i);
+            out << index2Letter(i);
         }
     }
     out << "}";
