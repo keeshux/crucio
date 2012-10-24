@@ -136,6 +136,11 @@ void WordCompiler::reset() {
 }
 
 Compiler::Result WordCompiler::compile(Model* const m, const Walk& w) {
+
+    // only compile word models
+    if (m->type() != Model::WORDS) {
+        return Compiler::FAILURE_IMPOSSIBLE;
+    }
     
     // use word-based domains
     m->computeWordDomains();
