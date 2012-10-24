@@ -48,7 +48,7 @@ bool isValidWord(const std::string& word) {
 #ifdef CRUCIO_C_ARRAYS
 
 WordSet::WordSet(const uint32_t len) : m_length(len), m_size(0), m_words(NULL), m_pointers(NULL),
-                                       m_cpBuckets(m_length * ALPHABET_SIZE), m_cpMatrix(NULL) {
+                                       m_cpBuckets(m_length * LETTERS_COUNT), m_cpMatrix(NULL) {
 }
 
 WordSet::~WordSet() {
@@ -170,7 +170,7 @@ void WordSet::load(const vector<string>& words) {
 
 #else
 
-WordSet::WordSet(const uint32_t len) : m_words(), m_length(len), m_cpMatrix(len * ALPHABET_SIZE) {
+WordSet::WordSet(const uint32_t len) : m_words(), m_length(len), m_cpMatrix(len * LETTERS_COUNT) {
 }
 
 void WordSet::insert(const string& word) {

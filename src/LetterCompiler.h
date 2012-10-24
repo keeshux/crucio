@@ -54,7 +54,7 @@ namespace crucio {
         Backjumper m_bj;
         
         // depending on compiler type
-        uint32_t m_alphabetLength;
+        uint32_t m_alphabetSize;
 
         // subproblems
         char choose(ABMask* const);

@@ -37,10 +37,10 @@ LetterCompiler::LetterCompiler(const Type type) :
 
     switch (type) {
         case Compiler::WORDS:
-            m_alphabetLength = ALPHABET_SIZE;
+            m_alphabetSize = LETTERS_COUNT;
             break;
         case Compiler::NUMBERS:
-            m_alphabetLength = 10;
+            m_alphabetSize = 10;
             break;
     }
 }
@@ -254,13 +254,13 @@ char LetterCompiler::choose(ABMask* const domainMask) {
 
     // XXX: bad method for sparse bitmask (used in benchmarks)
     do {
-        vi = rand() % m_alphabetLength;
+        vi = rand() % m_alphabetSize;
     } while (!(*domainMask)[vi]);
 
     // better method for sparse bitmask
-/*  uint32_t active[m_alphabetLength];
+/*  uint32_t active[m_alphabetSize];
     uint32_t ai = 0;
-    for (vi = 0; vi < m_alphabetLength; ++vi) {
+    for (vi = 0; vi < m_alphabetSize; ++vi) {
 
         // saves active bit position
         if ((*domainMask)[vi]) {

@@ -38,9 +38,9 @@ namespace crucio {
 
     /* global alphabet management (IMPORTANT: only uppercase letters!) */
 
-    const uint32_t ALPHABET_SIZE = 26;
+    const uint32_t LETTERS_COUNT = 26;
 
-    typedef std::bitset<ALPHABET_SIZE> ABMask;
+    typedef std::bitset<LETTERS_COUNT> ABMask;
 
     typedef struct {
         uint32_t length;
@@ -114,7 +114,7 @@ namespace crucio {
             
             // adds all characters that appear at position pos
             const uint32_t cpStart = getHash(pos, 'A');
-            for (uint32_t i = 0; i < ALPHABET_SIZE; ++i) {
+            for (uint32_t i = 0; i < LETTERS_COUNT; ++i) {
                 if (m_cpMatrix[cpStart + i]->length > 0) {
                     possible->set(i);
                 }
@@ -139,7 +139,7 @@ namespace crucio {
         
         // hash function for m_cpMatrix buckets addressing
         uint32_t getHash(const uint32_t pos, const char ch) const {
-            return (pos * ALPHABET_SIZE + reverseAlphabet(ch));
+            return (pos * LETTERS_COUNT + reverseAlphabet(ch));
         }
     };
 #else
@@ -194,7 +194,7 @@ namespace crucio {
 
             // adds all characters that appear at position pos
             const uint32_t cpStart = getHash(pos, 'A');
-            for (uint32_t i = 0; i < ALPHABET_SIZE; ++i) {
+            for (uint32_t i = 0; i < LETTERS_COUNT; ++i) {
                 if (!m_cpMatrix[cpStart + i].empty()) {
                     possible->set(i);
                 }
@@ -212,7 +212,7 @@ namespace crucio {
 
         // hash function for m_cpMatrix buckets addressing
         uint32_t getHash(const uint32_t pos, const char ch) const {
-            return (pos * ALPHABET_SIZE + reverseAlphabet(ch));
+            return (pos * LETTERS_COUNT + reverseAlphabet(ch));
         }
     };
 #endif
