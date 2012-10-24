@@ -38,7 +38,8 @@ namespace crucio {
 
     /* global alphabet management (IMPORTANT: only uppercase letters!) */
 
-    const uint32_t LETTERS_COUNT = 26;
+    const uint32_t LETTERS_COUNT    = 26;
+    const uint32_t DIGITS_COUNT     = 10;
 
     typedef std::bitset<LETTERS_COUNT> ABMask;
 

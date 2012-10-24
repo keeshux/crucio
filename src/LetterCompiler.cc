@@ -41,8 +41,9 @@ LetterCompiler::LetterCompiler(const Type type) :
             m_index2Char = &index2Letter;
             m_char2Index = &letter2Index;
             break;
+
         case Compiler::NUMBERS:
-            m_alphabetSize = 10;
+            m_alphabetSize = DIGITS_COUNT;
             m_index2Char = &index2Number;
             m_char2Index = &number2Index;
             break;
