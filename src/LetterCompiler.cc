@@ -26,7 +26,8 @@ using namespace std;
 #define CRUCIO_BJ
 #define CRUCIO_BJ_FAST
 
-LetterCompiler::LetterCompiler() :
+LetterCompiler::LetterCompiler(const Type type) :
+        Compiler(type),
         m_domains(),
         m_order(),
         m_revOrder(),

@@ -28,6 +28,11 @@
 namespace crucio {
     class Compiler {
     public:
+        enum Type {
+            WORDS,
+            NUMBERS
+        };
+        
         enum Result {
             SUCCESS,
             FAILURE_IMPOSSIBLE,
@@ -35,8 +40,13 @@ namespace crucio {
             FAILURE_ND_GRID
         };
 
-        Compiler();
+        Compiler(const Type);
         virtual ~Compiler();
+
+        // compiler type
+        Type type() const {
+            return m_type;
+        }
 
         // no repeated words constraint
         void setUnique(const bool unique) {
@@ -92,6 +102,7 @@ namespace crucio {
         };
 
         // parameters
+        Type m_type;
         bool m_unique;
         bool m_deterministic;
         bool m_verbose;

@@ -27,6 +27,7 @@ using namespace std;
 #define CRUCIO_BJ_FAST
 
 WordCompiler::WordCompiler() :
+        Compiler(Compiler::WORDS),
         m_domains(),
         m_order(),
         m_revOrder(),
