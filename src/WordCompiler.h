@@ -37,8 +37,6 @@ namespace crucio {
     public:
         WordCompiler();
 
-        Compiler::Result compile(Model* const, const Walk&);
-
     protected:
         virtual void configure(const Walk&);
         virtual void reset();

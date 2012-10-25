@@ -36,6 +36,21 @@ void LetterCompiler::configure(const Walk& w) {
 //    uint32_t li, ordLi;
     uint32_t li;
 
+    // prepare alphabet conversions
+    switch (m_model->type()) {
+        case Model::WORDS:
+            m_alphabetSize = LETTERS_COUNT;
+            m_index2Char = &index2Letter;
+            m_char2Index = &letter2Index;
+            break;
+            
+        case Model::NUMBERS:
+            m_alphabetSize = DIGITS_COUNT;
+            m_index2Char = &index2Number;
+            m_char2Index = &number2Index;
+            break;
+    }
+
     // letters count
     const uint32_t lettersNum = m_model->getLettersNum();
 
@@ -122,35 +137,15 @@ void LetterCompiler::configure(const Walk& w) {
         }
     }
     m_bj.configure(m_order, ordDeps);
+
+    // use letter-based domains
+    m_model->computeLetterDomains();
 }
 
 void LetterCompiler::reset() {
     m_model->reset();
     m_bj.reset();
     m_domains = m_model->getInitLettersDomains();
-}
-
-Compiler::Result LetterCompiler::compile(Model* const m, const Walk& w) {
-
-    // prepare alphabet conversions
-    switch (m->type()) {
-        case Model::WORDS:
-            m_alphabetSize = LETTERS_COUNT;
-            m_index2Char = &index2Letter;
-            m_char2Index = &letter2Index;
-            break;
-            
-        case Model::NUMBERS:
-            m_alphabetSize = DIGITS_COUNT;
-            m_index2Char = &index2Number;
-            m_char2Index = &number2Index;
-            break;
-    }
-
-    // use letter-based domains
-    m->computeLetterDomains();
-    
-    return Compiler::compile(m, w);
 }
 
 bool LetterCompiler::compileFrom(const uint32_t i) {
