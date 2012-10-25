@@ -40,7 +40,10 @@ Compiler::Result Compiler::compile(Model* const m, const Walk& w) {
     m_model = m;
 
     // configures internal objects
-    configure(w);
+    const Compiler::Result result = configure(w);
+    if (result != Compiler::SUCCESS) {
+        return result;
+    }
 
     // checks for empty domains
     if (m_model->isOverConstrained()) {

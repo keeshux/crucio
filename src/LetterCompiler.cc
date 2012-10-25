@@ -32,7 +32,7 @@ LetterCompiler::LetterCompiler() :
         m_bj() {
 }
 
-void LetterCompiler::configure(const Walk& w) {
+Compiler::Result LetterCompiler::configure(const Walk& w) {
 //    uint32_t li, ordLi;
     uint32_t li;
 
@@ -140,6 +140,8 @@ void LetterCompiler::configure(const Walk& w) {
 
     // use letter-based domains
     m_model->computeLetterDomains();
+
+    return Compiler::SUCCESS;
 }
 
 void LetterCompiler::reset() {

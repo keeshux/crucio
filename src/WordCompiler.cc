@@ -35,15 +35,14 @@ WordCompiler::WordCompiler() :
         m_bj() {
 }
 
-void WordCompiler::configure(const Walk& w) {
+Compiler::Result WordCompiler::configure(const Walk& w) {
 //    uint32_t wi, ordWi;
     uint32_t wi;
 
     // only compile word models
-#warning FIXME
-//    if (m_model->type() != Model::WORDS) {
-//        return Compiler::FAILURE_IMPOSSIBLE;
-//    }
+    if (m_model->type() != Model::WORDS) {
+        return Compiler::FAILURE_IMPOSSIBLE;
+    }
     
     // words count
     const uint32_t wordsNum = m_model->getWordsNum();
@@ -136,6 +135,8 @@ void WordCompiler::configure(const Walk& w) {
 
     // use word-based domains
     m_model->computeWordDomains();
+
+    return Compiler::SUCCESS;
 }
 
 void WordCompiler::reset() {

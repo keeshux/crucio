@@ -69,7 +69,7 @@ namespace crucio {
     protected:
 
         // callbacks
-        virtual void configure(const Walk&) = 0;
+        virtual Compiler::Result configure(const Walk&) = 0;
         virtual void reset() = 0;
         virtual bool compileFrom(const uint32_t) = 0;
 
