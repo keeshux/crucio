@@ -26,7 +26,7 @@ using namespace std;
 Model::Model(const Type type, const Grid* const g, const Dictionary* const d) :
         m_type(type),
         m_grid(g),
-        m_dictionary(d),
+        m_dictionary(Model::typeNeedsDictionary(type) ? d : NULL),
         m_mappings(0),
         m_letters(g->getNonBlackCells()),
         m_words(g->getWords()),
@@ -375,4 +375,8 @@ void Model::computeWordDomains() {
         // empty word domain
         m_overConstrained |= wDom->empty();
     }
+}
+
+const bool Model::typeNeedsDictionary(const Type type) {
+    return (type == Model::WORDS);
 }

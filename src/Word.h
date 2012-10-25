@@ -91,6 +91,7 @@ namespace crucio {
                 return;
             }
 
+            // get matchings and updates exclusions list
             m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
 
             // updates letters masks

@@ -249,6 +249,8 @@ namespace crucio {
 
         // overconstrained flag
         bool m_overConstrained;
+
+        static const bool typeNeedsDictionary(const Type);
     };
 }
 
