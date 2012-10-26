@@ -26,7 +26,6 @@
 
 namespace crucio
 {
-
     class MatchingResult;
 
     /* Matcher: loading/matching implementation */
@@ -45,12 +44,6 @@ namespace crucio
                                   const std::string& pattern,
                                   MatchingResult* const res,
                                   const std::set<uint32_t>* const excluded) const = 0;
-
-        // return possible letter at position pos given a matching result
-        virtual bool getPossible(WordSetIndex* const wsIndex,
-                                 const MatchingResult* const res,
-                                 const uint32_t pos,
-                                 ABMask* const possible) const = 0;
 
         // return possible letters given a matching result
         virtual bool getPossible(WordSetIndex* const wsIndex,
@@ -90,13 +83,10 @@ namespace crucio
         //    return ws->contains(word);
         //}
 
-        // maps to WordSet::getWord(id)
         const std::string getWord(const uint32_t len, const uint32_t id) const {
             const WordSet* const ws = m_index->getWordSet(len);
             return ws->getWord(id);
         }
-
-        //// maps to WordSet::getWordId(word)
         //const uint32_t getWordId(const string& word) const {
         //    const WordSet* const ws = m_index->getWordSet(word.length());
         //    return ws->getWordId(word);
@@ -112,12 +102,6 @@ namespace crucio
                           const std::set<uint32_t>* const excluded) const {
 
             return m_matcher->getMatchings(m_index, pattern, res, excluded);
-        }
-        bool getPossible(const MatchingResult* const res,
-                         const uint32_t pos,
-                         ABMask* const possible) const {
-
-            return m_matcher->getPossible(m_index, res, pos, possible);
         }
         bool getPossible(const MatchingResult* const res,
                          std::vector<ABMask>* const possibleVector) const {

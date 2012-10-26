@@ -297,7 +297,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
     if (cpVectors.empty()) {
 
         // IMPORTANT: very expensive, but only happens at model creation; this
-        // is because *_compiler classes only call Word::doMatch() after
+        // is because compiler classes only call Word::doMatch() after
         // having ASSIGNED a letter/word, not when they are retired; so empty
         // masks are _never_ re-matched, apart at model creation time when
         // initial domains have to be evaluated
@@ -309,10 +309,10 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
         return true;
     }
 
-#ifdef CRUCIO_C_ARRAYS
     // intersects matchings; set intersection is at most large as smallest set,
     // so other sets are filtered on this one; smallest set search cost is a
     // good tradeoff for subsequent computation
+#ifdef CRUCIO_C_ARRAYS
     list<const IDArray*>::const_iterator minSetIt;
     minSetIt = min_element(cpVectors.begin(), cpVectors.end(), MinSizePtr());
     const IDArray* const minSet = *minSetIt;
@@ -324,7 +324,8 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
         const uint32_t id = minSet->ids[idi];
 
         // skips excluded elements (if given)
-        if (excluded && (excluded->find(id) != excluded->end())) {
+//        if (excluded && (excluded->find(id) != excluded->end())) {
+        if (excluded->find(id) != excluded->end()) {
             continue;
         }
 
@@ -356,9 +357,6 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
         }
     }
 #else
-    // intersects matchings; set intersection is at most large as smallest set,
-    // so other sets are filtered on this one; smallest set search cost is a
-    // good tradeoff for subsequent computation
     list<const vector<uint32_t>* >::const_iterator minSetIt;
     minSetIt = min_element(cpVectors.begin(), cpVectors.end(), MinSizePtr());
     const vector<uint32_t>* const minSet = *minSetIt;
@@ -407,50 +405,50 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
     return !res->getIDs().empty();
 }
 
-bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
-                                  const MatchingResult* const res,
-                                  const uint32_t pos,
-                                  ABMask* const possible) const
-{
-    const uint32_t len = res->getWordsLength();
-
-    // initially empty letter mask
-    possible->reset();
-
-    // no matchings, empty mask is returned
-    if (res->isEmpty()) {
-        return false;
-    }
-
-    // current wordset
-    const WordSet* const ws = wsIndex->getWordSet(len);
-
-    // are matchings equal to whole subdictionary?
-    if (res->isFull()) {
-        ws->getPossibleAt(pos, possible);
-    } else {
-
-        // iterates over matching words IDs
-        const vector<uint32_t>& ids = res->getIDs();
-        vector<uint32_t>::const_iterator idIt;
-        for (idIt = ids.begin(); idIt != ids.end(); ++idIt) {
-            const uint32_t id = *idIt;
-#ifdef CRUCIO_C_ARRAYS
-            const char* word = ws->getWordPtr(id);
-#else
-            const string& word = ws->getWord(id);
-#endif
-
-            // letter index at position pos in the word
-            const uint32_t chIndex = letter2Index(word[pos]);
-
-            // puts letter into letter mask
-            possible->set(chIndex);
-        }
-    }
-
-    return true;
-}
+//bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
+//                                  const MatchingResult* const res,
+//                                  const uint32_t pos,
+//                                  ABMask* const possible) const
+//{
+//    const uint32_t len = res->getWordsLength();
+//
+//    // initially empty letter mask
+//    possible->reset();
+//
+//    // no matchings, empty mask is returned
+//    if (res->isEmpty()) {
+//        return false;
+//    }
+//
+//    // current wordset
+//    const WordSet* const ws = wsIndex->getWordSet(len);
+//
+//    // are matchings equal to whole subdictionary?
+//    if (res->isFull()) {
+//        ws->getPossibleAt(pos, possible);
+//    } else {
+//
+//        // iterates over matching words IDs
+//        const vector<uint32_t>& ids = res->getIDs();
+//        vector<uint32_t>::const_iterator idIt;
+//        for (idIt = ids.begin(); idIt != ids.end(); ++idIt) {
+//            const uint32_t id = *idIt;
+//#ifdef CRUCIO_C_ARRAYS
+//            const char* word = ws->getWordPtr(id);
+//#else
+//            const string& word = ws->getWord(id);
+//#endif
+//
+//            // letter index at position pos in the word
+//            const uint32_t chIndex = letter2Index(word[pos]);
+//
+//            // puts letter into letter mask
+//            possible->set(chIndex);
+//        }
+//    }
+//
+//    return true;
+//}
 
 bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
                                   const MatchingResult* const res,

@@ -45,14 +45,6 @@ bool SolutionMatcher::getMatchings(WordSetIndex *const wsIndex,
 
 bool SolutionMatcher::getPossible(WordSetIndex *const wsIndex,
                                   const MatchingResult* const res,
-                                  const uint32_t pos,
-                                  ABMask* const possible) const
-{
-    return true;
-}
-
-bool SolutionMatcher::getPossible(WordSetIndex *const wsIndex,
-                                  const MatchingResult* const res,
                                   std::vector<ABMask>* const possibleVector) const
 {
     return true;

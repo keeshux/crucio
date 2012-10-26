@@ -46,11 +46,6 @@ namespace crucio
 
         virtual bool getPossible(WordSetIndex *const wsIndex,
                                  const MatchingResult* const res,
-                                 const uint32_t pos,
-                                 ABMask* const possible) const;
-
-        virtual bool getPossible(WordSetIndex *const wsIndex,
-                                 const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector) const;
 
     private:
