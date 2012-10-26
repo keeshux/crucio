@@ -63,21 +63,8 @@ namespace crucio
         return (ch - alphabet);
     }
 
-    inline std::string ABMaskString(const Alphabet alphabet, const ABMask mask)
-    {
-        std::string s = "";
-
-        s += "{";
-        uint32_t i;
-        for (i = 0; i < mask.size(); ++i) {
-            if (mask[i]) {
-                s += index2Character(alphabet, i);
-            }
-        }
-        s += "}";
-
-        return s;
-    }
+    // ABMask string representation by alphabet
+    std::string ABMaskString(const Alphabet alphabet, const ABMask mask);
 
     /* exceptions */
 
