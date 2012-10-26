@@ -39,14 +39,32 @@ namespace crucio
 
     /* global alphabet management (IMPORTANT: only uppercase letters!) */
 
+    // alphabet kind (base character)
     enum Alphabet {
         LETTERS = 'A',
         DIGITS = '0'
     };
 
     // alphabet/domain size
-    const uint32_t LETTERS_COUNT    = 26;
-    const uint32_t DIGITS_COUNT     = 10;
+    enum AlphabetSize {
+        LETTERS_COUNT = 26,
+        DIGITS_COUNT = 10
+    };
+
+    // size by alphabet
+    inline uint32_t alphabetSize(const Alphabet alphabet)
+    {
+        switch (alphabet) {
+        case LETTERS:
+            return LETTERS_COUNT;
+
+        case DIGITS:
+            return DIGITS_COUNT;
+        }
+
+        // should never happen
+        return 0;
+    }
 
     // domain mask to hold max alphabet size
     typedef std::bitset<LETTERS_COUNT> ABMask; // max(letters, digits)

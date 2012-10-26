@@ -40,15 +40,7 @@ Compiler::Result LetterCompiler::configure(const Walk& w)
 
     // prepare alphabet conversions
     m_alphabet = m_model->getAlphabet();
-    switch (m_alphabet) {
-    case LETTERS:
-        m_alphabetSize = LETTERS_COUNT;
-        break;
-
-    case DIGITS:
-        m_alphabetSize = DIGITS_COUNT;
-        break;
-    }
+    m_alphabetSize = alphabetSize(m_alphabet);
 
     // letters count
     const uint32_t lettersNum = m_model->getLettersNum();
