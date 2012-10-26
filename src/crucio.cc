@@ -9,7 +9,8 @@ int main(int argc, char* argv[]) {
     // defaults to failure
     int status = -1;
 
-    // compiler and walk
+    // heap objects
+    const Dictionary *inDict;
     Compiler* inCpl = 0;
     Walk* inWalk = 0;
 
@@ -75,8 +76,19 @@ int main(int argc, char* argv[]) {
         cmd.parse(argc, argv);
 
         // allocates data structures through input arguments
-        const LanguageDictionary inDict(dictArg.getValue());
+        const Model::Type modelType = Model::WORDS;
         const Grid inGrid(gridArg.getValue());
+
+        // chooses dictionary
+        switch (modelType) {
+            case Model::WORDS:
+                inDict = new LanguageDictionary(dictArg.getValue());
+                break;
+
+            case Model::NUMBERS:
+                inDict = new SolutionDictionary();
+                break;
+        }
 
 #ifndef USE_BENCHMARK
         // binary output
@@ -87,13 +99,13 @@ int main(int argc, char* argv[]) {
 #endif
 
         // prints out input description
-        printInputDescription(cout, inDict, inGrid,
+        printInputDescription(cout, *inDict, inGrid,
                 fillArg.getValue(), walkArg.getValue(),
                 uniqueArg.getValue(), determArg.getValue(),
                 seedArg.getValue(), verboseArg.getValue());
 
         // model building
-        Model inModel(Model::WORDS, &inDict, &inGrid);
+        Model inModel(modelType, inDict, &inGrid);
 
         // if verbose prints out model description too
         if (verboseArg.getValue()) {
@@ -175,6 +187,9 @@ int main(int argc, char* argv[]) {
     // deallocates compiler and walk
     if (inCpl) {
         delete inCpl;
+    }
+    if (inDict) {
+        delete inDict;
     }
     if (inWalk) {
         delete inWalk;
