@@ -31,6 +31,13 @@ const char Dictionary::ANY_CHAR = '-';
 // all ones 26-bit mask (any [A-Z] letter)
 const ABMask Dictionary::ANY_MASK = ABMask(0x03FFFFFF);
 
+Dictionary::Dictionary() :
+        m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH)) {
+}
+
+Dictionary::~Dictionary() {
+}
+
 MatchingResult* Dictionary::createMatchingResult(const uint32_t len) const {
     return new MatchingResult(this, len);
 }
@@ -38,6 +45,32 @@ MatchingResult* Dictionary::createMatchingResult(const uint32_t len) const {
 void Dictionary::destroyMatchingResult(MatchingResult* const res) const {
     delete res;
 }
+
+uint32_t Dictionary::getSize() const {
+    return m_index->getSize();
+}
+
+uint32_t Dictionary::getSize(const uint32_t len) const {
+    const WordSet* const ws = m_index->getWordSet(len);
+    return ws->getSize();
+}
+
+//bool Dictionary::contains(const string& word) const {
+//    const WordSet* const ws = m_index->getWordSet(word.length());
+//    return ws->contains(word);
+//}
+
+// maps to WordSet::getWord(id)
+const string Dictionary::getWord(const uint32_t len, const uint32_t id) const {
+    const WordSet* const ws = m_index->getWordSet(len);
+    return ws->getWord(id);
+}
+
+//// maps to WordSet::getWordId(word)
+//const uint32_t Dictionary::getWordId(const string& word) const {
+//    const WordSet* const ws = m_index->getWordSet(word.length());
+//    return ws->getWordId(word);
+//}
 
 /* <global> */
 

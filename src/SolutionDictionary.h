@@ -30,11 +30,6 @@ namespace crucio {
         SolutionDictionary();
         virtual ~SolutionDictionary();
         
-        virtual uint32_t getSize() const;
-        virtual uint32_t getSize(const uint32_t) const;
-        
-        virtual const std::string getWord(const uint32_t, const uint32_t) const;
-        
         virtual bool getMatchings(const std::string&, MatchingResult* const,
                                   const std::set<uint32_t>* const = 0) const;
         

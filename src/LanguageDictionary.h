@@ -37,12 +37,6 @@ namespace crucio {
             return m_filename;
         }
         
-        virtual uint32_t getSize() const;
-        virtual uint32_t getSize(const uint32_t) const;
-        
-        virtual const std::string getWord(const uint32_t,
-                                          const uint32_t) const;
-        
         virtual bool getMatchings(const std::string&, MatchingResult* const,
                                   const std::set<uint32_t>* const = 0) const;
         
@@ -88,9 +82,6 @@ namespace crucio {
         // origin filename (if any)
         const std::string m_filename;
         
-        // wordsets vector wrapper
-        WordSetIndex* m_index;
-
         // input validation
         static bool isValidWord(const std::string&);
     };

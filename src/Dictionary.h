@@ -71,6 +71,7 @@ namespace crucio {
     /* abstract */
     
     class MatchingResult;
+    class WordSetIndex;
     
     class Dictionary {
     public:
@@ -80,19 +81,23 @@ namespace crucio {
         static const uint32_t MIN_LENGTH = 2;
         static const uint32_t MAX_LENGTH = 32;
         
-        virtual ~Dictionary() {
-        }
+        Dictionary();
+        virtual ~Dictionary();
 
         // proxy for MatchingResult ctors/dctors
         MatchingResult* createMatchingResult(const uint32_t) const;
         void destroyMatchingResult(MatchingResult* const) const;
         
-        virtual uint32_t getSize() const = 0;
-        virtual uint32_t getSize(const uint32_t) const = 0;
+        uint32_t getSize() const;
+        uint32_t getSize(const uint32_t len) const;
         
-        virtual const std::string getWord(const uint32_t, const uint32_t) const = 0;
+        //bool contains(const std::string& word) const;
+        const std::string getWord(const uint32_t len, const uint32_t id) const;
+        //const uint32_t getWordId(const std::string& word) const;
+        
+        /* implement in subclasses */
 
-        // returns words matching a pattern, excluding given IDs (optional)
+        // return words matching a pattern, excluding given IDs (optional)
         virtual bool getMatchings(const std::string&, MatchingResult* const,
                                   const std::set<uint32_t>* const = 0) const = 0;
         
@@ -103,6 +108,11 @@ namespace crucio {
         // return possible letters given a matching result
         virtual bool getPossible(const MatchingResult* const,
                                  std::vector<ABMask>* const) const = 0;
+
+    protected:
+
+        // wordsets vector wrapper
+        WordSetIndex* m_index;
     };
     
     class MatchingResult {
@@ -188,6 +198,228 @@ namespace crucio {
         const Dictionary* const m_dictionary;
         const uint32_t m_wordsLength;
         std::vector<uint32_t> m_ids;
+    };
+    
+    /* utils */
+
+#ifdef CRUCIO_C_ARRAYS
+    // wordset of fixed length
+    class WordSet {
+    public:
+        WordSet(const uint32_t);
+        ~WordSet();
+        
+        // load a words array (must be uppercase)
+        void load(const std::vector<std::string>&);
+
+//        bool contains(const std::string& word) const {
+//            return std::binary_search(m_words.begin(),
+//                                      m_words.end(),
+//                                      word);
+//        }
+        uint32_t getSize() const {
+            return m_size;
+        }
+        
+        // wordset key is the offset within m_words
+        const std::string getWord(const uint32_t id) const {
+            return m_pointers[id];
+        }
+        const char* getWordPtr(const uint32_t id) const {
+            return m_pointers[id];
+        }
+        
+//        // finds word offset within wordset
+//        const uint32_t getWordId(const string& word) const {
+//            const vector<string>::const_iterator wIt =
+//            lower_bound(m_words.begin(),
+//                        m_words.end(),
+//                        word);
+//
+//            // found?
+//            if (word >= *wIt) {
+//                return distance(m_words.begin(), wIt);
+//            } else {
+//
+//                // same as distance(m_words.begin(), m_words.end())
+//                return m_words.size();
+//            }
+//        }
+        
+        // vector of words (offsets) containing ch at position pos
+        const IDArray* getCPVector(const uint32_t pos, const char ch) const {
+            return m_cpMatrix[getHash(pos, ch)];
+        }
+        
+        // possible letters at position pos
+        void getPossibleAt(const uint32_t pos, ABMask* const possible) const {
+            
+            // initially empty letter mask
+            possible->reset();
+            
+            // adds all characters that appear at position pos
+            const uint32_t cpStart = getHash(pos, 'A');
+            for (uint32_t i = 0; i < LETTERS_COUNT; ++i) {
+                if (m_cpMatrix[cpStart + i]->length > 0) {
+                    possible->set(i);
+                }
+            }
+        }
+        
+    private:
+        
+        // fixed word length
+        const uint32_t m_length;
+        
+        // words bitmap
+        uint32_t m_size;
+        char* m_words;
+        
+        // word id -> location in m_words
+        const char** m_pointers;
+        
+        // the (<position, letter> -> array of word offsets) table
+        const uint32_t m_cpBuckets;
+        IDArray** m_cpMatrix;
+        
+        // hash function for m_cpMatrix buckets addressing
+        uint32_t getHash(const uint32_t pos, const char ch) const {
+            return (pos * LETTERS_COUNT + letter2Index(ch));
+        }
+    };
+#else
+    // wordset of fixed length
+    class WordSet {
+    public:
+        WordSet(const uint32_t);
+        
+        // inserts a word (must be uppercase)
+        void insert(const std::string&);
+        
+//        bool contains(const std::string& word) const {
+//            return binary_search(m_words.begin(),
+//                    m_words.end(), word);
+//        }
+        uint32_t getSize() const {
+            return m_words.size();
+        }
+        
+        // wordset key is the offset within m_words
+        const string& getWord(const uint32_t id) const {
+            return m_words[id];
+        }
+        
+//        // finds word offset within wordset
+//        const uint32_t getWordId(const std::string& word) const {
+//            const std::vector<std::string>::const_iterator wIt =
+//                    std::lower_bound(m_words.begin(),
+//                                     m_words.end(),
+//                                     word);
+//
+//            // found?
+//            if (word >= *wIt) {
+//                return distance(m_words.begin(), wIt);
+//            } else {
+//
+//                // same as distance(m_words.begin(), m_words.end())
+//                return m_words.size();
+//            }
+//        }
+        
+        // vector of words (offsets) containing ch at position pos
+        const vector<uint32_t>* getCPVector(const uint32_t pos,
+                                            const char ch) const {
+            return &m_cpMatrix[getHash(pos, ch)];
+        }
+        
+        // possible letters at position pos
+        void getPossibleAt(const uint32_t pos, ABMask* const possible) const {
+            
+            // initially empty letter mask
+            possible->reset();
+            
+            // adds all characters that appear at position pos
+            const uint32_t cpStart = getHash(pos, 'A');
+            for (uint32_t i = 0; i < LETTERS_COUNT; ++i) {
+                if (!m_cpMatrix[cpStart + i].empty()) {
+                    possible->set(i);
+                }
+            }
+        }
+        
+    private:
+        
+        // words vector and fixed words length
+        const uint32_t m_length;
+        vector<string> m_words;
+        
+        // the (<position, letter> -> words offsets) hash table
+        vector<vector<uint32_t> > m_cpMatrix;
+        
+        // hash function for m_cpMatrix buckets addressing
+        uint32_t getHash(const uint32_t pos, const char ch) const {
+            return (pos * LETTERS_COUNT + reverseAlphabet(ch));
+        }
+    };
+#endif
+    
+    // encloses a set of wordsets whose word length parameter falls
+    // within [m_minLength, m_maxLength]
+    class WordSetIndex {
+    public:
+        WordSetIndex(const uint32_t minLength, const uint32_t maxLength) :
+        m_minLength(minLength),
+        m_maxLength(maxLength),
+        m_wordSets(maxLength - minLength + 1) {
+            
+            const uint32_t wsSize = m_wordSets.size();
+            for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
+                m_wordSets[wsi] = new WordSet(getReverseHash(wsi));
+            }
+        }
+        ~WordSetIndex() {
+            const uint32_t wsSize = m_wordSets.size();
+            for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
+                delete m_wordSets[wsi];
+            }
+        }
+        
+        // computes size as wordsets sizes sum
+        uint32_t getSize() const {
+            uint32_t totalSize = 0;
+            std::vector<WordSet*>::const_iterator wsIt;
+            for (wsIt = m_wordSets.begin(); wsIt !=
+                 m_wordSets.end(); ++wsIt) {
+                const WordSet* const ws = *wsIt;
+                totalSize += ws->getSize();
+            }
+            return totalSize;
+        }
+        
+        const WordSet* getWordSet(const uint32_t len) const {
+            return m_wordSets[getHash(len)];
+        }
+        WordSet* getWordSet(const uint32_t len) {
+            return m_wordSets[getHash(len)];
+        }
+        
+    private:
+        
+        // min and max length for a word
+        const uint32_t m_minLength;
+        const uint32_t m_maxLength;
+        
+        // wordsets vector
+        std::vector<WordSet*> m_wordSets;
+        
+        // hash functions to map (word length -> wordset)
+        // and (wordset index -> word length)
+        uint32_t getHash(const uint32_t len) const {
+            return (len - m_minLength);
+        }
+        uint32_t getReverseHash(const uint32_t i) const {
+            return (i + m_minLength);
+        }
     };
 }
 

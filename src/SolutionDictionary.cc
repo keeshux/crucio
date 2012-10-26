@@ -29,18 +29,6 @@ SolutionDictionary::SolutionDictionary() {
 SolutionDictionary::~SolutionDictionary() {
 }
 
-uint32_t SolutionDictionary::getSize() const {
-    return 0;
-}
-
-uint32_t SolutionDictionary::getSize(const uint32_t) const {
-    return 0;
-}
-
-const string SolutionDictionary::getWord(const uint32_t, const uint32_t) const {
-    return "";
-}
-
 bool SolutionDictionary::getMatchings(const std::string&, MatchingResult* const,
                                       const set<uint32_t>* const) const {
 
