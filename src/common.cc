@@ -29,7 +29,8 @@ string crucio::ABMaskString(const Alphabet alphabet, const ABMask mask)
 
     s += "{";
     uint32_t i;
-    for (i = 0; i < mask.size(); ++i) {
+    const size_t size = alphabetSize(alphabet);
+    for (i = 0; i < size; ++i) {
         if (mask[i]) {
             s += index2Character(alphabet, i);
         }
