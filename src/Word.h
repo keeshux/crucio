@@ -104,7 +104,7 @@ namespace crucio
         // word id in dictionary (WARNING: only after matching a complete mask!)
         // returns UINT_MAX if no dictionary existence check
         const uint32_t getID() const {
-            return m_matchings->getFirstWordID();
+            return m_matchings->getFirstID();
         }
 
         // exclusion list management for doMatch()

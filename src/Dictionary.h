@@ -126,32 +126,32 @@ namespace crucio
     public:
         friend class Dictionary;
 
-        // matching words length
+        // fixed words length
         uint32_t getWordsLength() const {
             return m_wordsLength;
         }
 
-        // true if no matchings
-        bool isEmpty() const {
-            return m_IDs.empty();
-        }
-
-        // true if whole subdictionary
-        bool isFull() const {
-            return (m_IDs.size() == m_dictionary->getSize(m_wordsLength));
-        }
-
-        // matchings size
+        // results
         uint32_t getSize() const {
             return m_IDs.size();
         }
-
-        // matching IDs vector
+        bool isEmpty() const {
+            return m_IDs.empty();
+        }
+        bool isFull() const {
+            return (m_IDs.size() == m_dictionary->getSize(m_wordsLength));
+        }
         const std::vector<uint32_t>& getIDs() const {
             return m_IDs;
         }
+        uint32_t getFirstID() const {
+            if (m_IDs.empty()) {
+                return UINT_MAX;
+            }
+            return *m_IDs.begin();
+        }
 
-        // IDs modification
+        // results modification
         void clear() {
             m_IDs.clear();
         }
@@ -162,7 +162,7 @@ namespace crucio
             m_IDs.push_back(id);
         }
 
-        // vector to set
+        // set operations
         void getIDsUnion(std::set<uint32_t>* const dest) const {
             std::vector<uint32_t>::const_iterator idIt;
             for (idIt = m_IDs.begin(); idIt != m_IDs.end(); ++idIt) {
@@ -188,17 +188,9 @@ namespace crucio
             }
         }
 
-        // maps to Dictionary::getWord
+        // dictionary proxy
         const std::string getWord(const uint32_t id) const {
             return m_dictionary->getWord(m_wordsLength, id);
-        }
-
-        // first matching (if any)
-        uint32_t getFirstWordID() const {
-            if (m_IDs.empty()) {
-                return UINT_MAX;
-            }
-            return *m_IDs.begin();
         }
 
     private:
