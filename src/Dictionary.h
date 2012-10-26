@@ -83,14 +83,15 @@ namespace crucio {
         virtual ~Dictionary() {
         }
 
+        // proxy for MatchingResult ctors/dctors
+        MatchingResult* createMatchingResult(const uint32_t) const;
+        void destroyMatchingResult(MatchingResult* const) const;
+        
         virtual uint32_t getSize() const = 0;
-        virtual uint32_t getSize(const uint32_t len) const = 0;
+        virtual uint32_t getSize(const uint32_t) const = 0;
         
-        virtual const std::string getWord(const uint32_t len, const uint32_t id) const = 0;
+        virtual const std::string getWord(const uint32_t, const uint32_t) const = 0;
 
-        virtual MatchingResult* createMatchingResult(const uint32_t len) const = 0;
-        virtual void destroyMatchingResult(MatchingResult* const res) const = 0;
-        
         // returns words matching a pattern, excluding given IDs (optional)
         virtual bool getMatchings(const std::string&, MatchingResult* const,
                                   const std::set<uint32_t>* const = 0) const = 0;

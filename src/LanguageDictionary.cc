@@ -57,7 +57,7 @@ namespace crucio {
         
 //        bool contains(const string& word) const {
 //            return binary_search(m_words.begin(),
-//                                      m_words.end(), word);
+//                                 m_words.end(), word);
 //        }
         uint32_t getSize() const {
             return m_size;
@@ -210,9 +210,10 @@ namespace crucio {
     class WordSetIndex {
     public:
         WordSetIndex(const uint32_t minLength, const uint32_t maxLength) :
-        m_minLength(minLength),
-        m_maxLength(maxLength),
-        m_wordSets(maxLength - minLength + 1) {
+                m_minLength(minLength),
+                m_maxLength(maxLength),
+                m_wordSets(maxLength - minLength + 1) {
+
             const uint32_t wsSize = m_wordSets.size();
             for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
                 m_wordSets[wsi] = new WordSet(getReverseHash(wsi));
@@ -659,15 +660,6 @@ const string LanguageDictionary::getWord(const uint32_t len, const uint32_t id) 
 //    const WordSet* const ws = m_index->getWordSet(word.length());
 //    return ws->getWordId(word);
 //}
-
-// wrappers for MatchingResult ctors/dctors
-MatchingResult* LanguageDictionary::createMatchingResult(const uint32_t len) const {
-    return new MatchingResult(this, len);
-}
-
-void LanguageDictionary::destroyMatchingResult(MatchingResult* const res) const {
-    delete res;
-}
 
 bool LanguageDictionary::getMatchings(const string& pattern,
                               MatchingResult* const res, const set<uint32_t>* const excluded) const {

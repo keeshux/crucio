@@ -25,20 +25,15 @@
 
 namespace crucio {
     
-    class WordSetIndex;
-    
     class SolutionDictionary : public Dictionary {
     public:
         SolutionDictionary();
         virtual ~SolutionDictionary();
         
         virtual uint32_t getSize() const;
-        virtual uint32_t getSize(const uint32_t len) const;
+        virtual uint32_t getSize(const uint32_t) const;
         
-        virtual const std::string getWord(const uint32_t len, const uint32_t id) const;
-        
-        virtual MatchingResult* createMatchingResult(const uint32_t len) const;
-        virtual void destroyMatchingResult(MatchingResult* const res) const;
+        virtual const std::string getWord(const uint32_t, const uint32_t) const;
         
         virtual bool getMatchings(const std::string&, MatchingResult* const,
                                   const std::set<uint32_t>* const = 0) const;
@@ -50,9 +45,6 @@ namespace crucio {
                                  std::vector<ABMask>* const) const;
         
     private:
-        
-        // wordsets vector wrapper
-        WordSetIndex* m_index;
     };
 }
 

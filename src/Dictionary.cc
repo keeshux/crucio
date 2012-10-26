@@ -31,6 +31,14 @@ const char Dictionary::ANY_CHAR = '-';
 // all ones 26-bit mask (any [A-Z] letter)
 const ABMask Dictionary::ANY_MASK = ABMask(0x03FFFFFF);
 
+MatchingResult* Dictionary::createMatchingResult(const uint32_t len) const {
+    return new MatchingResult(this, len);
+}
+
+void Dictionary::destroyMatchingResult(MatchingResult* const res) const {
+    delete res;
+}
+
 /* <global> */
 
 ostream& operator<<(ostream& out, const ABMask& m) {
