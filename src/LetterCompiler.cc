@@ -306,7 +306,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
         // word completed, constrains remaining words having same length
         if (isUnique() && w->isComplete()) {
-            
+
             if (isVerbose()) {
                 *m_verboseOut << "completed word '" << w->get() << "'" << endl;
             }

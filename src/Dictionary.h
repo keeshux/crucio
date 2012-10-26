@@ -200,13 +200,6 @@ namespace crucio
             }
             return *m_IDs.begin();
         }
-        const std::string getFirstWord() const {
-            const uint32_t id = getFirstWordID();
-            if (id == UINT_MAX) {
-                return "";
-            }
-            return m_dictionary->getWord(m_wordsLength, id);
-        }
 
     private:
         const Dictionary* const m_dictionary;

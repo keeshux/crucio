@@ -106,7 +106,7 @@ namespace crucio
         const uint32_t getID() const {
             return m_matchings->getFirstWordID();
         }
-        
+
         // exclusion list management for doMatch()
         void exclude(const uint32_t id) {
             m_excluded.insert(id);
