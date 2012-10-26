@@ -312,7 +312,7 @@ bool LetterCompiler::assign(const uint32_t li,
             }
 
             // excluded word ID
-            const uint32_t excludedID = w->getID();
+            uint32_t excludedID = w->getID();
             if (excludedID == UINT_MAX) {
                 continue;
             }
@@ -336,8 +336,12 @@ bool LetterCompiler::assign(const uint32_t li,
                 Word* const slw = m_model->getWord(slWi);
 
                 // excludes completed word and rematches pattern
-                slw->excludeID(excludedID);
+                slw->exclude(excludedID);
                 slw->doMatchUpdating();
+                
+                if (isVerbose()) {
+//                    slw->
+                }
 
                 // domains update
                 const vector<uint32_t>& wordLetters =
@@ -466,7 +470,7 @@ void LetterCompiler::retire(const uint32_t li,
                 Word* const slw = m_model->getWord(slWi);
 
                 // reincludes completed word
-                slw->includeID(excludedID);
+                slw->include(excludedID);
             }
         }
 

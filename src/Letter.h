@@ -31,7 +31,7 @@ namespace crucio
     public:
         Letter(const Cell* cellRef) :
             m_cellRef(cellRef),
-            m_value(Dictionary::ANY_CHAR) {
+            m_value(ANY_CHAR) {
         }
 
         // referred cell
@@ -47,7 +47,7 @@ namespace crucio
             m_value = value;
         }
         void unset() {
-            m_value = Dictionary::ANY_CHAR;
+            m_value = ANY_CHAR;
         }
 
     private:

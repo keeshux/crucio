@@ -39,8 +39,7 @@ void SolutionMatcher::loadIndex(WordSetIndex* const wsIndex)
 bool SolutionMatcher::getMatchings(WordSetIndex* const wsIndex,
                                    const std::string& pattern,
                                    MatchingResult* const res,
-                                   const set<uint32_t>* const excludedIDs,
-                                   const std::set<std::string>* const excludedWords)
+                                   const set<uint32_t>* const exclusions)
 {
     return true;
 }

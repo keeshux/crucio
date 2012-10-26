@@ -275,8 +275,7 @@ void LanguageMatcher::loadFilename(WordSetIndex* const wsIndex) const
 bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
                                    const string& pattern,
                                    MatchingResult* const res,
-                                   const set<uint32_t>* const excludedIDs,
-                                   const std::set<std::string>* const excludedWords)
+                                   const set<uint32_t>* const exclusions)
 {
     const uint32_t len = pattern.length();
 
@@ -291,7 +290,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
     list<const vector<uint32_t>* > cpVectors;
 #endif
     for (uint32_t pi = 0; pi < len; ++pi) {
-        if (pattern[pi] != Dictionary::ANY_CHAR) {
+        if (pattern[pi] != ANY_CHAR) {
             cpVectors.push_back(ws->getCPVector(pi, pattern[pi]));
         }
     }
@@ -328,8 +327,8 @@ bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
         const uint32_t id = minSet->ids[idi];
 
         // skips excluded elements (if given)
-//        if (excludedIDs && (excludedIDs->find(id) != excludedIDs->end())) {
-        if (excludedIDs->find(id) != excludedIDs->end()) {
+//        if (exclusions && (exclusions->find(id) != exclusions->end())) {
+        if (exclusions->find(id) != exclusions->end()) {
             continue;
         }
 

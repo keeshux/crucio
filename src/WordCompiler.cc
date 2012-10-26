@@ -339,7 +339,7 @@ bool WordCompiler::assign(const uint32_t wi,
             // excludes domain value (no need for rematch)
             set<uint32_t>* const slDom = &m_domains[slWi];
             const uint32_t slDomOldCount = slDom->size();
-            slw->excludeID(excludedID);
+            slw->exclude(excludedID);
             slDom->erase(excludedID);
 
             // puts removed value on the stack
@@ -468,7 +468,7 @@ void WordCompiler::retire(const uint32_t wi,
                 Word* const slw = m_model->getWord(slWi);
 
                 // reincludes completed word
-                slw->includeID(excludedID);
+                slw->include(excludedID);
             }
         }
 

@@ -52,6 +52,15 @@ namespace crucio
         DIGITS_COUNT = 10
     };
 
+    // domain mask to hold max alphabet size
+    typedef std::bitset<LETTERS_COUNT> ABMask; // max(letters, digits)
+
+    // wildcard (any characater)
+    const char ANY_CHAR = '-';
+
+    // all ones 26-bit mask (any [A-Z] letter)
+    const ABMask ANY_MASK = ABMask(0x03FFFFFF);
+
     // size by alphabet
     inline uint32_t alphabetSize(const Alphabet alphabet)
     {
@@ -67,9 +76,6 @@ namespace crucio
         assert(false);
         return 0;
     }
-
-    // domain mask to hold max alphabet size
-    typedef std::bitset<LETTERS_COUNT> ABMask; // max(letters, digits)
 
     // maps i to i-th letter of alphabet
     inline char index2Character(const Alphabet alphabet, const uint32_t i)

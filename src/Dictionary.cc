@@ -25,12 +25,6 @@ using namespace std;
 
 /* Dictionary */
 
-// wildcard (any characater)
-const char Dictionary::ANY_CHAR = '-';
-
-// all ones 26-bit mask (any [A-Z] letter)
-const ABMask Dictionary::ANY_MASK = ABMask(0x03FFFFFF);
-
 Dictionary::Dictionary(const Alphabet alphabet, Matcher* const matcher) :
     m_matcher(matcher),
     m_index(new WordSetIndex(alphabet, MIN_LENGTH, MAX_LENGTH))

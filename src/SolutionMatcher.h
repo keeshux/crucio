@@ -37,9 +37,8 @@ namespace crucio
         virtual bool getMatchings(WordSetIndex* const wsIndex,
                                   const std::string& pattern,
                                   MatchingResult* const res,
-                                  const std::set<uint32_t>* const excludedIDs,
-                                  const std::set<std::string>* const excludedWords);
- 
+                                  const std::set<uint32_t>* const exclusions);
+
         virtual bool getPossible(WordSetIndex* const wsIndex,
                                  const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector);

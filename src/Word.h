@@ -36,14 +36,11 @@ namespace crucio
         Word(const Dictionary* const dict, const Definition* defRef) :
             m_dictionary(dict),
             m_defRef(defRef),
-            m_mask(defRef->getLength(),
-                   Dictionary::ANY_CHAR),
+            m_mask(defRef->getLength(), ANY_CHAR),
             m_wildcards(defRef->getLength()),
-            m_letterMasks(defRef->getLength(),
-                          ABMask(Dictionary::ANY_MASK)),
+            m_letterMasks(defRef->getLength(), ABMask(ANY_MASK)),
             m_matchings(dict->createMatchingResult(defRef->getLength())),
-            m_excludedIDs(),
-            m_excludedWords() {
+            m_excluded() {
         }
         ~Word() {
             m_dictionary->destroyMatchingResult(m_matchings);
@@ -64,10 +61,10 @@ namespace crucio
         void set(const std::string& mask) {
             m_mask = mask;
             m_wildcards = count(m_mask.begin(), m_mask.end(),
-                                Dictionary::ANY_CHAR);
+                                ANY_CHAR);
         }
         void unset() {
-            std::fill(m_mask.begin(), m_mask.end(), Dictionary::ANY_CHAR);
+            std::fill(m_mask.begin(), m_mask.end(), ANY_CHAR);
             m_wildcards = m_mask.length();
         }
 
@@ -76,52 +73,51 @@ namespace crucio
             return m_mask[i];
         }
         void setAt(const uint32_t i, const char ch) {
-            assert(ch != Dictionary::ANY_CHAR);
-            if (m_mask[i] == Dictionary::ANY_CHAR) {
+            assert(ch != ANY_CHAR);
+            if (m_mask[i] == ANY_CHAR) {
                 --m_wildcards;
             }
             m_mask[i] = ch;
         }
         void unsetAt(const uint32_t i) {
-            if (m_mask[i] != Dictionary::ANY_CHAR) {
+            if (m_mask[i] != ANY_CHAR) {
                 ++m_wildcards;
             }
-            m_mask[i] = Dictionary::ANY_CHAR;
+            m_mask[i] = ANY_CHAR;
         }
 
         // rematches pattern, updates matching result
         void doMatch() {
             m_dictionary->getMatchings(m_mask, m_matchings,
-                                       &m_excludedIDs, &m_excludedWords);
+                                       &m_excluded);
         }
 
         // rematches pattern, updates matching result and letter masks
         void doMatchUpdating() {
             m_dictionary->getMatchings(m_mask, m_matchings,
-                                       &m_excludedIDs, &m_excludedWords);
+                                       &m_excluded);
 
             // updates letters masks
             m_dictionary->getPossible(m_matchings, &m_letterMasks);
         }
 
         // word id in dictionary (WARNING: only after matching a complete mask!)
-        // returns UINT_MAX if no dictionary existence check
         const uint32_t getID() const {
-            return m_matchings->getFirstID();
+            assert(isComplete());
+
+            uint32_t id = m_matchings->getFirstID();
+            if (id == UINT_MAX) {
+                // TODO: add to matcher dictionary
+            }
+            return id;
         }
 
-        // exclusion list management for doMatch()
-        void excludeID(const uint32_t id) {
-            m_excludedIDs.insert(id);
+        // exclusions management for doMatch()
+        void exclude(const int id) {
+            m_excluded.insert(id);
         }
-        void includeID(const uint32_t id) {
-            m_excludedIDs.erase(id);
-        }
-        void excludeWord(const std::string& word) {
-            m_excludedWords.insert(word);
-        }
-        void includeWord(const std::string& word) {
-            m_excludedWords.erase(word);
+        void include(const int id) {
+            m_excluded.erase(id);
         }
 
         // current domains
@@ -154,8 +150,7 @@ namespace crucio
         MatchingResult* m_matchings;
 
         // both ID based and word based
-        std::set<uint32_t> m_excludedIDs;
-        std::set<std::string> m_excludedWords;
+        std::set<uint32_t> m_excluded;
     };
 }
 

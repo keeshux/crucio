@@ -43,8 +43,7 @@ namespace crucio
         virtual bool getMatchings(WordSetIndex* const wsIndex,
                                   const std::string& pattern,
                                   MatchingResult* const res,
-                                  const std::set<uint32_t>* const excludedIDs,
-                                  const std::set<std::string>* const excludedWords) = 0;
+                                  const std::set<uint32_t>* const exclusions) = 0;
 
         // return possible letters given a matching result
         virtual bool getPossible(WordSetIndex* const wsIndex,
@@ -58,9 +57,6 @@ namespace crucio
     class Dictionary
     {
     public:
-        static const char ANY_CHAR;
-        static const ABMask ANY_MASK;
-
         static const uint32_t MIN_LENGTH = 2;
         static const uint32_t MAX_LENGTH = 32;
 
@@ -103,11 +99,10 @@ namespace crucio
         }
         bool getMatchings(const std::string& pattern,
                           MatchingResult* const res,
-                          const std::set<uint32_t>* const excludedIDs,
-                          const std::set<std::string>* const excludedWords) const {
+                          const std::set<uint32_t>* const exclusions) const {
 
             return m_matcher->getMatchings(m_index, pattern, res,
-                                           excludedIDs, excludedWords);
+                                           exclusions);
         }
         bool getPossible(const MatchingResult* const res,
                          std::vector<ABMask>* const possibleVector) const {

@@ -176,7 +176,7 @@ bool Compiler::isDeterministicSolution() const
                 if (slw) {
 
                     // excludes chosen value for sw from slw
-                    slw->excludeID(chosenID);
+                    slw->exclude(chosenID);
                     slw->doMatch();
                 }
             }
