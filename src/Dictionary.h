@@ -124,11 +124,7 @@ namespace crucio
     class MatchingResult
     {
     public:
-        MatchingResult(const Dictionary* const d, const uint32_t len) :
-            m_dictionary(d),
-            m_wordsLength(len),
-            m_IDs() {
-        }
+        friend class Dictionary;
 
         // matching words length
         uint32_t getWordsLength() const {
@@ -209,6 +205,12 @@ namespace crucio
         const Dictionary* const m_dictionary;
         const uint32_t m_wordsLength;
         std::vector<uint32_t> m_IDs;
+
+        MatchingResult(const Dictionary* const d, const uint32_t len) :
+            m_dictionary(d),
+            m_wordsLength(len),
+            m_IDs() {
+        }
     };
 }
 

@@ -33,6 +33,7 @@ UnicityMatcher::~UnicityMatcher()
 
 void UnicityMatcher::loadIndex(WordSetIndex* const wsIndex)
 {
+    // initially empty
 }
 
 bool UnicityMatcher::getMatchings(WordSetIndex *const wsIndex,
