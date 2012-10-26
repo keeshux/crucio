@@ -23,7 +23,9 @@
 using namespace crucio;
 using namespace std;
 
-SolutionMatcher::SolutionMatcher()
+SolutionMatcher::SolutionMatcher() :
+    m_customWords(),
+    m_lastWordID(0)
 {
 }
 
@@ -41,6 +43,14 @@ bool SolutionMatcher::getMatchings(WordSetIndex* const wsIndex,
                                    MatchingResult* const res,
                                    const set<uint32_t>* const exclusions)
 {
+//    cout << "exclusions (" << exclusions->size() << "):" << endl;
+//    for (set<uint32_t>::const_iterator i = exclusions->begin();
+//         i != exclusions->end();
+//         ++i) {
+//
+//        cout << "\t" << getCustomWord(*i) << endl;
+//    }
+    
     return true;
 }
 
@@ -51,14 +61,27 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
     return true;
 }
 
-uint32_t SolutionMatcher::addCustomWord(const std::string& word)
+uint32_t SolutionMatcher::addCustomWord(const string& word)
 {
-#warning TODO
-    return UINT_MAX;
+    const uint32_t id = m_lastWordID;
+    m_customWords.insert(make_pair(id, word));
+//    cout << "added '" << word << "' with id " << endl;
+    ++m_lastWordID;
+    
+    return id;
+}
+
+const string& SolutionMatcher::getCustomWord(const uint32_t id) const
+{
+    return m_customWords.find(id)->second;
 }
 
 uint32_t SolutionMatcher::removeCustomWordID(const uint32_t id)
 {
-#warning TODO
+    const map<uint32_t, string>::iterator wordIt = m_customWords.find(id);
+//    const string word = wordIt->second;
+//    cout << "removed '" << word << "'" << endl;
+    m_customWords.erase(wordIt);
+
     return UINT_MAX;
 }

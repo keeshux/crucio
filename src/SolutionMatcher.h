@@ -44,7 +44,12 @@ namespace crucio
                                  std::vector<ABMask>* const possibleVector);
 
         virtual uint32_t addCustomWord(const std::string& word);
+        virtual const std::string& getCustomWord(const uint32_t id) const;
         virtual uint32_t removeCustomWordID(const uint32_t id);
+
+    private:
+        std::map<uint32_t, std::string> m_customWords;
+        uint32_t m_lastWordID;
     };
 }
 
