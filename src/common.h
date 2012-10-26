@@ -29,16 +29,57 @@
 #define CRUCIO_BJ
 #define CRUCIO_BJ_FAST
 
+#include <bitset>
+
 namespace crucio
 {
 #ifdef WIN32
     typedef unsigned int uint;
 #endif
 
+    /* global alphabet management (IMPORTANT: only uppercase letters!) */
+
     enum Alphabet {
         LETTERS = 'A',
         DIGITS = '0'
     };
+
+    // alphabet/domain size
+    const uint32_t LETTERS_COUNT    = 26;
+    const uint32_t DIGITS_COUNT     = 10;
+
+    // domain mask to hold max alphabet size
+    typedef std::bitset<LETTERS_COUNT> ABMask; // max(letters, digits)
+
+    // maps i to i-th letter of alphabet
+    inline char index2Character(const Alphabet alphabet, const uint32_t i)
+    {
+        return (char)(alphabet + i);
+    }
+
+    // maps ch to its alphabet index
+    inline uint32_t character2Index(const Alphabet alphabet, const char ch)
+    {
+        return (ch - alphabet);
+    }
+
+    inline std::string ABMaskString(const Alphabet alphabet, const ABMask mask)
+    {
+        std::string s = "";
+
+        s += "{";
+        uint32_t i;
+        for (i = 0; i < mask.size(); ++i) {
+            if (mask[i]) {
+                s += index2Character(alphabet, i);
+            }
+        }
+        s += "}";
+
+        return s;
+    }
+
+    /* exceptions */
 
     class CrucioException
     {

@@ -162,10 +162,9 @@ bool LetterCompiler::compileFrom(const uint32_t i)
 
         // admittable domain
         ABMask domainMask = m_domains[li];
-#warning XXX: cannot print domains
-//        if (isVerbose()) {
-//            *m_verboseOut << "domain for " << li << " = " << domainMask << endl;
-//        }
+        if (isVerbose()) {
+            *m_verboseOut << "domain for " << li << " = " << ABMaskString(m_alphabet, domainMask) << endl;
+        }
 
         // removal stack through forward checking
         stack<pair<uint32_t, ABMask> > remStack;
@@ -361,12 +360,11 @@ bool LetterCompiler::assign(const uint32_t li,
                     // puts removed values on the stack
                     remStack->push(make_pair(slwLi, remValues));
 
-#warning XXX: cannot print domains
-//                    if (isVerbose() && remValues.any()) {
-//                        *m_verboseOut << "\tletter " << slwLi <<
-//                                      ": removed " << remValues << ", ";
-//                        *m_verboseOut << "now " << *slwDom << endl;
-//                    }
+                    if (isVerbose() && remValues.any()) {
+                        *m_verboseOut << "\tletter " << slwLi <<
+                                      ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
+                        *m_verboseOut << "now " << ABMaskString(m_alphabet, *slwDom) << endl;
+                    }
 
                     // an empty domain implies failure
                     if (slwDom->none()) {
@@ -407,12 +405,11 @@ bool LetterCompiler::assign(const uint32_t li,
         // puts removed values on the stack
         remStack->push(make_pair(dLi, remValues));
 
-#warning XXX: cannot print domains
-//        if (isVerbose() && remValues.any()) {
-//            *m_verboseOut << "\tletter " << dLi <<
-//                          ": removed " << remValues << ", ";
-//            *m_verboseOut << "now " << *dDom << endl;
-//        }
+        if (isVerbose() && remValues.any()) {
+            *m_verboseOut << "\tletter " << dLi <<
+                          ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
+            *m_verboseOut << "now " << ABMaskString(m_alphabet, *dDom) << endl;
+        }
 
         // an empty domain implies failure
         if (dDom->none()) {

@@ -229,19 +229,3 @@ uint32_t WordSetIndex::getSize() const
     }
     return totalSize;
 }
-
-/* <global> */
-
-//ostream& operator<<(ostream& out, const ABMask& m)
-//{
-//    out << "{";
-//    uint32_t i;
-//    for (i = 0; i < m.size(); ++i) {
-//        if (m[i]) {
-//            out << index2Letter(i);
-//        }
-//    }
-//    out << "}";
-//
-//    return out;
-//}

@@ -22,7 +22,6 @@
 #define __WORD_SET_H
 
 #include <algorithm>
-#include <bitset>
 #include <fstream>
 #include <iostream>
 #include <list>
@@ -36,29 +35,10 @@
 
 namespace crucio
 {
-    /* global alphabet management (IMPORTANT: only uppercase letters!) */
-
-    const uint32_t LETTERS_COUNT    = 26;
-    const uint32_t DIGITS_COUNT     = 10;
-
-    typedef std::bitset<LETTERS_COUNT> ABMask;
-
     typedef struct {
         uint32_t length;
         uint32_t ids[1];
     } IDArray;
-
-    // maps i to i-th letter of alphabet
-    inline char index2Character(const Alphabet alphabet, const uint32_t i)
-    {
-        return (char)(alphabet + i);
-    }
-
-    // maps ch to its alphabet index
-    inline uint32_t character2Index(const Alphabet alphabet, const char ch)
-    {
-        return (ch - alphabet);
-    }
 
     /* utils */
 
@@ -271,7 +251,5 @@ namespace crucio
         }
     };
 }
-
-std::ostream& operator<<(std::ostream& out, const crucio::ABMask& m);
 
 #endif
