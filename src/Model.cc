@@ -372,7 +372,7 @@ void Model::computeWordDomains()
         // word domain
         set<uint32_t>* const wDom = &m_initWordsDomains[wi];
         const MatchingResult* const wRes = w->getMatchingResult();
-        wRes->getIDsUnion(wDom);
+        wRes->saveIDsUnion(wDom);
 
         // empty word domain
         m_overConstrained |= wDom->empty();

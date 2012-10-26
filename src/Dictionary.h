@@ -162,15 +162,16 @@ namespace crucio
             m_IDs.push_back(id);
         }
 
-        // set operations
-        void getIDsUnion(std::set<uint32_t>* const dest) const {
+        // external set operations
+        void saveIDsUnion(std::set<uint32_t>* const dest) const {
             std::vector<uint32_t>::const_iterator idIt;
+
             for (idIt = m_IDs.begin(); idIt != m_IDs.end(); ++idIt) {
                 dest->insert(*idIt);
             }
         }
-        void getIDsIntersection(std::set<uint32_t>* const dest,
-                                std::set<uint32_t>* const removed) const {
+        void saveIDsIntersection(std::set<uint32_t>* const dest,
+                                 std::set<uint32_t>* const removed) const {
 
             std::set<uint32_t>::iterator sIDIt, sNextIDIt;
             for (sIDIt = dest->begin(); sIDIt != dest->end(); sIDIt = sNextIDIt) {
