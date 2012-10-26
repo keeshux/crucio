@@ -32,7 +32,7 @@
 #include <string>
 #include <vector>
 
-#include "../common.h"
+#include "common.h"
 
 namespace crucio {
     
@@ -72,9 +72,15 @@ namespace crucio {
     
     class MatchingResult;
     
-    class AbstractDictionary {
+    class Dictionary {
     public:
-        virtual ~AbstractDictionary() {
+        static const char ANY_CHAR;
+        static const ABMask ANY_MASK;
+        
+        static const uint32_t MIN_LENGTH = 2;
+        static const uint32_t MAX_LENGTH = 32;
+        
+        virtual ~Dictionary() {
         }
 
         virtual uint32_t getSize() const = 0;
@@ -100,14 +106,14 @@ namespace crucio {
     
     class MatchingResult {
     public:
-        MatchingResult(const AbstractDictionary* const d, const uint32_t len) :
+        MatchingResult(const Dictionary* const d, const uint32_t len) :
                 m_dictionary(d),
                 m_wordsLength(len),
                 m_ids() {
         }
         
         // dictionary reference
-        const AbstractDictionary* getDictionary() const {
+        const Dictionary* getDictionary() const {
             return m_dictionary;
         }
         
@@ -178,78 +184,9 @@ namespace crucio {
         }
         
     private:
-        const AbstractDictionary* const m_dictionary;
+        const Dictionary* const m_dictionary;
         const uint32_t m_wordsLength;
         std::vector<uint32_t> m_ids;
-    };
-    
-    /* dictionary implementation */
-    
-    class WordSetIndex;
-    
-    class Dictionary : public AbstractDictionary {
-    public:
-        static const uint32_t MIN_LENGTH = 2;
-        static const uint32_t MAX_LENGTH = 32;
-        
-        static const char ANY_CHAR;
-        static const ABMask ANY_MASK;
-        
-        Dictionary(const std::set<std::string>&);
-        Dictionary(const std::string&);
-        virtual ~Dictionary();
-        
-        const std::string& getFilename() const {
-            return m_filename;
-        }
-        
-        virtual uint32_t getSize() const;
-        virtual uint32_t getSize(const uint32_t len) const;
-        
-        virtual const std::string getWord(const uint32_t len, const uint32_t id) const;
-        
-        virtual MatchingResult* createMatchingResult(const uint32_t len) const;
-        virtual void destroyMatchingResult(MatchingResult* const res) const;
-        
-        virtual bool getMatchings(const std::string&, MatchingResult* const,
-                                  const std::set<uint32_t>* const = 0) const;
-        
-        virtual bool getPossible(const MatchingResult* const, const uint32_t,
-                                 ABMask* const) const;
-        
-        virtual bool getPossible(const MatchingResult* const,
-                                 std::vector<ABMask>* const) const;
-
-    private:
-        class MakeUpper {
-        public:
-            void operator()(char& ch) const {
-                ch &= ~32;
-            }
-        };
-        
-#ifdef CRUCIO_C_ARRAYS
-        class MinSizePtr {
-        public:
-            bool operator()(const IDArray* const v1, const IDArray* const v2) const {
-                return (v1->length < v2->length);
-            }
-        };
-#else
-        class MinSizePtr {
-        public:
-            bool operator()(const std::vector<uint32_t>* const v1,
-                            const std::vector<uint32_t>* const v2) const {
-                return (v1->size() < v2->size());
-            }
-        };
-#endif
-        
-        // origin filename (if any)
-        const std::string m_filename;
-        
-        // wordsets vector wrapper
-        WordSetIndex* m_index;
     };
 }
 

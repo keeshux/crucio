@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
         cmd.parse(argc, argv);
 
         // allocates data structures through input arguments
-        const Dictionary inDict(dictArg.getValue());
+        const LanguageDictionary inDict(dictArg.getValue());
         const Grid inGrid(gridArg.getValue());
 
 #ifndef USE_BENCHMARK

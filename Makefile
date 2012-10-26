@@ -15,14 +15,17 @@ vpath %.cc = $(SRC_DIR)
 CPPFLAGS=-Wall -ansi -pedantic -I$(EXT_DIR)/include $(OPTIMIZE) \
 	$(BENCHMARK) $(PROFILE) $(DEBUG)
 
-OBJS=Dictionary.o Grid.o Walk.o Model.o Compiler.o Backjumper.o \
-	LetterCompiler.o WordCompiler.o Output.o \
+OBJS=Grid.o Walk.o Backjumper.o Model.o \
+    Dictionary.o LanguageDictionary.o \
+    Compiler.o LetterCompiler.o WordCompiler.o Output.o \
 	crucio.o cruciotex.o
 
 all: $(CRUCIO_NAME) $(CRUCIOTEX_NAME)
 
-CRUCIO_OBJS=Dictionary.o Grid.o Walk.o Model.o Compiler.o Backjumper.o \
-	LetterCompiler.o WordCompiler.o Output.o crucio.o
+CRUCIO_OBJS=Grid.o Walk.o Backjumper.o Model.o \
+    Dictionary.o LanguageDictionary.o \
+    Compiler.o LetterCompiler.o WordCompiler.o Output.o \
+    crucio.o
 
 $(CRUCIO_NAME): $(CRUCIO_OBJS)
 	$(CPP) -o $(CRUCIO_NAME) $(CRUCIO_OBJS)

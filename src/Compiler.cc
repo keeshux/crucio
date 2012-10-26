@@ -19,6 +19,7 @@
  */
 
 #include "Compiler.h"
+#include "LanguageDictionary.h"
 
 using namespace crucio;
 using namespace std;
@@ -120,7 +121,7 @@ bool Compiler::isDeterministicSolution() const {
     }
 
     // solution dictionary based on solution word list
-    const Dictionary solDict(solWordList);
+    const LanguageDictionary solDict(solWordList);
 
     // creates new words based on solution dictionary
     vector<Word*> solWords(wordsNum, (Word*) 0);

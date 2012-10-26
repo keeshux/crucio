@@ -1,8 +1,8 @@
 /*
- * Dictionary.cc
+ * LanguageDictionary.cc
  * crucio
  *
- * Copyright 2007 Davide De Rosa
+ * Copyright 2012 Davide De Rosa
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  *
  */
 
-#include "Dictionary.h"
+#include "LanguageDictionary.h"
 
 using namespace crucio;
 using namespace std;
@@ -33,8 +33,8 @@ public:
 
 // checks for a word to be only-ASCII and in [MIN_LENGTH, MAX_LENGTH]
 bool isValidWord(const string& word) {
-    if ((word.length() < Dictionary::MIN_LENGTH) ||
-        (word.length() > Dictionary::MAX_LENGTH)) {
+    if ((word.length() < LanguageDictionary::MIN_LENGTH) ||
+        (word.length() > LanguageDictionary::MAX_LENGTH)) {
         return false;
     }
     
@@ -374,19 +374,19 @@ void WordSet::load(const vector<string>& words) {
     
     // save words count (= last wordId + 1)
     m_size = wordId;
-    //    for (uint32_t i = 0; i < m_size; ++i) {
-    //        cout << ">>> " << i << " = " << m_pointers[i] << endl;
-    //    }
-    
-    //    if (m_length == 7) {
-    //        cout << "words having R as 3rd letter" << endl;
-    //        const uint32_t b = getHash(2, 'R');
-    //        const IDArray *arr = m_cpMatrix[b];
-    //        cout << "bucket = " << b << endl;
-    //        for (int j = 0; j < arr->length; ++j) {
-    //            cout << "\t" << m_pointers[arr->ids[j]] << endl;
-    //        }
-    //    }
+//    for (uint32_t i = 0; i < m_size; ++i) {
+//        cout << ">>> " << i << " = " << m_pointers[i] << endl;
+//    }
+
+//    if (m_length == 7) {
+//        cout << "words having R as 3rd letter" << endl;
+//        const uint32_t b = getHash(2, 'R');
+//        const IDArray *arr = m_cpMatrix[b];
+//        cout << "bucket = " << b << endl;
+//        for (int j = 0; j < arr->length; ++j) {
+//            cout << "\t" << m_pointers[arr->ids[j]] << endl;
+//        }
+//    }
 }
 
 #else
@@ -419,15 +419,9 @@ void WordSet::insert(const string& word) {
 
 #endif
 
-/* Dictionary */
+/* LanguageDictionary */
 
-// wildcard (any characater)
-const char Dictionary::ANY_CHAR = '-';
-
-// all ones 26-bit mask (any [A-Z] letter)
-const ABMask Dictionary::ANY_MASK = ABMask(0x03FFFFFF);
-
-Dictionary::Dictionary(const set<string>& words) :
+LanguageDictionary::LanguageDictionary(const set<string>& words) :
         m_filename(),
         m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH)) {
     
@@ -495,7 +489,7 @@ Dictionary::Dictionary(const set<string>& words) :
 #endif
 }
 
-Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH)) {
+LanguageDictionary::LanguageDictionary(const string& filename) : m_filename(filename), m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH)) {
     
     // opens words list file
     ifstream wordsIn(filename.c_str());
@@ -631,51 +625,51 @@ Dictionary::Dictionary(const string& filename) : m_filename(filename), m_index(n
 #endif
 #endif
     
-    //    const time_t timeEnd = time(NULL);
-    //    const double timeElapsed = difftime(timeEnd, timeBegin);
-    //    cout << "dictionary loaded in " << timeElapsed << " seconds" << endl;
+//    const time_t timeEnd = time(NULL);
+//    const double timeElapsed = difftime(timeEnd, timeBegin);
+//    cout << "dictionary loaded in " << timeElapsed << " seconds" << endl;
 }
 
-Dictionary::~Dictionary() {
+LanguageDictionary::~LanguageDictionary() {
     delete m_index;
 }
 
-//bool Dictionary::contains(const string& word) const {
+//bool LanguageDictionary::contains(const string& word) const {
 //    const WordSet* const ws = m_index->getWordSet(word.length());
 //    return ws->contains(word);
 //}
 
-uint32_t Dictionary::getSize() const {
+uint32_t LanguageDictionary::getSize() const {
     return m_index->getSize();
 }
 
-uint32_t Dictionary::getSize(const uint32_t len) const {
+uint32_t LanguageDictionary::getSize(const uint32_t len) const {
     const WordSet* const ws = m_index->getWordSet(len);
     return ws->getSize();
 }
 
 // maps to WordSet::getWord(id)
-const string Dictionary::getWord(const uint32_t len, const uint32_t id) const {
+const string LanguageDictionary::getWord(const uint32_t len, const uint32_t id) const {
     const WordSet* const ws = m_index->getWordSet(len);
     return ws->getWord(id);
 }
 
 //// maps to WordSet::getWordId(word)
-//const uint32_t getWordId(const string& word) const {
+//const uint32_t LanguageDictionary::getWordId(const string& word) const {
 //    const WordSet* const ws = m_index->getWordSet(word.length());
 //    return ws->getWordId(word);
 //}
 
 // wrappers for MatchingResult ctors/dctors
-MatchingResult* Dictionary::createMatchingResult(const uint32_t len) const {
+MatchingResult* LanguageDictionary::createMatchingResult(const uint32_t len) const {
     return new MatchingResult(this, len);
 }
 
-void Dictionary::destroyMatchingResult(MatchingResult* const res) const {
+void LanguageDictionary::destroyMatchingResult(MatchingResult* const res) const {
     delete res;
 }
 
-bool Dictionary::getMatchings(const string& pattern,
+bool LanguageDictionary::getMatchings(const string& pattern,
                               MatchingResult* const res, const set<uint32_t>* const excluded) const {
     const uint32_t len = pattern.length();
     
@@ -810,7 +804,7 @@ bool Dictionary::getMatchings(const string& pattern,
     return !res->getIds().empty();
 }
 
-bool Dictionary::getPossible(const MatchingResult* const res,
+bool LanguageDictionary::getPossible(const MatchingResult* const res,
                              const uint32_t pos, ABMask* const possible) const {
     const uint32_t len = res->getWordsLength();
     
@@ -852,7 +846,7 @@ bool Dictionary::getPossible(const MatchingResult* const res,
     return true;
 }
 
-bool Dictionary::getPossible(const MatchingResult* const res,
+bool LanguageDictionary::getPossible(const MatchingResult* const res,
                              vector<ABMask>* const possibleVector) const {
     
     // fixed length for words in matching result
@@ -908,31 +902,4 @@ bool Dictionary::getPossible(const MatchingResult* const res,
     }
     
     return true;
-}
-
-/* <global> */
-
-ostream& operator<<(ostream& out, const ABMask& m) {
-    out << "{";
-    uint32_t i;
-    for (i = 0; i < m.size(); ++i) {
-        if (m[i]) {
-            out << index2Letter(i);
-        }
-    }
-    out << "}";
-    
-    return out;
-}
-
-ostream& operator<<(ostream& out, const MatchingResult* const res) {
-    out << "{ ";
-    const vector<uint32_t>& ids = res->getIds();
-    uint32_t i;
-    for (i = 0; i < ids.size(); ++i) {
-        out << res->getWord(ids[i]) << " ";
-    }
-    out << "}";
-    
-    return out;
 }

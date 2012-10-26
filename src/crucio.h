@@ -7,7 +7,7 @@
 
 #include <tclap/CmdLine.h>
 
-#include "Dictionary.h"
+#include "LanguageDictionary.h"
 #include "Grid.h"
 #include "LetterCompiler.h"
 #include "Model.h"
