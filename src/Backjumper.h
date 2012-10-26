@@ -38,7 +38,7 @@ namespace crucio
                        const std::vector<std::list<uint32_t> >& deps);
 
         // backjumping logic
-        void jump(const uint32_t i, const std::set<uint32_t>* const failed = 0);
+        void jump(const uint32_t i, const std::set<uint32_t>* const failed = NULL);
 
         bool isExhausted() const {
             return m_exhausted;

@@ -30,8 +30,8 @@ Backjumper::Backjumper() :
     m_deps(),
     m_jumps(),
     m_exhausted(true),
-    m_origin(0),
-    m_destination(0)
+    m_origin(NULL),
+    m_destination(NULL)
 {
 }
 

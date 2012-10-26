@@ -27,7 +27,7 @@ Model::Model(const Dictionary* const d, const Grid* const g) :
     m_alphabet(d->getAlphabet()),
     m_dictionary(d),
     m_grid(g),
-    m_mappings(0),
+    m_mappings(),
     m_letters(g->getNonBlackCells()),
     m_words(g->getWords()),
     m_initLetters(g->getNonBlackCells(), Dictionary::ANY_CHAR),
@@ -50,7 +50,7 @@ Model::Model(const Dictionary* const d, const Grid* const g) :
     uint32_t i, j, pos;
 
     // grid traversing
-    const Cell* cl = 0;
+    const Cell* cl = NULL;
 
     // letters/words indexes matrix
     m_mappings.resize(m_grid->getRows());

@@ -29,6 +29,7 @@
 #define CRUCIO_BJ
 #define CRUCIO_BJ_FAST
 
+#include <assert.h>
 #include <bitset>
 
 namespace crucio
@@ -63,6 +64,7 @@ namespace crucio
         }
 
         // should never happen
+        assert(false);
         return 0;
     }
 

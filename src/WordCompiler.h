@@ -40,7 +40,7 @@ namespace crucio
         WordCompiler();
 
     protected:
-        virtual Compiler::Result configure(const Walk& w);
+        virtual Compiler::Result configure(const Walk& walk);
         virtual void reset();
         virtual bool compileFrom(const uint32_t i);
 

@@ -33,7 +33,7 @@ LetterCompiler::LetterCompiler() :
 {
 }
 
-Compiler::Result LetterCompiler::configure(const Walk& w)
+Compiler::Result LetterCompiler::configure(const Walk& walk)
 {
 //    uint32_t li, ordLi;
     uint32_t li;
@@ -50,7 +50,7 @@ Compiler::Result LetterCompiler::configure(const Walk& w)
     m_revDeps.resize(lettersNum);
 
     // letters graph visit
-    w.visitLetters(*m_model, &m_order);
+    walk.visitLetters(*m_model, &m_order);
     Walk::getReverseOrder(m_order, &m_revOrder);
 
     // direct and reverse dependencies
@@ -163,7 +163,7 @@ bool LetterCompiler::compileFrom(const uint32_t i)
 
 #ifdef CRUCIO_BJ_FAST
         // FC failures ignored
-        set<uint32_t>* const failedPtr = 0;
+        set<uint32_t>* const failedPtr = NULL;
 #else
         // FC failures added for BJ
         set<uint32_t> failed;

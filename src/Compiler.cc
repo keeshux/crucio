@@ -28,8 +28,8 @@ Compiler::Compiler() :
     m_unique(false),
     m_deterministic(false),
     m_verbose(false),
-    m_model(0),
-    m_verboseOut(0)
+    m_model(NULL),
+    m_verboseOut(NULL)
 {
 }
 
@@ -37,13 +37,15 @@ Compiler::~Compiler()
 {
 }
 
-Compiler::Result Compiler::compile(Model* const m, const Walk& w)
+Compiler::Result Compiler::compile(Model* const model, const Walk& walk)
 {
+    assert(model != NULL);
+
     // model reference
-    m_model = m;
+    m_model = model;
 
     // configures internal objects
-    const Compiler::Result result = configure(w);
+    const Compiler::Result result = configure(walk);
     if (result != Compiler::SUCCESS) {
         return result;
     }
@@ -127,7 +129,7 @@ bool Compiler::isDeterministicSolution() const
     const Dictionary solDict(m_model->getAlphabet(), &solMatcher);
 
     // creates new words based on solution dictionary
-    vector<Word*> solWords(wordsNum, (Word*) 0);
+    vector<Word*> solWords(wordsNum, (Word*) NULL);
     for (wi = 0; wi < wordsNum; ++wi) {
         const Word* const w = m_model->getWord(wi);
 
@@ -202,7 +204,7 @@ bool Compiler::isDeterministicSolution() const
 
         // deletes last choice
         delete *swIt;
-        *swIt = 0;
+        *swIt = NULL;
     }
 
     // deallocates words where needed

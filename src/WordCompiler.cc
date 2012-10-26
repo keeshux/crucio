@@ -36,7 +36,7 @@ WordCompiler::WordCompiler() :
 {
 }
 
-Compiler::Result WordCompiler::configure(const Walk& w)
+Compiler::Result WordCompiler::configure(const Walk& walk)
 {
 //    uint32_t wi, ordWi;
     uint32_t wi;
@@ -54,7 +54,7 @@ Compiler::Result WordCompiler::configure(const Walk& w)
     m_revDeps.resize(wordsNum);
 
     // words graph visit
-    w.visitWords(*m_model, &m_order);
+    walk.visitWords(*m_model, &m_order);
     Walk::getReverseOrder(m_order, &m_revOrder);
 
     // direct and reverse dependencies
@@ -192,7 +192,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
 
 #ifdef CRUCIO_BJ_FAST
         // FC failures ignored
-        set<uint32_t>* const failedPtr = 0;
+        set<uint32_t>* const failedPtr = NULL;
 #else
         // FC failures added for BJ
         set<uint32_t> failed;

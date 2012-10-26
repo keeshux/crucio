@@ -12,8 +12,8 @@ int main(int argc, char* argv[])
 
     // heap objects
     Matcher* inMatcher;
-    Compiler* inCpl = 0;
-    Walk* inWalk = 0;
+    Compiler* inCpl = NULL;
+    Walk* inWalk = NULL;
 
     try {
 

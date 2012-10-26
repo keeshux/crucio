@@ -75,6 +75,7 @@ namespace crucio
             return m_mask[i];
         }
         void setAt(const uint32_t i, const char ch) {
+            assert(ch != Dictionary::ANY_CHAR);
             if (m_mask[i] == Dictionary::ANY_CHAR) {
                 --m_wildcards;
             }

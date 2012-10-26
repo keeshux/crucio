@@ -66,12 +66,12 @@ namespace crucio
         }
 
         // algorithm execution
-        Result compile(Model* const m, const Walk& w);
+        Result compile(Model* const model, const Walk& walk);
 
     protected:
 
         // callbacks
-        virtual Compiler::Result configure(const Walk& w) = 0;
+        virtual Compiler::Result configure(const Walk& walk) = 0;
         virtual void reset() = 0;
         virtual bool compileFrom(const uint32_t i) = 0;
 

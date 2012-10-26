@@ -37,8 +37,8 @@ Cell::Cell(const Grid* const parent,
     m_column(column),
     m_value(value),
     m_crossing(crossing),
-    m_acrossDef(0),
-    m_downDef(0),
+    m_acrossDef(NULL),
+    m_downDef(NULL),
     m_nearCells()
 {
 }
@@ -46,7 +46,7 @@ Cell::Cell(const Grid* const parent,
 const Cell* Cell::getNorth() const
 {
     if (m_row == 0) {
-        return 0;
+        return NULL;
     }
     return m_parent->getCell(m_row - 1, m_column);
 }
@@ -54,7 +54,7 @@ const Cell* Cell::getNorth() const
 const Cell* Cell::getWest() const
 {
     if (m_column == 0) {
-        return 0;
+        return NULL;
     }
     return m_parent->getCell(m_row, m_column - 1);
 }
@@ -62,7 +62,7 @@ const Cell* Cell::getWest() const
 const Cell* Cell::getSouth() const
 {
     if (m_row == m_parent->getRows() - 1) {
-        return 0;
+        return NULL;
     }
     return m_parent->getCell(m_row + 1, m_column);
 }
@@ -70,7 +70,7 @@ const Cell* Cell::getSouth() const
 const Cell* Cell::getEast() const
 {
     if (m_column == m_parent->getColumns() - 1) {
-        return 0;
+        return NULL;
     }
     return m_parent->getCell(m_row, m_column + 1);
 }
@@ -78,7 +78,7 @@ const Cell* Cell::getEast() const
 void Cell::calculateNearCells()
 {
     // help variable
-    const Cell* cl = 0;
+    const Cell* cl = NULL;
 
     // adjacent non-black cells
     cl = getEast();
@@ -111,7 +111,7 @@ Definition::Definition(const Grid* const parent,
     m_direction(dir),
     m_number(number),
     m_length(length),
-    m_startCell(0),
+    m_startCell(NULL),
     m_crossingDefinitions()
 {
 }
@@ -122,9 +122,9 @@ void Definition::calculateCrossingDefinitions()
     const Cell* cl = m_startCell;
 
     // help variables
-    const Cell* outCl = 0;
-    const Cell* crsCl = 0;
-    const Definition* def = 0;
+    const Cell* outCl = NULL;
+    const Cell* crsCl = NULL;
+    const Definition* def = NULL;
     uint32_t pos, crsPos;
 
     // current position within definition
@@ -219,7 +219,7 @@ Grid::Grid(const string& filename) :
     ifstream gridIn;
     string rowLine, columnLine;
     string line;
-    istringstream* dataIn = 0;
+    istringstream* dataIn = NULL;
     uint32_t rows, columns;
 
     // temporary characters matrix
@@ -333,7 +333,7 @@ void Grid::initGrid(const char** charsGrid,
         for (i = 0; i < m_rows; ++i) {
             m_cells[i].resize(m_columns);
             for (j = 0; j < m_columns; ++j) {
-                m_cells[i][j] = 0;
+                m_cells[i][j] = NULL;
             }
         }
 
@@ -347,11 +347,11 @@ void Grid::initGrid(const char** charsGrid,
                 bool crossing = false;
 
                 // new cell
-                Cell* cl = 0;
+                Cell* cl = NULL;
 
                 // definitions, if existing
-                Definition* acrossDef = 0;
-                Definition* downDef = 0;
+                Definition* acrossDef = NULL;
+                Definition* downDef = NULL;
 
                 // total white/black/fixed cells
                 if (ch == Cell::WHITE) {

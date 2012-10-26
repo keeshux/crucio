@@ -46,7 +46,7 @@ namespace crucio
         static const char BLACK = '#';
 
         static bool isLegal(const char ch) {
-            return (strchr(sm_legalValues, ch) != 0);
+            return (strchr(sm_legalValues, ch) != NULL);
         }
 
         // parent grid
