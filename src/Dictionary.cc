@@ -34,6 +34,9 @@ const ABMask Dictionary::ANY_MASK = ABMask(0x03FFFFFF);
 Dictionary::Dictionary(const Matcher* const matcher) :
     m_matcher(matcher),
     m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH)) {
+
+    // load index through matcher
+    loadIndex();
 }
 
 Dictionary::~Dictionary() {
