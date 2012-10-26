@@ -44,7 +44,7 @@ namespace crucio
         virtual bool getMatchings(WordSetIndex* const wsIndex,
                                   const std::string& pattern,
                                   MatchingResult* const res,
-                                  const std::set<uint32_t>* const excluded = 0) const = 0;
+                                  const std::set<uint32_t>* const excluded) const = 0;
 
         // return possible letter at position pos given a matching result
         virtual bool getPossible(WordSetIndex* const wsIndex,
@@ -109,9 +109,9 @@ namespace crucio
         }
         bool getMatchings(const std::string& pattern,
                           MatchingResult* const res,
-                          const std::set<uint32_t>* const excluded = 0) const {
+                          const std::set<uint32_t>* const excluded) const {
 
-            return m_matcher->getMatchings(m_index, pattern, res);
+            return m_matcher->getMatchings(m_index, pattern, res, excluded);
         }
         bool getPossible(const MatchingResult* const res,
                          const uint32_t pos,
