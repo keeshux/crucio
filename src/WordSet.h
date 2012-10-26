@@ -71,7 +71,7 @@ namespace crucio
         }
 
 //        // finds word offset within wordset
-//        const uint32_t getWordId(const string& word) const {
+//        const uint32_t getWordID(const string& word) const {
 //            const vector<string>::const_iterator wIt =
 //            lower_bound(m_words.begin(),
 //                        m_words.end(),
@@ -155,7 +155,7 @@ namespace crucio
         }
 
 //        // finds word offset within wordset
-//        const uint32_t getWordId(const std::string& word) const {
+//        const uint32_t getWordID(const std::string& word) const {
 //            const std::vector<std::string>::const_iterator wIt =
 //                    std::lower_bound(m_words.begin(),
 //                                     m_words.end(),

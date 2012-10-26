@@ -312,8 +312,8 @@ bool WordCompiler::assign(const uint32_t wi,
     if (isUnique()) {
 
         // excluded word ID
-        const uint32_t excludedId = w->getID();
-        if (excludedId == UINT_MAX) {
+        const uint32_t excludedID = w->getID();
+        if (excludedID == UINT_MAX) {
             return true;
         }
 
@@ -338,11 +338,11 @@ bool WordCompiler::assign(const uint32_t wi,
             // excludes domain value (no need for rematch)
             set<uint32_t>* const slDom = &m_domains[slWi];
             const uint32_t slDomOldCount = slDom->size();
-            slw->exclude(excludedId);
-            slDom->erase(excludedId);
+            slw->exclude(excludedID);
+            slDom->erase(excludedID);
 
             // puts removed value on the stack
-            remStack->push(make_pair(slWi, excludedId));
+            remStack->push(make_pair(slWi, excludedID));
 
             if (isVerbose()) {
                 const uint32_t slDomNewCount = slDom->size();
@@ -449,8 +449,8 @@ void WordCompiler::retire(const uint32_t wi,
         if (isUnique()) {
 
             // excluded word ID
-            const uint32_t excludedId = w->getID();
-            if (excludedId == UINT_MAX) {
+            const uint32_t excludedID = w->getID();
+            if (excludedID == UINT_MAX) {
                 continue;
             }
 
@@ -466,7 +466,7 @@ void WordCompiler::retire(const uint32_t wi,
                 Word* const slw = m_model->getWord(slWi);
 
                 // reincludes completed word
-                slw->include(excludedId);
+                slw->include(excludedID);
             }
         }
 

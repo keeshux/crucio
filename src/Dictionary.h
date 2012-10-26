@@ -90,9 +90,9 @@ namespace crucio
             const WordSet* const ws = m_index->getWordSet(len);
             return ws->getWord(id);
         }
-        //const uint32_t getWordId(const string& word) const {
+        //const uint32_t getWordID(const string& word) const {
         //    const WordSet* const ws = m_index->getWordSet(word.length());
-        //    return ws->getWordId(word);
+        //    return ws->getWordID(word);
         //}
 
         /* matcher delegation */
@@ -172,18 +172,18 @@ namespace crucio
         void getIDsIntersection(std::set<uint32_t>* const dest,
                                 std::set<uint32_t>* const removed) const {
 
-            std::set<uint32_t>::iterator sIdIt, sNextIdIt;
-            for (sIdIt = dest->begin(); sIdIt != dest->end(); sIdIt = sNextIdIt) {
-                sNextIdIt = sIdIt;
-                ++sNextIdIt;
+            std::set<uint32_t>::iterator sIDIt, sNextIDIt;
+            for (sIDIt = dest->begin(); sIDIt != dest->end(); sIDIt = sNextIDIt) {
+                sNextIDIt = sIDIt;
+                ++sNextIDIt;
 
                 // current set ID
-                const uint32_t sId = *sIdIt;
+                const uint32_t sID = *sIDIt;
 
                 // removes and saves unshared values
-                if (!std::binary_search(m_IDs.begin(), m_IDs.end(), sId)) {
-                    dest->erase(sIdIt);
-                    removed->insert(sId);
+                if (!std::binary_search(m_IDs.begin(), m_IDs.end(), sID)) {
+                    dest->erase(sIDIt);
+                    removed->insert(sID);
                 }
             }
         }
@@ -194,14 +194,18 @@ namespace crucio
         }
 
         // first matching (if any)
-        uint32_t getFirstWordId() const {
+        uint32_t getFirstWordID() const {
             if (m_IDs.empty()) {
                 return UINT_MAX;
             }
             return *m_IDs.begin();
         }
         const std::string getFirstWord() const {
-            return m_dictionary->getWord(m_wordsLength, getFirstWordId());
+            const uint32_t id = getFirstWordID();
+            if (id == UINT_MAX) {
+                return "";
+            }
+            return m_dictionary->getWord(m_wordsLength, id);
         }
 
     private:

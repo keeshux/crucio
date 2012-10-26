@@ -156,7 +156,7 @@ bool Compiler::isDeterministicSolution() const
         Word* const sw = solWords[sWi];
 
         // gets matchings object to reach domain only-value
-        const uint32_t chosenId = sw->getID();
+        const uint32_t chosenID = sw->getID();
         const string& chosen = sw->get();
 
         // assigns domain value to the word
@@ -176,7 +176,7 @@ bool Compiler::isDeterministicSolution() const
                 if (slw) {
 
                     // excludes chosen value for sw from slw
-                    slw->exclude(chosenId);
+                    slw->exclude(chosenID);
                     slw->doMatch();
                 }
             }

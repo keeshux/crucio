@@ -112,7 +112,7 @@ void WordSet::load(const vector<string>& words)
 
     // 3) copy and index words
 
-    uint32_t wordId = 0;
+    uint32_t wordID = 0;
     vector<size_t> cpCounters(m_cpBuckets);
     char *wordPtr = m_words;
     for (wIt = words.begin(); wIt != words.end(); ++wIt) {
@@ -121,7 +121,7 @@ void WordSet::load(const vector<string>& words)
 
         // copy string and keep reference in pointer table
         strncpy(wordPtr, cWord, len);
-        m_pointers[wordId] = wordPtr;
+        m_pointers[wordID] = wordPtr;
 
         // character position index
         for (uint32_t pos = 0; pos < len; ++pos) {
@@ -131,17 +131,17 @@ void WordSet::load(const vector<string>& words)
 
             // appends word ID (ascending) to the bucket
             size_t& counter = cpCounters[bucket];
-            m_cpMatrix[bucket]->ids[counter] = wordId;
+            m_cpMatrix[bucket]->ids[counter] = wordID;
             ++counter;
         }
 
         // advance
         wordPtr += len + 1;
-        ++wordId;
+        ++wordID;
     }
 
     // save words count (= last wordId + 1)
-    m_size = wordId;
+    m_size = wordID;
 //    for (uint32_t i = 0; i < m_size; ++i) {
 //        cout << ">>> " << i << " = " << m_pointers[i] << endl;
 //    }
