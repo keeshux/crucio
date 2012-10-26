@@ -157,7 +157,7 @@ bool Compiler::isDeterministicSolution() const
 
         // gets matchings object to reach domain only-value
         const uint32_t chosenId = sw->getFirstId();
-        const string& chosen = sw->getFirst();
+        const string& chosen = sw->get();
 
         // assigns domain value to the word
         sw->set(chosen);

@@ -122,17 +122,14 @@ namespace crucio
             return m_matchings;
         }
 
-        // true if one only matching (implies pattern is a fixed word)
+        // true if no wildcards in pattern
         bool isComplete() const {
-            return ((m_wildcards == 0) && (m_matchings->getSize() == 1));
+            return (m_wildcards == 0);
         }
 
         // retrieves first matching word (only useful if isComplete())
         const uint32_t getFirstId() const {
             return m_matchings->getFirstWordId();
-        }
-        const std::string getFirst() const {
-            return m_matchings->getFirstWord();
         }
 
     private:
