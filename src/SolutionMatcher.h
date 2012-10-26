@@ -1,5 +1,5 @@
 /*
- * UnicityMatcher.h
+ * SolutionMatcher.h
  * crucio
  *
  * Copyright 2012 Davide De Rosa
@@ -18,19 +18,19 @@
  *
  */
 
-#ifndef __UNICITY_MATCHER_H
-#define __UNICITY_MATCHER_H
+#ifndef __SOLUTION_MATCHER_H
+#define __SOLUTION_MATCHER_H
 
 #include "Dictionary.h"
 
 namespace crucio
 {
 
-    class UnicityMatcher : public Matcher
+    class SolutionMatcher : public Matcher
     {
     public:
-        UnicityMatcher();
-        virtual ~UnicityMatcher();
+        SolutionMatcher();
+        virtual ~SolutionMatcher();
 
         virtual void loadIndex(WordSetIndex* const wsIndex);
 
