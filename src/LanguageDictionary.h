@@ -29,22 +29,22 @@ namespace crucio {
     
     class LanguageDictionary : public Dictionary {
     public:
-        LanguageDictionary(const std::set<std::string>&);
-        LanguageDictionary(const std::string&);
+        LanguageDictionary(const std::set<std::string>& words);
+        LanguageDictionary(const std::string& filename);
         virtual ~LanguageDictionary();
         
         const std::string& getFilename() const {
             return m_filename;
         }
         
-        virtual bool getMatchings(const std::string&, MatchingResult* const,
-                                  const std::set<uint32_t>* const = 0) const;
+        virtual bool getMatchings(const std::string& pattern, MatchingResult* const res,
+                                  const std::set<uint32_t>* const excluded = 0) const;
         
-        virtual bool getPossible(const MatchingResult* const, const uint32_t,
-                                 ABMask* const) const;
+        virtual bool getPossible(const MatchingResult* const res, const uint32_t pos,
+                                 ABMask* const possible) const;
         
-        virtual bool getPossible(const MatchingResult* const,
-                                 std::vector<ABMask>* const) const;
+        virtual bool getPossible(const MatchingResult* const res,
+                                 std::vector<ABMask>* const possibleVector) const;
 
     private:
         class MakeUpper {
@@ -74,6 +74,7 @@ namespace crucio {
         public:
             bool operator()(const std::vector<uint32_t>* const v1,
                             const std::vector<uint32_t>* const v2) const {
+
                 return (v1->size() < v2->size());
             }
         };
@@ -83,7 +84,7 @@ namespace crucio {
         const std::string m_filename;
         
         // input validation
-        static bool isValidWord(const std::string&);
+        static bool isValidWord(const std::string& word);
     };
 }
 

@@ -32,11 +32,11 @@ namespace crucio {
         Backjumper();
 
         // variables ordering and dependencies
-        void configure(const std::vector<uint32_t>&,
-                const std::vector<std::list<uint32_t> >&);
+        void configure(const std::vector<uint32_t>& order,
+                const std::vector<std::list<uint32_t> >& deps);
 
         // backjumping logic
-        void jump(const uint32_t, const std::set<uint32_t>* const = 0);
+        void jump(const uint32_t i, const std::set<uint32_t>* const failed = 0);
 
         bool isExhausted() const {
             return m_exhausted;

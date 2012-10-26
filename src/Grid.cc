@@ -508,6 +508,7 @@ bool Grid::isConnected() const {
 
 uint32_t Grid::getReachableFrom(const Cell* const cl,
         set<const Cell*, CellCompare>* const visited) {
+
     uint32_t reachable = 0;
 
     // skips visited cells

@@ -73,16 +73,16 @@ namespace crucio {
         /* implement in subclasses */
 
         // return words matching a pattern, excluding given IDs (optional)
-        virtual bool getMatchings(const std::string&, MatchingResult* const,
-                                  const std::set<uint32_t>* const = 0) const = 0;
+        virtual bool getMatchings(const std::string& pattern, MatchingResult* const res,
+                                  const std::set<uint32_t>* const excluded = 0) const = 0;
         
         // return possible letter at position pos given a matching result
-        virtual bool getPossible(const MatchingResult* const, const uint32_t,
-                                 ABMask* const) const = 0;
+        virtual bool getPossible(const MatchingResult* const res, const uint32_t pos,
+                                 ABMask* const possible) const = 0;
         
         // return possible letters given a matching result
-        virtual bool getPossible(const MatchingResult* const,
-                                 std::vector<ABMask>* const) const = 0;
+        virtual bool getPossible(const MatchingResult* const res,
+                                 std::vector<ABMask>* const possibleVector) const = 0;
 
     protected:
 
@@ -177,6 +177,6 @@ namespace crucio {
     };
 }
 
-std::ostream& operator<<(std::ostream&, const crucio::MatchingResult* const);
+std::ostream& operator<<(std::ostream& out, const crucio::MatchingResult* const res);
 
 #endif

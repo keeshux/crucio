@@ -167,6 +167,7 @@ namespace crucio {
         // crossing definitions
         const std::list<std::pair<uint32_t, std::pair<const Definition*, uint32_t> > >&
                 getCrossingDefinitions() const {
+
             return m_crossingDefinitions;
         }
 
@@ -228,7 +229,7 @@ namespace crucio {
 
         Grid(const char** charsGrid,
              const uint32_t rows, const uint32_t columns);
-        Grid(const std::string&);
+        Grid(const std::string& filename);
         ~Grid();
 
         // grid details
@@ -307,9 +308,9 @@ namespace crucio {
 
     private:
         void initGrid(const char** charsGrid,
-                      const uint32_t rows, const uint32_t columns);
-        static uint32_t getReachableFrom(const Cell* const,
-                std::set<const Cell*, CellCompare>* const);
+                const uint32_t rows, const uint32_t columns);
+        static uint32_t getReachableFrom(const Cell* const cl,
+                std::set<const Cell*, CellCompare>* const visited);
 
         const std::string m_filename;
         uint32_t m_rows;
@@ -330,6 +331,6 @@ namespace crucio {
     };
 }
 
-std::ostream& operator<<(std::ostream&, const crucio::Grid&);
+std::ostream& operator<<(std::ostream& out, const crucio::Grid& g);
 
 #endif

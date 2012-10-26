@@ -36,6 +36,7 @@ Backjumper::Backjumper() :
 
 void Backjumper::configure(const vector<uint32_t>& order,
         const vector<list<uint32_t> >& deps) {
+
     m_order = order;
     Walk::getReverseOrder(m_order, &m_revOrder);
     m_deps = deps;
