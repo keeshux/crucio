@@ -53,7 +53,7 @@ LanguageMatcher::~LanguageMatcher()
 {
 }
 
-void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex)
+void LanguageMatcher::loadIndex(WordSetIndex* const wsIndex)
 {
     if (m_words) {
         loadWords(wsIndex);
@@ -65,7 +65,7 @@ void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex)
     m_alphabet = wsIndex->getAlphabet();
 }
 
-void LanguageMatcher::loadWords(WordSetIndex *const wsIndex) const
+void LanguageMatcher::loadWords(WordSetIndex* const wsIndex) const
 {
     // uppercase
     MakeUpper upper;
@@ -131,7 +131,7 @@ void LanguageMatcher::loadWords(WordSetIndex *const wsIndex) const
 #endif
 }
 
-void LanguageMatcher::loadFilename(WordSetIndex *const wsIndex) const
+void LanguageMatcher::loadFilename(WordSetIndex* const wsIndex) const
 {
     // opens words list file
     ifstream wordsIn(m_filename.c_str());
@@ -272,7 +272,7 @@ void LanguageMatcher::loadFilename(WordSetIndex *const wsIndex) const
 //    cout << "dictionary loaded in " << timeElapsed << " seconds" << endl;
 }
 
-bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
+bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
                                    const string& pattern,
                                    MatchingResult* const res,
                                    const set<uint32_t>* const excluded)
@@ -371,7 +371,8 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
         const uint32_t id = *idIt;
 
         // skips excluded elements (if given)
-        if (excluded && (excluded->find(id) != excluded->end())) {
+//        if (excluded && (excluded->find(id) != excluded->end())) {
+        if ((excluded->find(id) != excluded->end())) {
             continue;
         }
 
@@ -408,7 +409,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
     return !res->getIDs().empty();
 }
 
-//bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
+//bool LanguageMatcher::getPossible(WordSetIndex* const wsIndex,
 //                                  const MatchingResult* const res,
 //                                  const uint32_t pos,
 //                                  ABMask* const possible) const
@@ -453,7 +454,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
 //    return true;
 //}
 
-bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
+bool LanguageMatcher::getPossible(WordSetIndex* const wsIndex,
                                   const MatchingResult* const res,
                                   vector<ABMask>* const possibleVector)
 {

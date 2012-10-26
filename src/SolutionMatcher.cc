@@ -36,7 +36,7 @@ void SolutionMatcher::loadIndex(WordSetIndex* const wsIndex)
     // initially empty
 }
 
-bool SolutionMatcher::getMatchings(WordSetIndex *const wsIndex,
+bool SolutionMatcher::getMatchings(WordSetIndex* const wsIndex,
                                    const std::string& pattern,
                                    MatchingResult* const res,
                                    const std::set<uint32_t>* const excluded)
@@ -44,7 +44,7 @@ bool SolutionMatcher::getMatchings(WordSetIndex *const wsIndex,
     return true;
 }
 
-bool SolutionMatcher::getPossible(WordSetIndex *const wsIndex,
+bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
                                   const MatchingResult* const res,
                                   std::vector<ABMask>* const possibleVector)
 {

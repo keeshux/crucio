@@ -39,12 +39,12 @@ namespace crucio
 
         virtual void loadIndex(WordSetIndex* const wsIndex);
 
-        virtual bool getMatchings(WordSetIndex *const wsIndex,
+        virtual bool getMatchings(WordSetIndex* const wsIndex,
                                   const std::string& pattern,
                                   MatchingResult* const res,
                                   const std::set<uint32_t>* const excluded);
 
-        virtual bool getPossible(WordSetIndex *const wsIndex,
+        virtual bool getPossible(WordSetIndex* const wsIndex,
                                  const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector);
 
