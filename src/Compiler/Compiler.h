@@ -21,9 +21,9 @@
 #ifndef __COMPILER_H
 #define __COMPILER_H
 
-#include "Model.h"
-#include "Output.h"
-#include "Walk.h"
+#include "../Model.h"
+#include "../Output.h"
+#include "../Walk.h"
 
 namespace crucio {
     class Compiler {

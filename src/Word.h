@@ -87,9 +87,6 @@ namespace crucio {
 
         // rematches pattern and updates letters masks
         void doMatch(const bool updateLetters = false) {
-            if (!m_dictionary) {
-                return;
-            }
 
             // get matchings and updates exclusions list
             m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
@@ -117,7 +114,7 @@ namespace crucio {
         }
 
         // current matchings (from last doMatch())
-        const Dictionary::MatchingResult* getMatchingResult() const {
+        const MatchingResult* getMatchingResult() const {
             return m_matchings;
         }
 
@@ -143,7 +140,7 @@ namespace crucio {
         std::string m_mask;
         uint32_t m_wildcards;
         std::vector<ABMask> m_letterMasks;
-        Dictionary::MatchingResult* m_matchings;
+        MatchingResult* m_matchings;
         std::set<uint32_t> m_excluded;
     };
 }

@@ -379,7 +379,7 @@ bool WordCompiler::assign(const uint32_t wi, const string& v, string* const oldV
         // intersects domain saving removed values
         set<uint32_t>* const dDom = &m_domains[dWi];
         const uint32_t dDomOldCount = dDom->size();
-        const Dictionary::MatchingResult* const dRes = dw->getMatchingResult();
+        const MatchingResult* const dRes = dw->getMatchingResult();
         set<uint32_t> dRemDom;
         dRes->getIdsIntersection(dDom, &dRemDom);
 
