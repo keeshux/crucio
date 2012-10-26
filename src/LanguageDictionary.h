@@ -60,6 +60,14 @@ namespace crucio {
             }
         };
         
+        class IsNotAscii {
+        public:
+            bool operator()(const char ch) const {
+                const char upperCh = ch & ~32;
+                return ((upperCh < 'A') || (upperCh > 'Z'));
+            }
+        };
+        
 #ifdef CRUCIO_C_ARRAYS
         class MinSizePtr {
         public:
@@ -82,6 +90,9 @@ namespace crucio {
         
         // wordsets vector wrapper
         WordSetIndex* m_index;
+
+        // input validation
+        static bool isValidWord(const std::string&);
     };
 }
 

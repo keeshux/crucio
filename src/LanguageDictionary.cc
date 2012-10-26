@@ -23,26 +23,6 @@
 using namespace crucio;
 using namespace std;
 
-class IsNotAscii {
-public:
-    bool operator()(const char ch) const {
-        const char upperCh = ch & ~32;
-        return ((upperCh < 'A') || (upperCh > 'Z'));
-    }
-};
-
-// checks for a word to be only-ASCII and in [MIN_LENGTH, MAX_LENGTH]
-bool isValidWord(const string& word) {
-    if ((word.length() < LanguageDictionary::MIN_LENGTH) ||
-        (word.length() > LanguageDictionary::MAX_LENGTH)) {
-        return false;
-    }
-    
-    // true if no non-ASCII letters, that is (IsNotAscii() == false)
-    // for each letter in the word
-    return (find_if(word.begin(), word.end(), IsNotAscii()) == word.end());
-}
-
 namespace crucio {
     
 #ifdef CRUCIO_C_ARRAYS
@@ -421,6 +401,18 @@ void WordSet::insert(const string& word) {
 #endif
 
 /* LanguageDictionary */
+
+// checks for a word to be only-ASCII and in [MIN_LENGTH, MAX_LENGTH]
+bool LanguageDictionary::isValidWord(const string& word) {
+    if ((word.length() < LanguageDictionary::MIN_LENGTH) ||
+        (word.length() > LanguageDictionary::MAX_LENGTH)) {
+        return false;
+    }
+    
+    // true if no non-ASCII letters, that is (IsNotAscii() == false)
+    // for each letter in the word
+    return (find_if(word.begin(), word.end(), IsNotAscii()) == word.end());
+}
 
 LanguageDictionary::LanguageDictionary(const set<string>& words) :
         m_filename(),
