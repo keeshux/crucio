@@ -41,10 +41,10 @@ Compiler::Result WordCompiler::configure(const Walk& walk)
 //    uint32_t wi, ordWi;
     uint32_t wi;
 
-#warning XXX: only compile word models?
-//    if (m_model->getAlphabet() != LETTERS) {
-//        return Compiler::FAILURE_IMPOSSIBLE;
-//    }
+    // word compiler relies on static, preloaded dictionaries
+    if (m_model->getDictionary()->getSize() == 0) {
+        return Compiler::FAILURE_IMPOSSIBLE;
+    }
 
     // words count
     const uint32_t wordsNum = m_model->getWordsNum();
@@ -313,9 +313,10 @@ bool WordCompiler::assign(const uint32_t wi,
 
         // excluded word ID
         const uint32_t excludedID = w->getID();
-        if (excludedID == UINT_MAX) {
-            return true;
-        }
+        assert(excludedID != UINT_MAX);
+//        if (excludedID == UINT_MAX) {
+//            return true;
+//        }
 
         // selects words subset by length
         const map<uint32_t, set<uint32_t> >& wordsByLength =
@@ -450,9 +451,10 @@ void WordCompiler::retire(const uint32_t wi,
 
             // excluded word ID
             const uint32_t excludedID = w->getID();
-            if (excludedID == UINT_MAX) {
-                continue;
-            }
+            assert(excludedID != UINT_MAX);
+//            if (excludedID == UINT_MAX) {
+//                continue;
+//            }
 
             // selects words subset by length
             const map<uint32_t, set<uint32_t> >& wordsByLength =
