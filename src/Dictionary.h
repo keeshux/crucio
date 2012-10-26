@@ -193,8 +193,11 @@ namespace crucio
             return m_dictionary->getWord(m_wordsLength, id);
         }
 
-        // first matching (NOTE: must be !isEmpty())
+        // first matching (if any)
         uint32_t getFirstWordId() const {
+            if (m_IDs.empty()) {
+                return UINT_MAX;
+            }
             return *m_IDs.begin();
         }
         const std::string getFirstWord() const {
