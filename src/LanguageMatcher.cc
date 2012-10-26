@@ -26,7 +26,7 @@ using namespace std;
 // checks for a word to be only-ASCII and in [MIN_LENGTH, MAX_LENGTH]
 bool LanguageMatcher::isValidWord(const string& word) {
     if ((word.length() < Dictionary::MIN_LENGTH) ||
-        (word.length() > Dictionary::MAX_LENGTH)) {
+            (word.length() > Dictionary::MAX_LENGTH)) {
 
         return false;
     }

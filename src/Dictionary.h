@@ -27,9 +27,9 @@
 namespace crucio {
 
     class MatchingResult;
-    
+
     /* Matcher: loading/matching implementation */
-    
+
     class Matcher {
     public:
         virtual ~Matcher() {
@@ -43,22 +43,22 @@ namespace crucio {
                                   const std::string& pattern,
                                   MatchingResult* const res,
                                   const std::set<uint32_t>* const excluded = 0) const = 0;
-        
+
         // return possible letter at position pos given a matching result
         virtual bool getPossible(WordSetIndex* const wsIndex,
                                  const MatchingResult* const res,
                                  const uint32_t pos,
                                  ABMask* const possible) const = 0;
-        
+
         // return possible letters given a matching result
         virtual bool getPossible(WordSetIndex* const wsIndex,
                                  const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector) const = 0;
-        
+
     };
 
     /* Dictionary */
-    
+
     class Dictionary {
     public:
         static const char ANY_CHAR;
@@ -118,12 +118,12 @@ namespace crucio {
         }
         bool getPossible(const MatchingResult* const res,
                          std::vector<ABMask>* const possibleVector) const {
-            
+
             return m_matcher->getPossible(m_index, res, possibleVector);
         }
 
     private:
-        
+
         // laoding/matching algorithm
         const Matcher *const m_matcher;
 
@@ -139,10 +139,10 @@ namespace crucio {
             m_ids() {
         }
 
-        // dictionary reference
-        const Dictionary* getDictionary() const {
-            return m_dictionary;
-        }
+//        // dictionary reference
+//        const Dictionary* getDictionary() const {
+//            return m_dictionary;
+//        }
 
         // matching words length
         uint32_t getWordsLength() const {
