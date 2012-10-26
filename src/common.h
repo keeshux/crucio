@@ -39,7 +39,7 @@ namespace crucio
         LETTERS = 'A',
         DIGITS = '0'
     };
-    
+
     class CrucioException
     {
     public:

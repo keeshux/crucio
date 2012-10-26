@@ -65,7 +65,7 @@ namespace crucio
 
         Dictionary(const Alphabet alphabet, Matcher* const matcher);
         ~Dictionary();
-        
+
         // proxy for MatchingResult ctors/dctors
         MatchingResult* createMatchingResult(const uint32_t len) const;
         void destroyMatchingResult(MatchingResult* const res) const;
@@ -154,7 +154,7 @@ namespace crucio
         const std::vector<uint32_t>& getIDs() const {
             return m_IDs;
         }
-        
+
         // IDs modification
         void clear() {
             m_IDs.clear();

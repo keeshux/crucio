@@ -312,7 +312,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
         // recalculates possible letters within the word
         w->doMatchUpdating();
-        
+
         // word completed, constrains remaining words having same length
         if (isUnique() && w->isComplete()) {
 

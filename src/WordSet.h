@@ -192,7 +192,7 @@ namespace crucio
 
         // vector of words (offsets) containing ch at position pos
         const std::vector<uint32_t>* getCPVector(const uint32_t pos,
-                                            const char ch) const {
+                const char ch) const {
 
             return &m_cpMatrix[getHash(pos, ch)];
         }

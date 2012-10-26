@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
             break;
 
         case DIGITS:
-            inMatcher = new SolutionMatcher();
+            inMatcher = new UnicityMatcher();
             break;
         }
 

@@ -1,5 +1,5 @@
 /*
- * SolutionMatcher.cc
+ * UnicityMatcher.cc
  * crucio
  *
  * Copyright 2012 Davide De Rosa
@@ -18,34 +18,34 @@
  *
  */
 
-#include "SolutionMatcher.h"
+#include "UnicityMatcher.h"
 
 using namespace crucio;
 using namespace std;
 
-SolutionMatcher::SolutionMatcher()
+UnicityMatcher::UnicityMatcher()
 {
 }
 
-SolutionMatcher::~SolutionMatcher()
+UnicityMatcher::~UnicityMatcher()
 {
 }
 
-void SolutionMatcher::loadIndex(WordSetIndex* const wsIndex)
+void UnicityMatcher::loadIndex(WordSetIndex* const wsIndex)
 {
 }
 
-bool SolutionMatcher::getMatchings(WordSetIndex *const wsIndex,
-                                   const std::string& pattern,
-                                   MatchingResult* const res,
-                                   const std::set<uint32_t>* const excluded)
+bool UnicityMatcher::getMatchings(WordSetIndex *const wsIndex,
+                                  const std::string& pattern,
+                                  MatchingResult* const res,
+                                  const std::set<uint32_t>* const excluded)
 {
     return true;
 }
 
-bool SolutionMatcher::getPossible(WordSetIndex *const wsIndex,
-                                  const MatchingResult* const res,
-                                  std::vector<ABMask>* const possibleVector)
+bool UnicityMatcher::getPossible(WordSetIndex *const wsIndex,
+                                 const MatchingResult* const res,
+                                 std::vector<ABMask>* const possibleVector)
 {
     return true;
 }

@@ -95,7 +95,7 @@ namespace crucio
         // rematches pattern, updates matching result and letter masks
         void doMatchUpdating() {
             m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
-            
+
             // updates letters masks
             m_dictionary->getPossible(m_matchings, &m_letterMasks);
         }

@@ -8,7 +8,7 @@
 #include <tclap/CmdLine.h>
 
 #include "LanguageMatcher.h"
-#include "SolutionMatcher.h"
+#include "UnicityMatcher.h"
 #include "Grid.h"
 #include "LetterCompiler.h"
 #include "Model.h"

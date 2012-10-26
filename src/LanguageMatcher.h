@@ -89,7 +89,7 @@ namespace crucio
         // origin word list or filename (if any)
         const std::set<std::string>* m_words;
         const std::string m_filename;
-        
+
         // cached alphabet
         Alphabet m_alphabet;
 

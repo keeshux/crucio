@@ -60,7 +60,7 @@ void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex)
     } else {
         loadFilename(wsIndex);
     }
-    
+
     // save alphabet locally
     m_alphabet = wsIndex->getAlphabet();
 }
