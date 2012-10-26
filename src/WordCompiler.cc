@@ -311,12 +311,9 @@ bool WordCompiler::assign(const uint32_t wi,
     // excludes domain value from remaining words of same length
     if (isUnique()) {
 
-        // excluded word ID
+        // excluded word ID (must exist in dictionary)
         const uint32_t excludedID = w->getID();
         assert(excludedID != UINT_MAX);
-//        if (excludedID == UINT_MAX) {
-//            return true;
-//        }
 
         // selects words subset by length
         const map<uint32_t, set<uint32_t> >& wordsByLength =
@@ -449,12 +446,9 @@ void WordCompiler::retire(const uint32_t wi,
         // readmit domain value in same length words
         if (isUnique()) {
 
-            // excluded word ID
+            // excluded word ID (must exist in dictionary)
             const uint32_t excludedID = w->getID();
             assert(excludedID != UINT_MAX);
-//            if (excludedID == UINT_MAX) {
-//                continue;
-//            }
 
             // selects words subset by length
             const map<uint32_t, set<uint32_t> >& wordsByLength =
