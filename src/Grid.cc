@@ -27,6 +27,21 @@ using namespace std;
 
 const char Cell::sm_legalValues[] = "-#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+Cell::Cell(const Grid* const parent,
+           const uint32_t row,
+           const uint32_t column,
+           const char value,
+           const bool crossing) :
+    m_parent(parent),
+    m_row(row),
+    m_column(column),
+    m_value(value),
+    m_crossing(crossing),
+    m_acrossDef(0),
+    m_downDef(0),
+    m_nearCells() {
+}
+
 const Cell* Cell::getNorth() const {
     if (m_row == 0) {
         return 0;
@@ -80,6 +95,20 @@ void Cell::calculateNearCells() {
 }
 
 /* Definition */
+
+Definition::Definition(const Grid* const parent,
+                       const uint32_t index,
+                       const Direction dir,
+                       const uint32_t number,
+                       const uint32_t length) :
+    m_parent(parent),
+    m_index(index),
+    m_direction(dir),
+    m_number(number),
+    m_length(length),
+    m_startCell(0),
+    m_crossingDefinitions() {
+}
 
 void Definition::calculateCrossingDefinitions() {
 

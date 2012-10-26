@@ -108,18 +108,11 @@ namespace crucio {
         const Definition* m_downDef;
         std::list<const Cell*> m_nearCells;
 
-        Cell(const Grid* const parent, const uint32_t row,
-             const uint32_t column, const char value,
-             const bool crossing) :
-            m_parent(parent),
-            m_row(row),
-            m_column(column),
-            m_value(value),
-            m_crossing(crossing),
-            m_acrossDef(0),
-            m_downDef(0),
-            m_nearCells() {
-        }
+        Cell(const Grid* const parent,
+             const uint32_t row,
+             const uint32_t column,
+             const char value,
+             const bool crossing);
 
         // called by grid after ctor
         void setAcrossDef(const Definition* const acrossDef) {
@@ -183,17 +176,11 @@ namespace crucio {
         std::list<std::pair<uint32_t, std::pair<const Definition*, uint32_t> > >
         m_crossingDefinitions;
 
-        Definition(const Grid* const parent, const uint32_t index,
-                   const Direction dir, const uint32_t number,
-                   const uint32_t length) :
-            m_parent(parent),
-            m_index(index),
-            m_direction(dir),
-            m_number(number),
-            m_length(length),
-            m_startCell(0),
-            m_crossingDefinitions() {
-        }
+        Definition(const Grid* const parent,
+                   const uint32_t index,
+                   const Direction dir,
+                   const uint32_t number,
+                   const uint32_t length);
 
         // called by grid after ctor
         void setStartCell(const Cell* const startCell) {
