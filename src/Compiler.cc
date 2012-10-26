@@ -29,14 +29,16 @@ Compiler::Compiler() :
     m_deterministic(false),
     m_verbose(false),
     m_model(0),
-    m_verboseOut(0) {
+    m_verboseOut(0)
+{
 }
 
-Compiler::~Compiler() {
+Compiler::~Compiler()
+{
 }
 
-Compiler::Result Compiler::compile(Model* const m, const Walk& w) {
-
+Compiler::Result Compiler::compile(Model* const m, const Walk& w)
+{
     // model reference
     m_model = m;
 
@@ -104,8 +106,8 @@ Compiler::Result Compiler::compile(Model* const m, const Walk& w) {
 
 // checks for solution determinism (assumes ALL words are complete, i.e.
 // model compiling succeeded)
-bool Compiler::isDeterministicSolution() const {
-
+bool Compiler::isDeterministicSolution() const
+{
     // word index and solution words iterator
     uint32_t wi;
     vector<Word*>::iterator swIt;

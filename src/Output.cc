@@ -33,8 +33,8 @@ void crucio::printInputDescription(ostream& out,
                                    const bool unique,
                                    const bool deterministic,
                                    const uint32_t seed,
-                                   const bool verbose) {
-
+                                   const bool verbose)
+{
     // grid indexes
     uint32_t i, j;
 
@@ -73,8 +73,8 @@ void crucio::printInputDescription(ostream& out,
     out << endl;
 }
 
-void crucio::printModelDescription(ostream& out, const Model& m) {
-
+void crucio::printModelDescription(ostream& out, const Model& m)
+{
     // model letters/words shortcuts
     const uint32_t lettersNum = m.getLettersNum();
     const uint32_t wordsNum = m.getWordsNum();
@@ -157,7 +157,8 @@ void crucio::printModelDescription(ostream& out, const Model& m) {
     }
 }
 
-void crucio::printModelGrid(ostream& out, const Model& m) {
+void crucio::printModelGrid(ostream& out, const Model& m)
+{
     const Grid* const g = m.getGrid();
     const vector<Word*>& words = m.getWords();
 
@@ -210,7 +211,8 @@ void crucio::printModelGrid(ostream& out, const Model& m) {
     }
 }
 
-void crucio::printOutput(ostream& out, const Model& m) {
+void crucio::printOutput(ostream& out, const Model& m)
+{
     const vector<Word*>& words = m.getWords();
 
     // words traversing
@@ -289,7 +291,8 @@ Output::Output(const Model& m) :
     m_rows(0),
     m_columns(0),
     m_cellsData(),
-    m_defsData() {
+    m_defsData()
+{
     uint32_t i, j;
     uint32_t wi;
 
@@ -355,8 +358,8 @@ Output::Output(istream& in) :
     m_rows(0),
     m_columns(0),
     m_cellsData(),
-    m_defsData() {
-
+    m_defsData()
+{
     // 32-bit integer buffer (big endian)
     char numBuf[4];
 
@@ -431,8 +434,8 @@ Output::Output(istream& in) :
         }*/
 }
 
-void Output::printRaw(ostream& out) const {
-
+void Output::printRaw(ostream& out) const
+{
     // 32-bit integer buffer (big endian)
     char numBuf[4];
 
@@ -501,8 +504,8 @@ void Output::printRaw(ostream& out) const {
 
 void Output::printLatex(ostream& out,
                         const bool solution,
-                        const bool fillIn) const {
-
+                        const bool fillIn) const
+{
     uint32_t i, j;
 
     // string buffers

@@ -31,20 +31,21 @@ Backjumper::Backjumper() :
     m_jumps(),
     m_exhausted(true),
     m_origin(0),
-    m_destination(0) {
+    m_destination(0)
+{
 }
 
 void Backjumper::configure(const vector<uint32_t>& order,
-                           const vector<list<uint32_t> >& deps) {
-
+                           const vector<list<uint32_t> >& deps)
+{
     m_order = order;
     Walk::getReverseOrder(m_order, &m_revOrder);
     m_deps = deps;
 }
 
 // i = variable, failed = further failed variables
-void Backjumper::jump(const uint32_t i, const set<uint32_t>* const failed) {
-
+void Backjumper::jump(const uint32_t i, const set<uint32_t>* const failed)
+{
     // variable index
     const uint32_t vi = m_order[i];
 

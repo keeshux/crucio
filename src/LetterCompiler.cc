@@ -29,10 +29,12 @@ LetterCompiler::LetterCompiler() :
     m_revOrder(),
     m_deps(),
     m_revDeps(),
-    m_bj() {
+    m_bj()
+{
 }
 
-Compiler::Result LetterCompiler::configure(const Walk& w) {
+Compiler::Result LetterCompiler::configure(const Walk& w)
+{
 //    uint32_t li, ordLi;
     uint32_t li;
 
@@ -144,14 +146,15 @@ Compiler::Result LetterCompiler::configure(const Walk& w) {
     return Compiler::SUCCESS;
 }
 
-void LetterCompiler::reset() {
+void LetterCompiler::reset()
+{
     m_model->reset();
     m_bj.reset();
     m_domains = m_model->getInitLettersDomains();
 }
 
-bool LetterCompiler::compileFrom(const uint32_t i) {
-
+bool LetterCompiler::compileFrom(const uint32_t i)
+{
     // all variables instantiated?
     if (i == m_model->getLettersNum()) {
         return true;
@@ -240,7 +243,8 @@ bool LetterCompiler::compileFrom(const uint32_t i) {
     }
 }
 
-char LetterCompiler::choose(ABMask* const domainMask) {
+char LetterCompiler::choose(ABMask* const domainMask)
+{
     uint32_t vi = 0;
 
 #ifdef CRUCIO_BENCHMARK
@@ -284,8 +288,8 @@ char LetterCompiler::choose(ABMask* const domainMask) {
 bool LetterCompiler::assign(const uint32_t li,
                             const char v,
                             stack<pair<uint32_t, ABMask> >* const remStack,
-                            set<uint32_t>* const failed) {
-
+                            set<uint32_t>* const failed)
+{
     // gets letter object
     Letter* const l = m_model->getLetter(li);
 
@@ -427,8 +431,8 @@ bool LetterCompiler::assign(const uint32_t li,
 }
 
 void LetterCompiler::retire(const uint32_t li,
-                            stack<pair<uint32_t, ABMask> >* const remStack) {
-
+                            stack<pair<uint32_t, ABMask> >* const remStack)
+{
     // gets letter object
     Letter* const l = m_model->getLetter(li);
 

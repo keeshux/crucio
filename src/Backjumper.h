@@ -26,8 +26,10 @@
 #include "Model.h"
 #include "Walk.h"
 
-namespace crucio {
-    class Backjumper {
+namespace crucio
+{
+    class Backjumper
+    {
     public:
         Backjumper();
 

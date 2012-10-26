@@ -32,8 +32,10 @@
 #include "Backjumper.h"
 #include "Compiler.h"
 
-namespace crucio {
-    class WordCompiler : public Compiler {
+namespace crucio
+{
+    class WordCompiler : public Compiler
+    {
     public:
         WordCompiler();
 

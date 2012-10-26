@@ -32,11 +32,13 @@
 
 #include "common.h"
 
-namespace crucio {
+namespace crucio
+{
     class Grid;
     class Definition;
 
-    class Cell {
+    class Cell
+    {
     public:
         friend class Grid;
 
@@ -124,7 +126,8 @@ namespace crucio {
         void calculateNearCells();
     };
 
-    class Definition {
+    class Definition
+    {
     public:
         friend class Grid;
 
@@ -189,7 +192,8 @@ namespace crucio {
         void calculateCrossingDefinitions();
     };
 
-    class CellCompare {
+    class CellCompare
+    {
     public:
         bool operator()(const Cell* const cl1,
                         const Cell* const cl2) const {
@@ -198,7 +202,8 @@ namespace crucio {
         }
     };
 
-    class DefinitionCompare {
+    class DefinitionCompare
+    {
     public:
         bool operator()(const Definition* const d1,
                         const Definition* const d2) const {
@@ -207,7 +212,8 @@ namespace crucio {
         }
     };
 
-    class Grid {
+    class Grid
+    {
     public:
 
         // prevents incorrect rows/columns format too

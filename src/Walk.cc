@@ -26,7 +26,8 @@ using namespace std;
 /* Walk */
 
 void Walk::getReverseOrder(const vector<uint32_t>& order,
-                           vector<uint32_t>* const revOrder) {
+                           vector<uint32_t>* const revOrder)
+{
     uint32_t li, ordLi;
 
     // order maps (variable order -> variable index)
@@ -40,7 +41,8 @@ void Walk::getReverseOrder(const vector<uint32_t>& order,
 
 /* BFSWalk */
 
-void BFSWalk::visitLetters(const Model& m, vector<uint32_t>* const order) const {
+void BFSWalk::visitLetters(const Model& m, vector<uint32_t>* const order) const
+{
     const Cell* const root = m.getGrid()->getFirstNonBlackCell();
 
     // reserves enough space for order vector
@@ -88,7 +90,8 @@ void BFSWalk::visitLetters(const Model& m, vector<uint32_t>* const order) const 
     }
 }
 
-void BFSWalk::visitWords(const Model& m, vector<uint32_t>* const order) const {
+void BFSWalk::visitWords(const Model& m, vector<uint32_t>* const order) const
+{
     const Definition* const root = m.getGrid()->getFirstDefinition();
 
     // reserves enough space for order vector
@@ -142,7 +145,8 @@ void BFSWalk::visitWords(const Model& m, vector<uint32_t>* const order) const {
 
 /* DFSWalk */
 
-void DFSWalk::visitLetters(const Model& m, vector<uint32_t>* const order) const {
+void DFSWalk::visitLetters(const Model& m, vector<uint32_t>* const order) const
+{
     const Cell* const root = m.getGrid()->getFirstNonBlackCell();
 
     // reserves enough space for order vector
@@ -154,7 +158,8 @@ void DFSWalk::visitLetters(const Model& m, vector<uint32_t>* const order) const 
     recursiveVisitLetters(m, root, order, &visited);
 }
 
-void DFSWalk::visitWords(const Model& m, vector<uint32_t>* const order) const {
+void DFSWalk::visitWords(const Model& m, vector<uint32_t>* const order) const
+{
     const Definition* const root = m.getGrid()->getFirstDefinition();
 
     // reserves enough space for order vector
@@ -168,8 +173,8 @@ void DFSWalk::visitWords(const Model& m, vector<uint32_t>* const order) const {
 
 void DFSWalk::recursiveVisitLetters(const Model& m,
                                     const Cell* const v, vector<uint32_t>* const order,
-                                    set<const Cell*, CellCompare>* const visited) {
-
+                                    set<const Cell*, CellCompare>* const visited)
+{
     // skips visited cells
     const pair<set<const Cell*,
           CellCompare>::iterator, bool> res =
@@ -195,8 +200,8 @@ void DFSWalk::recursiveVisitLetters(const Model& m,
 
 void DFSWalk::recursiveVisitWords(const Model& m,
                                   const Definition* const v, vector<uint32_t>* const order,
-                                  set<const Definition*, DefinitionCompare>* const visited) {
-
+                                  set<const Definition*, DefinitionCompare>* const visited)
+{
     // skips visited definitions
     const pair<set<const Definition*,
           DefinitionCompare>::iterator, bool> res =

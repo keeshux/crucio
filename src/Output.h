@@ -29,7 +29,8 @@
 #include "endian.h"
 #include "Model.h"
 
-namespace crucio {
+namespace crucio
+{
 
 // formatted output functions
     void printInputDescription(std::ostream& out,
@@ -46,7 +47,8 @@ namespace crucio {
     void printOutput(std::ostream& out, const Model& m);
 
 // crucio output manager
-    class Output {
+    class Output
+    {
     public:
         Output(const Model& m);
         Output(std::istream& in);
@@ -57,7 +59,8 @@ namespace crucio {
                         const bool fillIn = false) const;
 
     private:
-        class CellData {
+        class CellData
+        {
         public:
             CellData() :
                 m_number(0),
@@ -70,10 +73,13 @@ namespace crucio {
             char m_filled;
         };
 
-        class DefinitionData {
+        class DefinitionData
+        {
         public:
-            DefinitionData(const Definition::Direction dir, const uint32_t number,
-                           const uint32_t startRow, const uint32_t startColumn,
+            DefinitionData(const Definition::Direction dir,
+                           const uint32_t number,
+                           const uint32_t startRow,
+                           const uint32_t startColumn,
                            const std::string& str) :
                 m_direction(dir),
                 m_number(number),
@@ -111,7 +117,8 @@ namespace crucio {
             std::string m_string;
         };
 
-        class IsDown {
+        class IsDown
+        {
         public:
             bool operator()(const DefinitionData& dd) const {
                 return (dd.getDirection() == Definition::DOWN);

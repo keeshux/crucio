@@ -24,13 +24,15 @@
 #include "common.h"
 #include "WordSet.h"
 
-namespace crucio {
+namespace crucio
+{
 
     class MatchingResult;
 
     /* Matcher: loading/matching implementation */
 
-    class Matcher {
+    class Matcher
+    {
     public:
         virtual ~Matcher() {
         }
@@ -59,7 +61,8 @@ namespace crucio {
 
     /* Dictionary */
 
-    class Dictionary {
+    class Dictionary
+    {
     public:
         static const char ANY_CHAR;
         static const ABMask ANY_MASK;
@@ -131,7 +134,8 @@ namespace crucio {
         WordSetIndex* m_index;
     };
 
-    class MatchingResult {
+    class MatchingResult
+    {
     public:
         MatchingResult(const Dictionary* const d, const uint32_t len) :
             m_dictionary(d),

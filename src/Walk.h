@@ -28,8 +28,10 @@
 #include "common.h"
 #include "Model.h"
 
-namespace crucio {
-    class Walk {
+namespace crucio
+{
+    class Walk
+    {
     public:
         static void getReverseOrder(const std::vector<uint32_t>&,
                                     std::vector<uint32_t>* const);
@@ -44,7 +46,8 @@ namespace crucio {
     };
 
 // breadth-first search
-    class BFSWalk : public Walk {
+    class BFSWalk : public Walk
+    {
     public:
         virtual void visitLetters(const Model&,
                                   std::vector<uint32_t>* const) const;
@@ -53,7 +56,8 @@ namespace crucio {
     };
 
 // depth-first search
-    class DFSWalk : public Walk {
+    class DFSWalk : public Walk
+    {
     public:
         virtual void visitLetters(const Model&,
                                   std::vector<uint32_t>* const) const;

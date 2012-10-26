@@ -32,8 +32,10 @@
 #include "Backjumper.h"
 #include "Compiler.h"
 
-namespace crucio {
-    class LetterCompiler : public Compiler {
+namespace crucio
+{
+    class LetterCompiler : public Compiler
+    {
     public:
         LetterCompiler();
 

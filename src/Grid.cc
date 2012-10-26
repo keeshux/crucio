@@ -39,39 +39,44 @@ Cell::Cell(const Grid* const parent,
     m_crossing(crossing),
     m_acrossDef(0),
     m_downDef(0),
-    m_nearCells() {
+    m_nearCells()
+{
 }
 
-const Cell* Cell::getNorth() const {
+const Cell* Cell::getNorth() const
+{
     if (m_row == 0) {
         return 0;
     }
     return m_parent->getCell(m_row - 1, m_column);
 }
 
-const Cell* Cell::getWest() const {
+const Cell* Cell::getWest() const
+{
     if (m_column == 0) {
         return 0;
     }
     return m_parent->getCell(m_row, m_column - 1);
 }
 
-const Cell* Cell::getSouth() const {
+const Cell* Cell::getSouth() const
+{
     if (m_row == m_parent->getRows() - 1) {
         return 0;
     }
     return m_parent->getCell(m_row + 1, m_column);
 }
 
-const Cell* Cell::getEast() const {
+const Cell* Cell::getEast() const
+{
     if (m_column == m_parent->getColumns() - 1) {
         return 0;
     }
     return m_parent->getCell(m_row, m_column + 1);
 }
 
-void Cell::calculateNearCells() {
-
+void Cell::calculateNearCells()
+{
     // help variable
     const Cell* cl = 0;
 
@@ -107,11 +112,12 @@ Definition::Definition(const Grid* const parent,
     m_number(number),
     m_length(length),
     m_startCell(0),
-    m_crossingDefinitions() {
+    m_crossingDefinitions()
+{
 }
 
-void Definition::calculateCrossingDefinitions() {
-
+void Definition::calculateCrossingDefinitions()
+{
     // definition starting cell
     const Cell* cl = m_startCell;
 
@@ -191,8 +197,8 @@ Grid::Grid(const char** charsGrid,
     m_crossings(0),
     m_cells(0),
     m_acrossDefinitions(),
-    m_downDefinitions() {
-
+    m_downDefinitions()
+{
     initGrid(charsGrid, rows, columns);
 }
 
@@ -207,8 +213,8 @@ Grid::Grid(const string& filename) :
     m_crossings(0),
     m_cells(0),
     m_acrossDefinitions(),
-    m_downDefinitions() {
-
+    m_downDefinitions()
+{
     // file reading
     ifstream gridIn;
     string rowLine, columnLine;
@@ -310,8 +316,8 @@ Grid::Grid(const string& filename) :
 }
 
 void Grid::initGrid(const char** charsGrid,
-                    const uint32_t rows, const uint32_t columns) {
-
+                    const uint32_t rows, const uint32_t columns)
+{
     // save size
     m_rows = rows;
     m_columns = columns;
@@ -506,8 +512,8 @@ void Grid::initGrid(const char** charsGrid,
     }
 }
 
-Grid::~Grid() {
-
+Grid::~Grid()
+{
     // cells
     for (uint32_t i = 0; i < m_rows; ++i) {
         for (uint32_t j = 0; j < m_columns; ++j) {
@@ -527,7 +533,8 @@ Grid::~Grid() {
     }
 }
 
-bool Grid::isConnected() const {
+bool Grid::isConnected() const
+{
     const Cell* const firstCl = getFirstNonBlackCell();
     set<const Cell*, CellCompare> visited;
 
@@ -536,8 +543,8 @@ bool Grid::isConnected() const {
 }
 
 uint32_t Grid::getReachableFrom(const Cell* const cl,
-                                set<const Cell*, CellCompare>* const visited) {
-
+                                set<const Cell*, CellCompare>* const visited)
+{
     uint32_t reachable = 0;
 
     // skips visited cells
@@ -563,7 +570,8 @@ uint32_t Grid::getReachableFrom(const Cell* const cl,
 
 /* <global> */
 
-ostream& operator<<(ostream& out, const Grid& g) {
+ostream& operator<<(ostream& out, const Grid& g)
+{
     for (uint32_t i = 0; i < g.getRows(); ++i) {
         for (uint32_t j = 0; j < g.getColumns(); ++j) {
             const Cell* const cl = g.getCell(i, j);

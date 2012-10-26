@@ -23,9 +23,11 @@
 
 #include "Dictionary.h"
 
-namespace crucio {
+namespace crucio
+{
 
-    class LanguageMatcher : public Matcher {
+    class LanguageMatcher : public Matcher
+    {
     public:
         LanguageMatcher(const std::set<std::string>* const words);
         LanguageMatcher(const std::string& filename);
@@ -52,14 +54,16 @@ namespace crucio {
                                  std::vector<ABMask>* const possibleVector) const;
 
     private:
-        class MakeUpper {
+        class MakeUpper
+        {
         public:
             void operator()(char& ch) const {
                 ch &= ~32;
             }
         };
 
-        class IsNotAscii {
+        class IsNotAscii
+        {
         public:
             bool operator()(const char ch) const {
                 const char upperCh = ch & ~32;
@@ -68,14 +72,16 @@ namespace crucio {
         };
 
 #ifdef CRUCIO_C_ARRAYS
-        class MinSizePtr {
+        class MinSizePtr
+        {
         public:
             bool operator()(const IDArray* const v1, const IDArray* const v2) const {
                 return (v1->length < v2->length);
             }
         };
 #else
-        class MinSizePtr {
+        class MinSizePtr
+        {
         public:
             bool operator()(const std::vector<uint32_t>* const v1,
                             const std::vector<uint32_t>* const v2) const {

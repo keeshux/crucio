@@ -33,10 +33,12 @@
 #include "Letter.h"
 #include "Word.h"
 
-namespace crucio {
+namespace crucio
+{
 
 // <word index, position in the word>
-    class LetterPosition {
+    class LetterPosition
+    {
     public:
         LetterPosition(const uint32_t wi, const uint32_t pos) :
             m_wi(wi),
@@ -56,7 +58,8 @@ namespace crucio {
     };
 
 // <word position, crossing word position>
-    class WordCrossing {
+    class WordCrossing
+    {
     public:
         WordCrossing(const uint32_t pos, const uint32_t cwPos) :
             m_pos(pos),
@@ -75,7 +78,8 @@ namespace crucio {
         uint32_t m_cwPos;
     };
 
-    class Model {
+    class Model
+    {
     public:
         enum Type {
             WORDS,
@@ -203,7 +207,8 @@ namespace crucio {
     private:
 
         // structure containing mapped letter/words in grid matrix
-        class LWInfo {
+        class LWInfo
+        {
         public:
             int m_li;
             int m_wiAcross;

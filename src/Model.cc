@@ -39,8 +39,8 @@ Model::Model(const Type type, const Dictionary* const d, const Grid* const g) :
     m_wordsLetters(g->getWords()),
     m_wordsNeighbours(g->getWords()),
     m_wordsByLength(),
-    m_overConstrained(false) {
-
+    m_overConstrained(false)
+{
     // letters and words indexes
     int li, wi;
     const int lettersNum = m_letters.size();
@@ -318,8 +318,8 @@ Model::Model(const Type type, const Dictionary* const d, const Grid* const g) :
     }
 }
 
-Model::~Model() {
-
+Model::~Model()
+{
     // letters
     vector<Letter*>::iterator lIt;
     for (lIt = m_letters.begin(); lIt != m_letters.end(); ++lIt) {
@@ -333,7 +333,8 @@ Model::~Model() {
     }
 }
 
-void Model::computeLetterDomains() {
+void Model::computeLetterDomains()
+{
     const int wordsNum = m_words.size();
     int wi;
     uint32_t pos;
@@ -359,7 +360,8 @@ void Model::computeLetterDomains() {
 }
 
 // WARNING: very high memory usage
-void Model::computeWordDomains() {
+void Model::computeWordDomains()
+{
     const int wordsNum = m_words.size();
     int wi;
 

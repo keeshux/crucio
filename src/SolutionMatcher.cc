@@ -23,34 +23,37 @@
 using namespace crucio;
 using namespace std;
 
-SolutionMatcher::SolutionMatcher() {
+SolutionMatcher::SolutionMatcher()
+{
 }
 
-SolutionMatcher::~SolutionMatcher() {
+SolutionMatcher::~SolutionMatcher()
+{
 }
 
-void SolutionMatcher::loadIndex(WordSetIndex* const wsIndex) const {
+void SolutionMatcher::loadIndex(WordSetIndex* const wsIndex) const
+{
 }
 
 bool SolutionMatcher::getMatchings(WordSetIndex *const wsIndex,
                                    const std::string& pattern,
                                    MatchingResult* const res,
-                                   const std::set<uint32_t>* const excluded) const {
-
+                                   const std::set<uint32_t>* const excluded) const
+{
     return true;
 }
 
 bool SolutionMatcher::getPossible(WordSetIndex *const wsIndex,
                                   const MatchingResult* const res,
                                   const uint32_t pos,
-                                  ABMask* const possible) const {
-
+                                  ABMask* const possible) const
+{
     return true;
 }
 
 bool SolutionMatcher::getPossible(WordSetIndex *const wsIndex,
                                   const MatchingResult* const res,
-                                  std::vector<ABMask>* const possibleVector) const {
-
+                                  std::vector<ABMask>* const possibleVector) const
+{
     return true;
 }

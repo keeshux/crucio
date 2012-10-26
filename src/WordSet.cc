@@ -28,10 +28,12 @@ using namespace std;
 #ifdef CRUCIO_C_ARRAYS
 
 WordSet::WordSet(const uint32_t len) : m_length(len), m_size(0), m_words(NULL), m_pointers(NULL),
-    m_cpBuckets(m_length * LETTERS_COUNT), m_cpMatrix(NULL) {
+    m_cpBuckets(m_length * LETTERS_COUNT), m_cpMatrix(NULL)
+{
 }
 
-WordSet::~WordSet() {
+WordSet::~WordSet()
+{
     if (m_words) {
         free(m_words);
         free(m_pointers);
@@ -42,8 +44,8 @@ WordSet::~WordSet() {
     }
 }
 
-void WordSet::load(const vector<string>& words) {
-
+void WordSet::load(const vector<string>& words)
+{
     if (m_words) {
         free(m_words);
         free(m_pointers);
@@ -133,31 +135,33 @@ void WordSet::load(const vector<string>& words) {
 
     // save words count (= last wordId + 1)
     m_size = wordId;
-    //    for (uint32_t i = 0; i < m_size; ++i) {
-    //        cout << ">>> " << i << " = " << m_pointers[i] << endl;
-    //    }
+//    for (uint32_t i = 0; i < m_size; ++i) {
+//        cout << ">>> " << i << " = " << m_pointers[i] << endl;
+//    }
 
-    //    if (m_length == 7) {
-    //        cout << "words having R as 3rd letter" << endl;
-    //        const uint32_t b = getHash(2, 'R');
-    //        const IDArray *arr = m_cpMatrix[b];
-    //        cout << "bucket = " << b << endl;
-    //        for (int j = 0; j < arr->length; ++j) {
-    //            cout << "\t" << m_pointers[arr->ids[j]] << endl;
-    //        }
-    //    }
+//    if (m_length == 7) {
+//        cout << "words having R as 3rd letter" << endl;
+//        const uint32_t b = getHash(2, 'R');
+//        const IDArray *arr = m_cpMatrix[b];
+//        cout << "bucket = " << b << endl;
+//        for (int j = 0; j < arr->length; ++j) {
+//            cout << "\t" << m_pointers[arr->ids[j]] << endl;
+//        }
+//    }
 }
 
 #else
 
-WordSet::WordSet(const uint32_t len) : m_words(), m_length(len), m_cpMatrix(len * LETTERS_COUNT) {
+WordSet::WordSet(const uint32_t len) : m_words(), m_length(len), m_cpMatrix(len * LETTERS_COUNT)
+{
 }
 
-WordSet::~WordSet() {
+WordSet::~WordSet()
+{
 }
 
-void WordSet::insert(const string& word) {
-
+void WordSet::insert(const string& word)
+{
     // words MUST have fixed length
     if (word.length() != m_length) {
         throw DictionaryException("WordSet: invalid word length");
@@ -186,15 +190,16 @@ void WordSet::insert(const string& word) {
 WordSetIndex::WordSetIndex(const uint32_t minLength, const uint32_t maxLength) :
     m_minLength(minLength),
     m_maxLength(maxLength),
-    m_wordSets(maxLength - minLength + 1) {
-
+    m_wordSets(maxLength - minLength + 1)
+{
     const uint32_t wsSize = m_wordSets.size();
     for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
         m_wordSets[wsi] = new WordSet(getReverseHash(wsi));
     }
 }
 
-WordSetIndex::~WordSetIndex() {
+WordSetIndex::~WordSetIndex()
+{
     const uint32_t wsSize = m_wordSets.size();
     for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
         delete m_wordSets[wsi];
@@ -202,7 +207,8 @@ WordSetIndex::~WordSetIndex() {
 }
 
 // computes size as wordsets sizes sum
-uint32_t WordSetIndex::getSize() const {
+uint32_t WordSetIndex::getSize() const
+{
     uint32_t totalSize = 0;
     vector<WordSet*>::const_iterator wsIt;
     for (wsIt = m_wordSets.begin(); wsIt !=
@@ -215,7 +221,8 @@ uint32_t WordSetIndex::getSize() const {
 
 /* <global> */
 
-ostream& operator<<(ostream& out, const ABMask& m) {
+ostream& operator<<(ostream& out, const ABMask& m)
+{
     out << "{";
     uint32_t i;
     for (i = 0; i < m.size(); ++i) {

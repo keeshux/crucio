@@ -33,27 +33,32 @@ const ABMask Dictionary::ANY_MASK = ABMask(0x03FFFFFF);
 
 Dictionary::Dictionary(const Matcher* const matcher) :
     m_matcher(matcher),
-    m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH)) {
+    m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH))
+{
 
     // load index through matcher
     loadIndex();
 }
 
-Dictionary::~Dictionary() {
+Dictionary::~Dictionary()
+{
     delete m_index;
 }
 
-MatchingResult* Dictionary::createMatchingResult(const uint32_t len) const {
+MatchingResult* Dictionary::createMatchingResult(const uint32_t len) const
+{
     return new MatchingResult(this, len);
 }
 
-void Dictionary::destroyMatchingResult(MatchingResult* const res) const {
+void Dictionary::destroyMatchingResult(MatchingResult* const res) const
+{
     delete res;
 }
 
 /* <global> */
 
-ostream& operator<<(ostream& out, const MatchingResult* const res) {
+ostream& operator<<(ostream& out, const MatchingResult* const res)
+{
     out << "{ ";
     const vector<uint32_t>& ids = res->getIds();
     uint32_t i;

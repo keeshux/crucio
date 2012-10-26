@@ -24,7 +24,8 @@ using namespace crucio;
 using namespace std;
 
 // checks for a word to be only-ASCII and in [MIN_LENGTH, MAX_LENGTH]
-bool LanguageMatcher::isValidWord(const string& word) {
+bool LanguageMatcher::isValidWord(const string& word)
+{
     if ((word.length() < Dictionary::MIN_LENGTH) ||
             (word.length() > Dictionary::MAX_LENGTH)) {
 
@@ -38,18 +39,22 @@ bool LanguageMatcher::isValidWord(const string& word) {
 
 LanguageMatcher::LanguageMatcher(const set<string>* const words) :
     m_words(words),
-    m_filename() {
+    m_filename()
+{
 }
 
 LanguageMatcher::LanguageMatcher(const string& filename) :
     m_words(0),
-    m_filename(filename) {
+    m_filename(filename)
+{
 }
 
-LanguageMatcher::~LanguageMatcher() {
+LanguageMatcher::~LanguageMatcher()
+{
 }
 
-void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex) const {
+void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex) const
+{
     if (m_words) {
         loadWords(wsIndex);
     } else {
@@ -57,8 +62,8 @@ void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex) const {
     }
 }
 
-void LanguageMatcher::loadWords(WordSetIndex *const wsIndex) const {
-
+void LanguageMatcher::loadWords(WordSetIndex *const wsIndex) const
+{
     // uppercase
     MakeUpper upper;
 
@@ -123,8 +128,8 @@ void LanguageMatcher::loadWords(WordSetIndex *const wsIndex) const {
 #endif
 }
 
-void LanguageMatcher::loadFilename(WordSetIndex *const wsIndex) const {
-
+void LanguageMatcher::loadFilename(WordSetIndex *const wsIndex) const
+{
     // opens words list file
     ifstream wordsIn(m_filename.c_str());
     if (!wordsIn.is_open()) {
@@ -267,8 +272,8 @@ void LanguageMatcher::loadFilename(WordSetIndex *const wsIndex) const {
 bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
                                    const string& pattern,
                                    MatchingResult* const res,
-                                   const set<uint32_t>* const excluded) const {
-
+                                   const set<uint32_t>* const excluded) const
+{
     const uint32_t len = pattern.length();
 
     // initially empty result
@@ -405,8 +410,8 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
 bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
                                   const MatchingResult* const res,
                                   const uint32_t pos,
-                                  ABMask* const possible) const {
-
+                                  ABMask* const possible) const
+{
     const uint32_t len = res->getWordsLength();
 
     // initially empty letter mask
@@ -449,8 +454,8 @@ bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
 
 bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
                                   const MatchingResult* const res,
-                                  vector<ABMask>* const possibleVector) const {
-
+                                  vector<ABMask>* const possibleVector) const
+{
     // fixed length for words in matching result
     const uint32_t len = res->getWordsLength();
 

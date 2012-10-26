@@ -25,8 +25,10 @@
 #include "Output.h"
 #include "Walk.h"
 
-namespace crucio {
-    class Compiler {
+namespace crucio
+{
+    class Compiler
+    {
     public:
         enum Result {
             SUCCESS,
@@ -76,7 +78,8 @@ namespace crucio {
     private:
 
         // used by determinism check
-        class IsSimpleDomain {
+        class IsSimpleDomain
+        {
         public:
 
             // <length, words-by-length> pair

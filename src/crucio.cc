@@ -4,7 +4,8 @@ using namespace crucio;
 using namespace std;
 using namespace TCLAP;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     // defaults to failure
     int status = -1;

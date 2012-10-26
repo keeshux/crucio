@@ -24,8 +24,10 @@
 #include "Dictionary.h"
 #include "Grid.h"
 
-namespace crucio {
-    class Letter {
+namespace crucio
+{
+    class Letter
+    {
     public:
         Letter(const Cell* cellRef) :
             m_cellRef(cellRef),

@@ -29,12 +29,14 @@
 #define CRUCIO_BJ
 #define CRUCIO_BJ_FAST
 
-namespace crucio {
+namespace crucio
+{
 #ifdef WIN32
     typedef unsigned int uint;
 #endif
 
-    class CrucioException {
+    class CrucioException
+    {
     public:
         CrucioException(const char* const what) :
             m_what(what) {
@@ -48,13 +50,15 @@ namespace crucio {
         const char* const m_what;
     };
 
-    class DictionaryException : public CrucioException {
+    class DictionaryException : public CrucioException
+    {
     public:
         DictionaryException(const char* const what) : CrucioException(what) {
         }
     };
 
-    class GridException : public CrucioException {
+    class GridException : public CrucioException
+    {
     public:
         GridException(const char* const what) : CrucioException(what) {
         }

@@ -28,8 +28,10 @@
 #include "Dictionary.h"
 #include "Grid.h"
 
-namespace crucio {
-    class Word {
+namespace crucio
+{
+    class Word
+    {
     public:
         Word(const Dictionary* const dict, const Definition* defRef) :
             m_dictionary(dict),

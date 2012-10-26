@@ -23,9 +23,11 @@
 
 #include "Dictionary.h"
 
-namespace crucio {
+namespace crucio
+{
 
-    class SolutionMatcher : public Matcher {
+    class SolutionMatcher : public Matcher
+    {
     public:
         SolutionMatcher();
         virtual ~SolutionMatcher();
