@@ -30,10 +30,12 @@ namespace crucio {
         SolutionDictionary();
         virtual ~SolutionDictionary();
 
-        virtual bool getMatchings(const std::string& pattern, MatchingResult* const res,
+        virtual bool getMatchings(const std::string& pattern,
+                                  MatchingResult* const res,
                                   const std::set<uint32_t>* const excluded = 0) const;
 
-        virtual bool getPossible(const MatchingResult* const res, const uint32_t pos,
+        virtual bool getPossible(const MatchingResult* const res,
+                                 const uint32_t pos,
                                  ABMask* const possible) const;
 
         virtual bool getPossible(const MatchingResult* const res,

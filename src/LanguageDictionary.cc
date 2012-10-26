@@ -248,7 +248,8 @@ LanguageDictionary::~LanguageDictionary() {
 }
 
 bool LanguageDictionary::getMatchings(const string& pattern,
-                                      MatchingResult* const res, const set<uint32_t>* const excluded) const {
+                                      MatchingResult* const res,
+                                      const set<uint32_t>* const excluded) const {
 
     const uint32_t len = pattern.length();
 
@@ -384,7 +385,8 @@ bool LanguageDictionary::getMatchings(const string& pattern,
 }
 
 bool LanguageDictionary::getPossible(const MatchingResult* const res,
-                                     const uint32_t pos, ABMask* const possible) const {
+                                     const uint32_t pos,
+                                     ABMask* const possible) const {
 
     const uint32_t len = res->getWordsLength();
 

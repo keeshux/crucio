@@ -73,11 +73,13 @@ namespace crucio {
         /* implement in subclasses */
 
         // return words matching a pattern, excluding given IDs (optional)
-        virtual bool getMatchings(const std::string& pattern, MatchingResult* const res,
+        virtual bool getMatchings(const std::string& pattern,
+                                  MatchingResult* const res,
                                   const std::set<uint32_t>* const excluded = 0) const = 0;
 
         // return possible letter at position pos given a matching result
-        virtual bool getPossible(const MatchingResult* const res, const uint32_t pos,
+        virtual bool getPossible(const MatchingResult* const res,
+                                 const uint32_t pos,
                                  ABMask* const possible) const = 0;
 
         // return possible letters given a matching result

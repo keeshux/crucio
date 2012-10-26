@@ -29,20 +29,22 @@ SolutionDictionary::SolutionDictionary() {
 SolutionDictionary::~SolutionDictionary() {
 }
 
-bool SolutionDictionary::getMatchings(const std::string&, MatchingResult* const,
-                                      const set<uint32_t>* const) const {
+bool SolutionDictionary::getMatchings(const std::string& pattern,
+                                      MatchingResult* const res,
+                                      const std::set<uint32_t>* const excluded) const {
 
     return true;
 }
 
-bool SolutionDictionary::getPossible(const MatchingResult* const, const uint32_t,
-                                     ABMask* const) const {
+bool SolutionDictionary::getPossible(const MatchingResult* const res,
+                                     const uint32_t pos,
+                                     ABMask* const possible) const {
 
     return true;
 }
 
-bool SolutionDictionary::getPossible(const MatchingResult* const,
-                                     vector<ABMask>* const) const {
+bool SolutionDictionary::getPossible(const MatchingResult* const res,
+                                     std::vector<ABMask>* const possibleVector) const {
 
     return true;
 }
