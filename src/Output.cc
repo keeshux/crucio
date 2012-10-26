@@ -44,6 +44,7 @@ void crucio::printInputDescription(ostream& out,
     // input files
 //    out << "dictionary = '" << d.getFilename() << "', " <<
 //            d.getSize() << " valid words" << endl;
+    out << "dictionary = " << d.getSize() << " valid words" << endl;
     out << "grid = '"  << g.getFilename() << "', " <<
         g.getRows() << "x" << g.getColumns() << ", " <<
         "interlock degree " << g.getInterlockDegree() << "%" << endl;

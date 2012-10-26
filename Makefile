@@ -30,7 +30,7 @@ CRUCIO_OBJS=Grid.o Walk.o Backjumper.o Model.o \
 $(CRUCIO_NAME): $(CRUCIO_OBJS)
 	$(CPP) -o $(CRUCIO_NAME) $(CRUCIO_OBJS)
 
-CRUCIOTEX_OBJS=Output.o cruciotex.o
+CRUCIOTEX_OBJS=WordSet.o Output.o cruciotex.o
 
 $(CRUCIOTEX_NAME): $(CRUCIOTEX_OBJS)
 	$(CPP) -o $(CRUCIOTEX_NAME) $(CRUCIOTEX_OBJS)
