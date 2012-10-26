@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
                 seedArg.getValue(), verboseArg.getValue());
 
         // model building
-        Model inModel(Model::WORDS, &inGrid, &inDict);
+        Model inModel(Model::WORDS, &inDict, &inGrid);
 
         // if verbose prints out model description too
         if (verboseArg.getValue()) {

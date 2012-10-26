@@ -23,10 +23,10 @@
 using namespace crucio;
 using namespace std;
 
-Model::Model(const Type type, const Grid* const g, const Dictionary* const d) :
+Model::Model(const Type type, const Dictionary* const d, const Grid* const g) :
         m_type(type),
-        m_grid(g),
         m_dictionary(d),
+        m_grid(g),
         m_mappings(0),
         m_letters(g->getNonBlackCells()),
         m_words(g->getWords()),
