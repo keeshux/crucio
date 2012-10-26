@@ -29,11 +29,12 @@ using namespace std;
 
 WordSet::WordSet(const Alphabet alphabet, const uint32_t len) :
     m_alphabet(alphabet),
+    m_alphabetSize(alphabetSize(m_alphabet)),
     m_length(len),
     m_size(0),
     m_words(NULL),
     m_pointers(NULL),
-    m_cpBuckets(m_length * LETTERS_COUNT),
+    m_cpBuckets(m_length * m_alphabetSize),
     m_cpMatrix(NULL)
 {
 }
@@ -160,9 +161,10 @@ void WordSet::load(const vector<string>& words)
 
 WordSet::WordSet(const Alphabet alphabet, const uint32_t len) :
     m_alphabet(alphabet),
+    m_alphabetSize(alphabetSize(m_alphabet)),
     m_length(len),
     m_words(),
-    m_cpMatrix(len * LETTERS_COUNT)
+    m_cpMatrix(len * m_alphabetSize)
 {
 }
 

@@ -100,7 +100,7 @@ namespace crucio
 
             // adds all characters that appear at position pos
             const uint32_t cpStart = getHash(pos, m_alphabet);
-            for (uint32_t i = 0; i < LETTERS_COUNT; ++i) {
+            for (uint32_t i = 0; i < m_alphabetSize; ++i) {
                 if (m_cpMatrix[cpStart + i]->length > 0) {
                     possible->set(i);
                 }
@@ -111,6 +111,7 @@ namespace crucio
 
         // fixed alphabet and word length
         const Alphabet m_alphabet;
+        const uint32_t m_alphabetSize;
         const uint32_t m_length;
 
         // words bitmap
@@ -126,7 +127,7 @@ namespace crucio
 
         // hash function for m_cpMatrix buckets addressing
         uint32_t getHash(const uint32_t pos, const char ch) const {
-            return (pos * LETTERS_COUNT + character2Index(m_alphabet, ch));
+            return (pos * m_alphabetSize + character2Index(m_alphabet, ch));
         }
     };
 #else
@@ -185,7 +186,7 @@ namespace crucio
 
             // adds all characters that appear at position pos
             const uint32_t cpStart = getHash(pos, m_alphabet);
-            for (uint32_t i = 0; i < LETTERS_COUNT; ++i) {
+            for (uint32_t i = 0; i < m_alphabetSize; ++i) {
                 if (!m_cpMatrix[cpStart + i].empty()) {
                     possible->set(i);
                 }
@@ -196,6 +197,7 @@ namespace crucio
 
         // fixed alphabet and word length, words vector
         const Alphabet m_alphabet;
+        const uint32_t m_alphabetSize;
         const uint32_t m_length;
         std::vector<std::string> m_words;
 
@@ -204,7 +206,7 @@ namespace crucio
 
         // hash function for m_cpMatrix buckets addressing
         uint32_t getHash(const uint32_t pos, const char ch) const {
-            return (pos * LETTERS_COUNT + reverseAlphabet(ch));
+            return (pos * m_alphabetSize + reverseAlphabet(ch));
         }
     };
 #endif
