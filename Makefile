@@ -16,14 +16,14 @@ CPPFLAGS=-Wall -ansi -pedantic -I$(EXT_DIR)/include $(OPTIMIZE) \
 	$(BENCHMARK) $(PROFILE) $(DEBUG)
 
 OBJS=Grid.o Walk.o Backjumper.o Model.o \
-    Dictionary.o LanguageDictionary.o SolutionDictionary.o \
+    Dictionary.o WordSet.o LanguageMatcher.o SolutionMatcher.o \
     Compiler.o LetterCompiler.o WordCompiler.o Output.o \
 	crucio.o cruciotex.o
 
 all: $(CRUCIO_NAME) $(CRUCIOTEX_NAME)
 
 CRUCIO_OBJS=Grid.o Walk.o Backjumper.o Model.o \
-    Dictionary.o LanguageDictionary.o SolutionDictionary.o \
+    Dictionary.o WordSet.o LanguageMatcher.o SolutionMatcher.o \
     Compiler.o LetterCompiler.o WordCompiler.o Output.o \
     crucio.o
 

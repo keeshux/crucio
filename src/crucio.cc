@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
     int status = -1;
 
     // heap objects
-    const Dictionary *inDict;
+    const Matcher *inMatcher;
     Compiler* inCpl = 0;
     Walk* inWalk = 0;
 
@@ -79,16 +79,19 @@ int main(int argc, char* argv[]) {
         const Model::Type modelType = Model::WORDS;
         const Grid inGrid(gridArg.getValue());
 
-        // chooses dictionary
+        // chooses matcher
         switch (modelType) {
         case Model::WORDS:
-            inDict = new LanguageDictionary(dictArg.getValue());
+            inMatcher = new LanguageMatcher(dictArg.getValue());
             break;
 
         case Model::NUMBERS:
-            inDict = new SolutionDictionary();
+            inMatcher = new SolutionMatcher();
             break;
         }
+
+        // creates dictionary with matcher
+        Dictionary inDict(inMatcher);
 
 #ifndef USE_BENCHMARK
         // binary output
@@ -99,13 +102,13 @@ int main(int argc, char* argv[]) {
 #endif
 
         // prints out input description
-        printInputDescription(cout, *inDict, inGrid,
+        printInputDescription(cout, inDict, inGrid,
                               fillArg.getValue(), walkArg.getValue(),
                               uniqueArg.getValue(), determArg.getValue(),
                               seedArg.getValue(), verboseArg.getValue());
 
         // model building
-        Model inModel(modelType, inDict, &inGrid);
+        Model inModel(modelType, &inDict, &inGrid);
 
         // if verbose prints out model description too
         if (verboseArg.getValue()) {
@@ -188,8 +191,8 @@ int main(int argc, char* argv[]) {
     if (inCpl) {
         delete inCpl;
     }
-    if (inDict) {
-        delete inDict;
+    if (inMatcher) {
+        delete inMatcher;
     }
     if (inWalk) {
         delete inWalk;

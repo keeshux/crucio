@@ -1,5 +1,5 @@
 /*
- * SolutionDictionary.h
+ * SolutionMatcher.h
  * crucio
  *
  * Copyright 2012 Davide De Rosa
@@ -18,30 +18,34 @@
  *
  */
 
-#ifndef __SOLUTION_DICTIONARY_H
-#define __SOLUTION_DICTIONARY_H
+#ifndef __SOLUTION_MATCHER_H
+#define __SOLUTION_MATCHER_H
 
 #include "Dictionary.h"
 
 namespace crucio {
 
-    class SolutionDictionary : public Dictionary {
+    class SolutionMatcher : public Matcher {
     public:
-        SolutionDictionary();
-        virtual ~SolutionDictionary();
+        SolutionMatcher();
+        virtual ~SolutionMatcher();
 
-        virtual bool getMatchings(const std::string& pattern,
+        virtual void loadIndex(WordSetIndex* const wsIndex) const;
+
+        virtual bool getMatchings(WordSetIndex *const wsIndex,
+                                  const std::string& pattern,
                                   MatchingResult* const res,
                                   const std::set<uint32_t>* const excluded = 0) const;
 
-        virtual bool getPossible(const MatchingResult* const res,
+        virtual bool getPossible(WordSetIndex *const wsIndex,
+                                 const MatchingResult* const res,
                                  const uint32_t pos,
                                  ABMask* const possible) const;
 
-        virtual bool getPossible(const MatchingResult* const res,
+        virtual bool getPossible(WordSetIndex *const wsIndex,
+                                 const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector) const;
 
-    private:
     };
 }
 

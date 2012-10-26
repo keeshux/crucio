@@ -7,8 +7,8 @@
 
 #include <tclap/CmdLine.h>
 
-#include "LanguageDictionary.h"
-#include "SolutionDictionary.h"
+#include "LanguageMatcher.h"
+#include "SolutionMatcher.h"
 #include "Grid.h"
 #include "LetterCompiler.h"
 #include "Model.h"

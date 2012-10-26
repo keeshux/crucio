@@ -1,5 +1,5 @@
 /*
- * LanguageDictionary.cc
+ * LanguageMatcher.cc
  * crucio
  *
  * Copyright 2012 Davide De Rosa
@@ -18,15 +18,16 @@
  *
  */
 
-#include "LanguageDictionary.h"
+#include "LanguageMatcher.h"
 
 using namespace crucio;
 using namespace std;
 
 // checks for a word to be only-ASCII and in [MIN_LENGTH, MAX_LENGTH]
-bool LanguageDictionary::isValidWord(const string& word) {
-    if ((word.length() < LanguageDictionary::MIN_LENGTH) ||
-            (word.length() > LanguageDictionary::MAX_LENGTH)) {
+bool LanguageMatcher::isValidWord(const string& word) {
+    if ((word.length() < Dictionary::MIN_LENGTH) ||
+        (word.length() > Dictionary::MAX_LENGTH)) {
+
         return false;
     }
 
@@ -35,8 +36,28 @@ bool LanguageDictionary::isValidWord(const string& word) {
     return (find_if(word.begin(), word.end(), IsNotAscii()) == word.end());
 }
 
-LanguageDictionary::LanguageDictionary(const set<string>& words) :
+LanguageMatcher::LanguageMatcher(const set<string>* const words) :
+    m_words(words),
     m_filename() {
+}
+
+LanguageMatcher::LanguageMatcher(const string& filename) :
+    m_words(0),
+    m_filename(filename) {
+}
+
+LanguageMatcher::~LanguageMatcher() {
+}
+
+void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex) const {
+    if (m_words) {
+        loadWords(wsIndex);
+    } else {
+        loadFilename(wsIndex);
+    }
+}
+
+void LanguageMatcher::loadWords(WordSetIndex *const wsIndex) const {
 
     // uppercase
     MakeUpper upper;
@@ -46,7 +67,7 @@ LanguageDictionary::LanguageDictionary(const set<string>& words) :
 
     // loads words into vector (a word each line)
     set<string>::const_iterator wIt;
-    for (wIt = words.begin(); wIt != words.end(); ++wIt) {
+    for (wIt = m_words->begin(); wIt != m_words->end(); ++wIt) {
         const string& word = *wIt;
 
         // checks word's length and format
@@ -76,7 +97,7 @@ LanguageDictionary::LanguageDictionary(const set<string>& words) :
         unique(subwords.begin(), subwords.end());
 
         // load into word set
-        WordSet *ws = m_index->getWordSet(length);
+        WordSet *ws = wsIndex->getWordSet(length);
         ws->load(subwords);
 
 //        cout << "length " << length << " = " << subwords.size() << " words (" << ws->getSize() << " loaded)" << endl;
@@ -102,10 +123,10 @@ LanguageDictionary::LanguageDictionary(const set<string>& words) :
 #endif
 }
 
-LanguageDictionary::LanguageDictionary(const string& filename) : m_filename(filename) {
+void LanguageMatcher::loadFilename(WordSetIndex *const wsIndex) const {
 
     // opens words list file
-    ifstream wordsIn(filename.c_str());
+    ifstream wordsIn(m_filename.c_str());
     if (!wordsIn.is_open()) {
         throw DictionaryException("dictionary: unable to open words list");
     }
@@ -113,7 +134,7 @@ LanguageDictionary::LanguageDictionary(const string& filename) : m_filename(file
     // uppercase
     MakeUpper upper;
 
-    //    const time_t timeBegin = time(NULL);
+//    const time_t timeBegin = time(NULL);
 
 #ifdef CRUCIO_C_ARRAYS
     map<uint32_t, size_t> wordCount;
@@ -176,7 +197,7 @@ LanguageDictionary::LanguageDictionary(const string& filename) : m_filename(file
         unique(subwords->begin(), subwords->end());
 
         // load into word set
-        WordSet *ws = m_index->getWordSet(len);
+        WordSet *ws = wsIndex->getWordSet(len);
         ws->load(*subwords);
 
 //        cout << "length " << len << " = " << subwords->size() << " words (" << ws->getSize() << " loaded)" << endl;
@@ -243,13 +264,10 @@ LanguageDictionary::LanguageDictionary(const string& filename) : m_filename(file
 //    cout << "dictionary loaded in " << timeElapsed << " seconds" << endl;
 }
 
-LanguageDictionary::~LanguageDictionary() {
-    delete m_index;
-}
-
-bool LanguageDictionary::getMatchings(const string& pattern,
-                                      MatchingResult* const res,
-                                      const set<uint32_t>* const excluded) const {
+bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
+                                   const string& pattern,
+                                   MatchingResult* const res,
+                                   const set<uint32_t>* const excluded) const {
 
     const uint32_t len = pattern.length();
 
@@ -257,14 +275,14 @@ bool LanguageDictionary::getMatchings(const string& pattern,
     res->getIds().clear();
 
     // single letters matching
-    const WordSet* const ws = m_index->getWordSet(len);
+    const WordSet* const ws = wsIndex->getWordSet(len);
 #ifdef CRUCIO_C_ARRAYS
     list<const IDArray* > cpVectors;
 #else
     list<const vector<uint32_t>* > cpVectors;
 #endif
     for (uint32_t pi = 0; pi < len; ++pi) {
-        if (pattern[pi] != ANY_CHAR) {
+        if (pattern[pi] != Dictionary::ANY_CHAR) {
             cpVectors.push_back(ws->getCPVector(pi, pattern[pi]));
         }
     }
@@ -384,9 +402,10 @@ bool LanguageDictionary::getMatchings(const string& pattern,
     return !res->getIds().empty();
 }
 
-bool LanguageDictionary::getPossible(const MatchingResult* const res,
-                                     const uint32_t pos,
-                                     ABMask* const possible) const {
+bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
+                                  const MatchingResult* const res,
+                                  const uint32_t pos,
+                                  ABMask* const possible) const {
 
     const uint32_t len = res->getWordsLength();
 
@@ -399,7 +418,7 @@ bool LanguageDictionary::getPossible(const MatchingResult* const res,
     }
 
     // current wordset
-    const WordSet* const ws = m_index->getWordSet(len);
+    const WordSet* const ws = wsIndex->getWordSet(len);
 
     // are matchings equal to whole subdictionary?
     if (res->isFull()) {
@@ -428,8 +447,9 @@ bool LanguageDictionary::getPossible(const MatchingResult* const res,
     return true;
 }
 
-bool LanguageDictionary::getPossible(const MatchingResult* const res,
-                                     vector<ABMask>* const possibleVector) const {
+bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
+                                  const MatchingResult* const res,
+                                  vector<ABMask>* const possibleVector) const {
 
     // fixed length for words in matching result
     const uint32_t len = res->getWordsLength();
@@ -449,7 +469,7 @@ bool LanguageDictionary::getPossible(const MatchingResult* const res,
     }
 
     // current wordset
-    const WordSet* const ws = m_index->getWordSet(len);
+    const WordSet* const ws = wsIndex->getWordSet(len);
 
     // are matchings equal to whole subdictionary?
     if (res->isFull()) {

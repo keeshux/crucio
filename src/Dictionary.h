@@ -26,10 +26,39 @@
 
 namespace crucio {
 
-    /* Dictionary */
-
     class MatchingResult;
+    
+    /* Matcher: loading/matching implementation */
+    
+    class Matcher {
+    public:
+        virtual ~Matcher() {
+        }
 
+        // delegated index loading
+        virtual void loadIndex(WordSetIndex* const wsIndex) const = 0;
+
+        // return words matching a pattern, excluding given IDs (optional)
+        virtual bool getMatchings(WordSetIndex* const wsIndex,
+                                  const std::string& pattern,
+                                  MatchingResult* const res,
+                                  const std::set<uint32_t>* const excluded = 0) const = 0;
+        
+        // return possible letter at position pos given a matching result
+        virtual bool getPossible(WordSetIndex* const wsIndex,
+                                 const MatchingResult* const res,
+                                 const uint32_t pos,
+                                 ABMask* const possible) const = 0;
+        
+        // return possible letters given a matching result
+        virtual bool getPossible(WordSetIndex* const wsIndex,
+                                 const MatchingResult* const res,
+                                 std::vector<ABMask>* const possibleVector) const = 0;
+        
+    };
+
+    /* Dictionary */
+    
     class Dictionary {
     public:
         static const char ANY_CHAR;
@@ -38,8 +67,8 @@ namespace crucio {
         static const uint32_t MIN_LENGTH = 2;
         static const uint32_t MAX_LENGTH = 32;
 
-        Dictionary();
-        virtual ~Dictionary();
+        Dictionary(const Matcher* const matcher);
+        ~Dictionary();
 
         // proxy for MatchingResult ctors/dctors
         MatchingResult* createMatchingResult(const uint32_t len) const;
@@ -70,23 +99,33 @@ namespace crucio {
         //    return ws->getWordId(word);
         //}
 
-        /* implement in subclasses */
+        /* matcher delegation */
 
-        // return words matching a pattern, excluding given IDs (optional)
-        virtual bool getMatchings(const std::string& pattern,
-                                  MatchingResult* const res,
-                                  const std::set<uint32_t>* const excluded = 0) const = 0;
+        void loadIndex() const {
+            return m_matcher->loadIndex(m_index);
+        }
+        bool getMatchings(const std::string& pattern,
+                          MatchingResult* const res,
+                          const std::set<uint32_t>* const excluded = 0) const {
 
-        // return possible letter at position pos given a matching result
-        virtual bool getPossible(const MatchingResult* const res,
-                                 const uint32_t pos,
-                                 ABMask* const possible) const = 0;
+            return m_matcher->getMatchings(m_index, pattern, res);
+        }
+        bool getPossible(const MatchingResult* const res,
+                         const uint32_t pos,
+                         ABMask* const possible) const {
 
-        // return possible letters given a matching result
-        virtual bool getPossible(const MatchingResult* const res,
-                                 std::vector<ABMask>* const possibleVector) const = 0;
+            return m_matcher->getPossible(m_index, res, pos, possible);
+        }
+        bool getPossible(const MatchingResult* const res,
+                         std::vector<ABMask>* const possibleVector) const {
+            
+            return m_matcher->getPossible(m_index, res, possibleVector);
+        }
 
-    protected:
+    private:
+        
+        // laoding/matching algorithm
+        const Matcher *const m_matcher;
 
         // wordsets vector wrapper
         WordSetIndex* m_index;

@@ -1,5 +1,5 @@
 /*
- * LanguageDictionary.h
+ * LanguageMatcher.h
  * crucio
  *
  * Copyright 2012 Davide De Rosa
@@ -18,32 +18,37 @@
  *
  */
 
-#ifndef __LANGUAGE_DICTIONARY_H
-#define __LANGUAGE_DICTIONARY_H
+#ifndef __LANGUAGE_MATCHER_H
+#define __LANGUAGE_MATCHER_H
 
 #include "Dictionary.h"
 
 namespace crucio {
 
-    class LanguageDictionary : public Dictionary {
+    class LanguageMatcher : public Matcher {
     public:
-        LanguageDictionary(const std::set<std::string>& words);
-        LanguageDictionary(const std::string& filename);
-        virtual ~LanguageDictionary();
+        LanguageMatcher(const std::set<std::string>* const words);
+        LanguageMatcher(const std::string& filename);
+        virtual ~LanguageMatcher();
 
         const std::string& getFilename() const {
             return m_filename;
         }
 
-        virtual bool getMatchings(const std::string& pattern,
+        virtual void loadIndex(WordSetIndex* const wsIndex) const;
+
+        virtual bool getMatchings(WordSetIndex *const wsIndex,
+                                  const std::string& pattern,
                                   MatchingResult* const res,
                                   const std::set<uint32_t>* const excluded = 0) const;
 
-        virtual bool getPossible(const MatchingResult* const res,
+        virtual bool getPossible(WordSetIndex *const wsIndex,
+                                 const MatchingResult* const res,
                                  const uint32_t pos,
                                  ABMask* const possible) const;
 
-        virtual bool getPossible(const MatchingResult* const res,
+        virtual bool getPossible(WordSetIndex *const wsIndex,
+                                 const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector) const;
 
     private:
@@ -80,11 +85,16 @@ namespace crucio {
         };
 #endif
 
-        // origin filename (if any)
+        // origin word list or filename (if any)
+        const std::set<std::string>* m_words;
         const std::string m_filename;
 
         // input validation
         static bool isValidWord(const std::string& word);
+
+        // subroutines
+        void loadWords(WordSetIndex *const wsIndex) const;
+        void loadFilename(WordSetIndex *const wsIndex) const;
     };
 }
 
