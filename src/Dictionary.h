@@ -140,7 +140,7 @@ namespace crucio
         MatchingResult(const Dictionary* const d, const uint32_t len) :
             m_dictionary(d),
             m_wordsLength(len),
-            m_ids() {
+            m_IDs() {
         }
 
 //        // dictionary reference
@@ -155,35 +155,43 @@ namespace crucio
 
         // true if no matchings
         bool isEmpty() const {
-            return m_ids.empty();
+            return m_IDs.empty();
         }
 
         // true if whole subdictionary
         bool isFull() const {
-            return (m_ids.size() == m_dictionary->getSize(m_wordsLength));
+            return (m_IDs.size() == m_dictionary->getSize(m_wordsLength));
         }
 
         // matchings size
         uint32_t getSize() const {
-            return m_ids.size();
+            return m_IDs.size();
         }
 
         // matching IDs vector
-        std::vector<uint32_t>& getIds() {
-            return m_ids;
+        const std::vector<uint32_t>& getIDs() const {
+            return m_IDs;
         }
-        const std::vector<uint32_t>& getIds() const {
-            return m_ids;
+        
+        // IDs modification
+        void clear() {
+            m_IDs.clear();
+        }
+        void reserve(const uint32_t size) {
+            m_IDs.reserve(size);
+        }
+        void addID(const uint32_t id) {
+            m_IDs.push_back(id);
         }
 
         // vector to set
-        void getIdsUnion(std::set<uint32_t>* const s) const {
+        void getIDsUnion(std::set<uint32_t>* const s) const {
             std::vector<uint32_t>::const_iterator idIt;
-            for (idIt = m_ids.begin(); idIt != m_ids.end(); ++idIt) {
+            for (idIt = m_IDs.begin(); idIt != m_IDs.end(); ++idIt) {
                 s->insert(*idIt);
             }
         }
-        void getIdsIntersection(std::set<uint32_t>* const s,
+        void getIDsIntersection(std::set<uint32_t>* const s,
                                 std::set<uint32_t>* const removed) const {
 
             std::set<uint32_t>::iterator sIdIt, sNextIdIt;
@@ -195,7 +203,7 @@ namespace crucio
                 const uint32_t sId = *sIdIt;
 
                 // removes and saves unshared values
-                if (!std::binary_search(m_ids.begin(), m_ids.end(), sId)) {
+                if (!std::binary_search(m_IDs.begin(), m_IDs.end(), sId)) {
                     s->erase(sIdIt);
                     removed->insert(sId);
                 }
@@ -209,7 +217,7 @@ namespace crucio
 
         // first matching (NOTE: must be !isEmpty())
         uint32_t getFirstWordId() const {
-            return *m_ids.begin();
+            return *m_IDs.begin();
         }
         const std::string getFirstWord() const {
             return m_dictionary->getWord(m_wordsLength, getFirstWordId());
@@ -218,7 +226,7 @@ namespace crucio
     private:
         const Dictionary* const m_dictionary;
         const uint32_t m_wordsLength;
-        std::vector<uint32_t> m_ids;
+        std::vector<uint32_t> m_IDs;
     };
 }
 

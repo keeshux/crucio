@@ -60,7 +60,7 @@ void Dictionary::destroyMatchingResult(MatchingResult* const res) const
 ostream& operator<<(ostream& out, const MatchingResult* const res)
 {
     out << "{ ";
-    const vector<uint32_t>& ids = res->getIds();
+    const vector<uint32_t>& ids = res->getIDs();
     uint32_t i;
     for (i = 0; i < ids.size(); ++i) {
         out << res->getWord(ids[i]) << " ";

@@ -389,7 +389,7 @@ bool WordCompiler::assign(const uint32_t wi,
         const uint32_t dDomOldCount = dDom->size();
         const MatchingResult* const dRes = dw->getMatchingResult();
         set<uint32_t> dRemDom;
-        dRes->getIdsIntersection(dDom, &dRemDom);
+        dRes->getIDsIntersection(dDom, &dRemDom);
 
         // puts removed values on the stack
         set<uint32_t>::const_iterator drIt;

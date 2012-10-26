@@ -277,7 +277,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
     const uint32_t len = pattern.length();
 
     // initially empty result
-    res->getIds().clear();
+    res->clear();
 
     // single letters matching
     const WordSet* const ws = wsIndex->getWordSet(len);
@@ -302,9 +302,9 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
         // masks are _never_ re-matched, apart at model creation time when
         // initial domains have to be evaluated
         const uint32_t wsSize = ws->getSize();
-        res->getIds().reserve(wsSize);
+        res->reserve(wsSize);
         for (uint32_t id = 0; id < wsSize; ++id) {
-            res->getIds().push_back(id);
+            res->addID(id);
         }
         return true;
     }
@@ -352,7 +352,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
 
         // if found in every set, element is added to intersection
         if (foundAll) {
-            res->getIds().push_back(id);
+            res->addID(id);
         }
     }
 #else
@@ -404,7 +404,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
 #endif
 
     // true if intersection is not empty
-    return !res->getIds().empty();
+    return !res->getIDs().empty();
 }
 
 bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
@@ -431,7 +431,7 @@ bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
     } else {
 
         // iterates over matching words IDs
-        const vector<uint32_t>& ids = res->getIds();
+        const vector<uint32_t>& ids = res->getIDs();
         vector<uint32_t>::const_iterator idIt;
         for (idIt = ids.begin(); idIt != ids.end(); ++idIt) {
             const uint32_t id = *idIt;
@@ -485,7 +485,7 @@ bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
     } else {
 
         // iterates over matching words IDs
-        const vector<uint32_t>& ids = res->getIds();
+        const vector<uint32_t>& ids = res->getIDs();
         vector<uint32_t>::const_iterator idIt;
         for (idIt = ids.begin(); idIt != ids.end(); ++idIt) {
             const uint32_t id = *idIt;
