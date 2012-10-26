@@ -313,8 +313,8 @@ bool LetterCompiler::assign(const uint32_t li,
         w->setAt(pos, v);
 
         // recalculates possible letters within the word
-        w->doMatch(true);
-
+        w->doMatchUpdating();
+        
         // word completed, constrains remaining words having same length
         if (isUnique() && w->isComplete()) {
 
@@ -341,7 +341,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
                 // excludes completed word and rematches pattern
                 slw->exclude(excludedId);
-                slw->doMatch(true);
+                slw->doMatchUpdating();
 
                 // domains update
                 const vector<uint32_t>& wordLetters =

@@ -87,16 +87,17 @@ namespace crucio
             m_mask[i] = Dictionary::ANY_CHAR;
         }
 
-        // rematches pattern and updates letters masks
-        void doMatch(const bool updateLetters = false) {
-
-            // get matchings and updates exclusions list
+        // rematches pattern, updates matching result
+        void doMatch() {
             m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
+        }
 
+        // rematches pattern, updates matching result and letter masks
+        void doMatchUpdating() {
+            m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
+            
             // updates letters masks
-            if (updateLetters) {
-                m_dictionary->getPossible(m_matchings, &m_letterMasks);
-            }
+            m_dictionary->getPossible(m_matchings, &m_letterMasks);
         }
 
         // exclusion list management for doMatch()

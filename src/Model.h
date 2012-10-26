@@ -200,7 +200,7 @@ namespace crucio
             for (uint32_t wi = 0; wi < m_words.size(); ++wi) {
                 Word* const w = m_words[wi];
                 w->set(m_initWords[wi]);
-                w->doMatch(true);
+                w->doMatchUpdating();
             }
         }
 

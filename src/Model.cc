@@ -306,7 +306,7 @@ Model::Model(const Type type, const Dictionary* const d, const Grid* const g) :
         Word* const w = m_words[wi];
 
         // calculates words/letters domains
-        w->doMatch(true);
+        w->doMatchUpdating();
 
         // empty domain
 //        m_overConstrained |= w->getAllowed()->empty();
