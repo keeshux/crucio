@@ -23,7 +23,7 @@
 using namespace crucio;
 using namespace std;
 
-Model::Model(const Dictionary* const d, const Grid* const g) :
+Model::Model(Dictionary* const d, const Grid* const g) :
     m_alphabet(d->getAlphabet()),
     m_dictionary(d),
     m_grid(g),

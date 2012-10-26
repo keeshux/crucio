@@ -43,6 +43,8 @@ namespace crucio
                                  const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector);
 
+        virtual uint32_t addCustomWord(const std::string& word);
+        virtual uint32_t removeCustomWordID(const uint32_t id);
     };
 }
 

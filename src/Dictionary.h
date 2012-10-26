@@ -38,7 +38,7 @@ namespace crucio
 
         // delegated index loading
         virtual void loadIndex(WordSetIndex* const wsIndex) = 0;
-
+        
         // return words matching a pattern, excluding given IDs (optional)
         virtual bool getMatchings(WordSetIndex* const wsIndex,
                                   const std::string& pattern,
@@ -49,6 +49,10 @@ namespace crucio
         virtual bool getPossible(WordSetIndex* const wsIndex,
                                  const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector) = 0;
+
+        // dynamic custom entries
+        virtual uint32_t addCustomWord(const std::string& word) = 0;
+        virtual uint32_t removeCustomWordID(const uint32_t id) = 0;
 
     };
 
@@ -108,6 +112,12 @@ namespace crucio
                          std::vector<ABMask>* const possibleVector) const {
 
             return m_matcher->getPossible(m_index, res, possibleVector);
+        }
+        uint32_t addCustomWord(const std::string& word) {
+            return m_matcher->addCustomWord(word);
+        }
+        uint32_t removeCustomWordID(const uint32_t id) {
+            return m_matcher->removeCustomWordID(id);
         }
 
     private:

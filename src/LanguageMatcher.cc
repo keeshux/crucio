@@ -512,3 +512,15 @@ bool LanguageMatcher::getPossible(WordSetIndex* const wsIndex,
 
     return true;
 }
+
+uint32_t LanguageMatcher::addCustomWord(const std::string& word)
+{
+    // unsupported
+    return UINT_MAX;
+}
+
+uint32_t LanguageMatcher::removeCustomWordID(const uint32_t id)
+{
+    // unsupported
+    return UINT_MAX;
+}

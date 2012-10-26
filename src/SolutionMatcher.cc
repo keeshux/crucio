@@ -50,3 +50,15 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
 {
     return true;
 }
+
+uint32_t SolutionMatcher::addCustomWord(const std::string& word)
+{
+#warning TODO
+    return UINT_MAX;
+}
+
+uint32_t SolutionMatcher::removeCustomWordID(const uint32_t id)
+{
+#warning TODO
+    return UINT_MAX;
+}

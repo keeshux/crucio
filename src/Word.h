@@ -33,13 +33,14 @@ namespace crucio
     class Word
     {
     public:
-        Word(const Dictionary* const dict, const Definition* defRef) :
+        Word(Dictionary* const dict, const Definition* defRef) :
             m_dictionary(dict),
             m_defRef(defRef),
             m_mask(defRef->getLength(), ANY_CHAR),
             m_wildcards(defRef->getLength()),
             m_letterMasks(defRef->getLength(), ABMask(ANY_MASK)),
             m_matchings(dict->createMatchingResult(defRef->getLength())),
+            m_customID(UINT_MAX),
             m_excluded() {
         }
         ~Word() {
@@ -105,11 +106,20 @@ namespace crucio
         const uint32_t getID() const {
             assert(isComplete());
 
-            uint32_t id = m_matchings->getFirstID();
-            if (id == UINT_MAX) {
-                // TODO: add to matcher dictionary
-            }
-            return id;
+            // search existing dictionary
+            return m_matchings->getFirstID();
+        }
+        uint32_t addCustomID() {
+            m_customID = m_dictionary->addCustomWord(m_mask);
+            return m_customID;
+        }
+        uint32_t removeCustomID() {
+            m_dictionary->removeCustomWordID(m_customID);
+
+            const uint32_t oldCustomID = m_customID;
+            m_customID = UINT_MAX;
+
+            return oldCustomID;
         }
 
         // exclusions management for doMatch()
@@ -141,7 +151,7 @@ namespace crucio
     private:
 
         // dictionary and definition references
-        const Dictionary* const m_dictionary;
+        Dictionary* const m_dictionary;
         const Definition* const m_defRef;
 
         std::string m_mask;
@@ -149,7 +159,8 @@ namespace crucio
         std::vector<ABMask> m_letterMasks;
         MatchingResult* m_matchings;
 
-        // both ID based and word based
+        // ID based exclusions
+        uint32_t m_customID; // optional, UINT_MAX
         std::set<uint32_t> m_excluded;
     };
 }
