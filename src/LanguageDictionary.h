@@ -25,8 +25,6 @@
 
 namespace crucio {
 
-    class WordSetIndex;
-
     class LanguageDictionary : public Dictionary {
     public:
         LanguageDictionary(const std::set<std::string>& words);
