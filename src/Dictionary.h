@@ -176,7 +176,7 @@ namespace crucio {
             return m_dictionary->getWord(m_wordsLength, id);
         }
         
-        // first matching (NOTE: must be !empty())
+        // first matching (NOTE: must be !isEmpty())
         uint32_t getFirstWordId() const {
             return *m_ids.begin();
         }
