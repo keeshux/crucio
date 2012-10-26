@@ -54,7 +54,8 @@ namespace crucio
         std::vector<std::list<std::pair<uint32_t, LetterPosition> > > m_revDeps;
         Backjumper m_bj;
 
-        // depending on compiler type
+        // depending on model alphabet
+        Alphabet m_alphabet;
         uint32_t m_alphabetSize;
 
         // subproblems
@@ -65,10 +66,6 @@ namespace crucio
                     std::set<uint32_t>* const failed);
         void retire(const uint32_t li,
                     std::stack<std::pair<uint32_t, ABMask> >* const remStack);
-
-        // alphabet pointers
-        char (*m_index2Char)(const uint32_t i);
-        uint32_t (*m_char2Index)(const char ch);
     };
 }
 

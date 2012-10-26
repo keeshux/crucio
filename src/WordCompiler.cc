@@ -41,10 +41,10 @@ Compiler::Result WordCompiler::configure(const Walk& w)
 //    uint32_t wi, ordWi;
     uint32_t wi;
 
-    // only compile word models
-    if (m_model->type() != Model::WORDS) {
-        return Compiler::FAILURE_IMPOSSIBLE;
-    }
+#warning XXX: only compile word models?
+//    if (m_model->getAlphabet() != LETTERS) {
+//        return Compiler::FAILURE_IMPOSSIBLE;
+//    }
 
     // words count
     const uint32_t wordsNum = m_model->getWordsNum();

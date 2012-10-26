@@ -31,21 +31,21 @@ SolutionMatcher::~SolutionMatcher()
 {
 }
 
-void SolutionMatcher::loadIndex(WordSetIndex* const wsIndex) const
+void SolutionMatcher::loadIndex(WordSetIndex* const wsIndex)
 {
 }
 
 bool SolutionMatcher::getMatchings(WordSetIndex *const wsIndex,
                                    const std::string& pattern,
                                    MatchingResult* const res,
-                                   const std::set<uint32_t>* const excluded) const
+                                   const std::set<uint32_t>* const excluded)
 {
     return true;
 }
 
 bool SolutionMatcher::getPossible(WordSetIndex *const wsIndex,
                                   const MatchingResult* const res,
-                                  std::vector<ABMask>* const possibleVector) const
+                                  std::vector<ABMask>* const possibleVector)
 {
     return true;
 }

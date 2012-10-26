@@ -37,18 +37,18 @@ namespace crucio
         }
 
         // delegated index loading
-        virtual void loadIndex(WordSetIndex* const wsIndex) const = 0;
+        virtual void loadIndex(WordSetIndex* const wsIndex) = 0;
 
         // return words matching a pattern, excluding given IDs (optional)
         virtual bool getMatchings(WordSetIndex* const wsIndex,
                                   const std::string& pattern,
                                   MatchingResult* const res,
-                                  const std::set<uint32_t>* const excluded) const = 0;
+                                  const std::set<uint32_t>* const excluded) = 0;
 
         // return possible letters given a matching result
         virtual bool getPossible(WordSetIndex* const wsIndex,
                                  const MatchingResult* const res,
-                                 std::vector<ABMask>* const possibleVector) const = 0;
+                                 std::vector<ABMask>* const possibleVector) = 0;
 
     };
 
@@ -63,13 +63,16 @@ namespace crucio
         static const uint32_t MIN_LENGTH = 2;
         static const uint32_t MAX_LENGTH = 32;
 
-        Dictionary(const Matcher* const matcher);
+        Dictionary(const Alphabet alphabet, Matcher* const matcher);
         ~Dictionary();
-
+        
         // proxy for MatchingResult ctors/dctors
         MatchingResult* createMatchingResult(const uint32_t len) const;
         void destroyMatchingResult(MatchingResult* const res) const;
 
+        const Alphabet getAlphabet() const {
+            return m_index->getAlphabet();
+        }
         uint32_t getSize() const {
             return m_index->getSize();
         }
@@ -112,7 +115,7 @@ namespace crucio
     private:
 
         // laoding/matching algorithm
-        const Matcher *const m_matcher;
+        Matcher *const m_matcher;
 
         // wordsets vector wrapper
         WordSetIndex* m_index;

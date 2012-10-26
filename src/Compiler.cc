@@ -123,8 +123,8 @@ bool Compiler::isDeterministicSolution() const
     }
 
     // solution dictionary based on solution word list
-    const LanguageMatcher solMatcher(&solWordList);
-    const Dictionary solDict(&solMatcher);
+    LanguageMatcher solMatcher(&solWordList);
+    const Dictionary solDict(m_model->getAlphabet(), &solMatcher);
 
     // creates new words based on solution dictionary
     vector<Word*> solWords(wordsNum, (Word*) 0);

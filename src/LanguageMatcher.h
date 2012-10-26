@@ -37,16 +37,16 @@ namespace crucio
             return m_filename;
         }
 
-        virtual void loadIndex(WordSetIndex* const wsIndex) const;
+        virtual void loadIndex(WordSetIndex* const wsIndex);
 
         virtual bool getMatchings(WordSetIndex *const wsIndex,
                                   const std::string& pattern,
                                   MatchingResult* const res,
-                                  const std::set<uint32_t>* const excluded) const;
+                                  const std::set<uint32_t>* const excluded);
 
         virtual bool getPossible(WordSetIndex *const wsIndex,
                                  const MatchingResult* const res,
-                                 std::vector<ABMask>* const possibleVector) const;
+                                 std::vector<ABMask>* const possibleVector);
 
     private:
         class MakeUpper
@@ -89,6 +89,9 @@ namespace crucio
         // origin word list or filename (if any)
         const std::set<std::string>* m_words;
         const std::string m_filename;
+        
+        // cached alphabet
+        Alphabet m_alphabet;
 
         // input validation
         static bool isValidWord(const std::string& word);

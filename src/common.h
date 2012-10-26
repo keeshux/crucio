@@ -35,6 +35,11 @@ namespace crucio
     typedef unsigned int uint;
 #endif
 
+    enum Alphabet {
+        LETTERS = 'A',
+        DIGITS = '0'
+    };
+    
     class CrucioException
     {
     public:

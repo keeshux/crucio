@@ -53,13 +53,16 @@ LanguageMatcher::~LanguageMatcher()
 {
 }
 
-void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex) const
+void LanguageMatcher::loadIndex(WordSetIndex *const wsIndex)
 {
     if (m_words) {
         loadWords(wsIndex);
     } else {
         loadFilename(wsIndex);
     }
+    
+    // save alphabet locally
+    m_alphabet = wsIndex->getAlphabet();
 }
 
 void LanguageMatcher::loadWords(WordSetIndex *const wsIndex) const
@@ -272,7 +275,7 @@ void LanguageMatcher::loadFilename(WordSetIndex *const wsIndex) const
 bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
                                    const string& pattern,
                                    MatchingResult* const res,
-                                   const set<uint32_t>* const excluded) const
+                                   const set<uint32_t>* const excluded)
 {
     const uint32_t len = pattern.length();
 
@@ -452,7 +455,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex *const wsIndex,
 
 bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
                                   const MatchingResult* const res,
-                                  vector<ABMask>* const possibleVector) const
+                                  vector<ABMask>* const possibleVector)
 {
     // fixed length for words in matching result
     const uint32_t len = res->getWordsLength();
@@ -498,7 +501,7 @@ bool LanguageMatcher::getPossible(WordSetIndex *const wsIndex,
                 ABMask* const possible = &(*possibleVector)[pos];
 
                 // letter index at position pos in the word
-                const uint32_t chIndex = letter2Index(word[pos]);
+                const uint32_t chIndex = character2Index(m_alphabet, word[pos]);
 
                 // puts letter into letter mask
                 possible->set(chIndex);

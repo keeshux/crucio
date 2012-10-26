@@ -39,17 +39,14 @@ Compiler::Result LetterCompiler::configure(const Walk& w)
     uint32_t li;
 
     // prepare alphabet conversions
-    switch (m_model->type()) {
-    case Model::WORDS:
+    m_alphabet = m_model->getAlphabet();
+    switch (m_alphabet) {
+    case LETTERS:
         m_alphabetSize = LETTERS_COUNT;
-        m_index2Char = &index2Letter;
-        m_char2Index = &letter2Index;
         break;
 
-    case Model::NUMBERS:
+    case DIGITS:
         m_alphabetSize = DIGITS_COUNT;
-        m_index2Char = &index2Number;
-        m_char2Index = &number2Index;
         break;
     }
 
@@ -165,9 +162,10 @@ bool LetterCompiler::compileFrom(const uint32_t i)
 
         // admittable domain
         ABMask domainMask = m_domains[li];
-        if (isVerbose()) {
-            *m_verboseOut << "domain for " << li << " = " << domainMask << endl;
-        }
+#warning XXX: cannot print domains
+//        if (isVerbose()) {
+//            *m_verboseOut << "domain for " << li << " = " << domainMask << endl;
+//        }
 
         // removal stack through forward checking
         stack<pair<uint32_t, ABMask> > remStack;
@@ -282,7 +280,7 @@ char LetterCompiler::choose(ABMask* const domainMask)
     domainMask->reset(vi);
 
     // alphabetic mapping for vi
-    return m_index2Char(vi);
+    return index2Character(m_alphabet, vi);
 }
 
 bool LetterCompiler::assign(const uint32_t li,
@@ -363,11 +361,12 @@ bool LetterCompiler::assign(const uint32_t li,
                     // puts removed values on the stack
                     remStack->push(make_pair(slwLi, remValues));
 
-                    if (isVerbose() && remValues.any()) {
-                        *m_verboseOut << "\tletter " << slwLi <<
-                                      ": removed " << remValues << ", ";
-                        *m_verboseOut << "now " << *slwDom << endl;
-                    }
+#warning XXX: cannot print domains
+//                    if (isVerbose() && remValues.any()) {
+//                        *m_verboseOut << "\tletter " << slwLi <<
+//                                      ": removed " << remValues << ", ";
+//                        *m_verboseOut << "now " << *slwDom << endl;
+//                    }
 
                     // an empty domain implies failure
                     if (slwDom->none()) {
@@ -408,11 +407,12 @@ bool LetterCompiler::assign(const uint32_t li,
         // puts removed values on the stack
         remStack->push(make_pair(dLi, remValues));
 
-        if (isVerbose() && remValues.any()) {
-            *m_verboseOut << "\tletter " << dLi <<
-                          ": removed " << remValues << ", ";
-            *m_verboseOut << "now " << *dDom << endl;
-        }
+#warning XXX: cannot print domains
+//        if (isVerbose() && remValues.any()) {
+//            *m_verboseOut << "\tletter " << dLi <<
+//                          ": removed " << remValues << ", ";
+//            *m_verboseOut << "now " << *dDom << endl;
+//        }
 
         // an empty domain implies failure
         if (dDom->none()) {

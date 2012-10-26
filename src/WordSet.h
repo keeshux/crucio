@@ -48,28 +48,16 @@ namespace crucio
         uint32_t ids[1];
     } IDArray;
 
-// maps i to i-th letter of alphabet (0 -> 'A', 1 -> 'B', ...)
-    inline char index2Letter(const uint32_t i)
+    // maps i to i-th letter of alphabet
+    inline char index2Character(const Alphabet alphabet, const uint32_t i)
     {
-        return (char)('A' + i);
+        return (char)(alphabet + i);
     }
 
-// maps ch to its alphabet index ('A' -> 0, 'B' -> 1, ...)
-    inline uint32_t letter2Index(const char ch)
+    // maps ch to its alphabet index
+    inline uint32_t character2Index(const Alphabet alphabet, const char ch)
     {
-        return (ch - 'A');
-    }
-
-// maps i to i-th numeric character (0 -> '0', 1 -> '1', ...)
-    inline char index2Number(const uint32_t i)
-    {
-        return (char)('0' + i);
-    }
-
-// maps ch to its numeric value ('0' -> 0, '1' -> 1, ...)
-    inline uint32_t number2Index(const char ch)
-    {
-        return (ch - '0');
+        return (ch - alphabet);
     }
 
     /* utils */
@@ -79,7 +67,7 @@ namespace crucio
     class WordSet
     {
     public:
-        WordSet(const uint32_t len);
+        WordSet(const Alphabet alphabet, const uint32_t len);
         ~WordSet();
 
         // load a words array (must be uppercase)
@@ -131,7 +119,7 @@ namespace crucio
             possible->reset();
 
             // adds all characters that appear at position pos
-            const uint32_t cpStart = getHash(pos, 'A');
+            const uint32_t cpStart = getHash(pos, m_alphabet);
             for (uint32_t i = 0; i < LETTERS_COUNT; ++i) {
                 if (m_cpMatrix[cpStart + i]->length > 0) {
                     possible->set(i);
@@ -141,7 +129,8 @@ namespace crucio
 
     private:
 
-        // fixed word length
+        // fixed alphabet and word length
+        const Alphabet m_alphabet;
         const uint32_t m_length;
 
         // words bitmap
@@ -157,7 +146,7 @@ namespace crucio
 
         // hash function for m_cpMatrix buckets addressing
         uint32_t getHash(const uint32_t pos, const char ch) const {
-            return (pos * LETTERS_COUNT + letter2Index(ch));
+            return (pos * LETTERS_COUNT + character2Index(m_alphabet, ch));
         }
     };
 #else
@@ -165,7 +154,8 @@ namespace crucio
     class WordSet
     {
     public:
-        WordSet(const uint32_t len);
+        WordSet(const Alphabet alphabet, const uint32_t len);
+        ~WordSet();
 
         // inserts a word (must be uppercase)
         void insert(const std::string& word);
@@ -192,7 +182,7 @@ namespace crucio
 //
 //            // found?
 //            if (word >= *wIt) {
-//                return distance(m_words.begin(), wIt);
+//                return std::distance(m_words.begin(), wIt);
 //            } else {
 //
 //                // same as distance(m_words.begin(), m_words.end())
@@ -201,7 +191,7 @@ namespace crucio
 //        }
 
         // vector of words (offsets) containing ch at position pos
-        const vector<uint32_t>* getCPVector(const uint32_t pos,
+        const std::vector<uint32_t>* getCPVector(const uint32_t pos,
                                             const char ch) const {
 
             return &m_cpMatrix[getHash(pos, ch)];
@@ -214,7 +204,7 @@ namespace crucio
             possible->reset();
 
             // adds all characters that appear at position pos
-            const uint32_t cpStart = getHash(pos, 'A');
+            const uint32_t cpStart = getHash(pos, m_alphabet);
             for (uint32_t i = 0; i < LETTERS_COUNT; ++i) {
                 if (!m_cpMatrix[cpStart + i].empty()) {
                     possible->set(i);
@@ -224,12 +214,13 @@ namespace crucio
 
     private:
 
-        // words vector and fixed words length
+        // fixed alphabet and word length, words vector
+        const Alphabet m_alphabet;
         const uint32_t m_length;
-        vector<string> m_words;
+        std::vector<std::string> m_words;
 
         // the (<position, letter> -> words offsets) hash table
-        vector<vector<uint32_t> > m_cpMatrix;
+        std::vector<std::vector<uint32_t> > m_cpMatrix;
 
         // hash function for m_cpMatrix buckets addressing
         uint32_t getHash(const uint32_t pos, const char ch) const {
@@ -243,8 +234,12 @@ namespace crucio
     class WordSetIndex
     {
     public:
-        WordSetIndex(const uint32_t minLength, const uint32_t maxLength);
+        WordSetIndex(const Alphabet alphabet, const uint32_t minLength, const uint32_t maxLength);
         ~WordSetIndex();
+
+        const Alphabet getAlphabet() const {
+            return m_alphabet;
+        }
 
         // computes size as wordsets sizes sum
         uint32_t getSize() const;
@@ -259,6 +254,7 @@ namespace crucio
     private:
 
         // min and max length for a word
+        const Alphabet m_alphabet;
         const uint32_t m_minLength;
         const uint32_t m_maxLength;
 

@@ -27,8 +27,14 @@ using namespace std;
 
 #ifdef CRUCIO_C_ARRAYS
 
-WordSet::WordSet(const uint32_t len) : m_length(len), m_size(0), m_words(NULL), m_pointers(NULL),
-    m_cpBuckets(m_length * LETTERS_COUNT), m_cpMatrix(NULL)
+WordSet::WordSet(const Alphabet alphabet, const uint32_t len) :
+    m_alphabet(alphabet),
+    m_length(len),
+    m_size(0),
+    m_words(NULL),
+    m_pointers(NULL),
+    m_cpBuckets(m_length * LETTERS_COUNT),
+    m_cpMatrix(NULL)
 {
 }
 
@@ -152,7 +158,11 @@ void WordSet::load(const vector<string>& words)
 
 #else
 
-WordSet::WordSet(const uint32_t len) : m_words(), m_length(len), m_cpMatrix(len * LETTERS_COUNT)
+WordSet::WordSet(const Alphabet alphabet, const uint32_t len) :
+    m_alphabet(alphabet),
+    m_length(len),
+    m_words(),
+    m_cpMatrix(len * LETTERS_COUNT)
 {
 }
 
@@ -187,14 +197,15 @@ void WordSet::insert(const string& word)
 
 /* WordSetIndex */
 
-WordSetIndex::WordSetIndex(const uint32_t minLength, const uint32_t maxLength) :
+WordSetIndex::WordSetIndex(const Alphabet alphabet, const uint32_t minLength, const uint32_t maxLength) :
+    m_alphabet(alphabet),
     m_minLength(minLength),
     m_maxLength(maxLength),
     m_wordSets(maxLength - minLength + 1)
 {
     const uint32_t wsSize = m_wordSets.size();
     for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
-        m_wordSets[wsi] = new WordSet(getReverseHash(wsi));
+        m_wordSets[wsi] = new WordSet(m_alphabet, getReverseHash(wsi));
     }
 }
 
@@ -221,16 +232,16 @@ uint32_t WordSetIndex::getSize() const
 
 /* <global> */
 
-ostream& operator<<(ostream& out, const ABMask& m)
-{
-    out << "{";
-    uint32_t i;
-    for (i = 0; i < m.size(); ++i) {
-        if (m[i]) {
-            out << index2Letter(i);
-        }
-    }
-    out << "}";
-
-    return out;
-}
+//ostream& operator<<(ostream& out, const ABMask& m)
+//{
+//    out << "{";
+//    uint32_t i;
+//    for (i = 0; i < m.size(); ++i) {
+//        if (m[i]) {
+//            out << index2Letter(i);
+//        }
+//    }
+//    out << "}";
+//
+//    return out;
+//}

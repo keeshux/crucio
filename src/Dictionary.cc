@@ -31,9 +31,9 @@ const char Dictionary::ANY_CHAR = '-';
 // all ones 26-bit mask (any [A-Z] letter)
 const ABMask Dictionary::ANY_MASK = ABMask(0x03FFFFFF);
 
-Dictionary::Dictionary(const Matcher* const matcher) :
+Dictionary::Dictionary(const Alphabet alphabet, Matcher* const matcher) :
     m_matcher(matcher),
-    m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH))
+    m_index(new WordSetIndex(alphabet, MIN_LENGTH, MAX_LENGTH))
 {
 
     // load index through matcher

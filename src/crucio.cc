@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
     int status = -1;
 
     // heap objects
-    const Matcher *inMatcher;
+    Matcher* inMatcher;
     Compiler* inCpl = 0;
     Walk* inWalk = 0;
 
@@ -77,22 +77,22 @@ int main(int argc, char* argv[])
         cmd.parse(argc, argv);
 
         // allocates data structures through input arguments
-        const Model::Type modelType = Model::WORDS;
+        const Alphabet inAlphabet = crucio::LETTERS;
         const Grid inGrid(gridArg.getValue());
 
         // chooses matcher
-        switch (modelType) {
-        case Model::WORDS:
+        switch (inAlphabet) {
+        case LETTERS:
             inMatcher = new LanguageMatcher(dictArg.getValue());
             break;
 
-        case Model::NUMBERS:
+        case DIGITS:
             inMatcher = new SolutionMatcher();
             break;
         }
 
         // creates dictionary with matcher
-        Dictionary inDict(inMatcher);
+        Dictionary inDict(inAlphabet, inMatcher);
 
 #ifndef USE_BENCHMARK
         // binary output
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
                               seedArg.getValue(), verboseArg.getValue());
 
         // model building
-        Model inModel(modelType, &inDict, &inGrid);
+        Model inModel(&inDict, &inGrid);
 
         // if verbose prints out model description too
         if (verboseArg.getValue()) {
