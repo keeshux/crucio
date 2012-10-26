@@ -313,6 +313,9 @@ bool WordCompiler::assign(const uint32_t wi,
 
         // excluded word ID
         const uint32_t excludedId = w->getFirstId();
+        if (excludedId == UINT_MAX) {
+            return true;
+        }
 
         // selects words subset by length
         const map<uint32_t, set<uint32_t> >& wordsByLength =
@@ -447,6 +450,9 @@ void WordCompiler::retire(const uint32_t wi,
 
             // excluded word ID
             const uint32_t excludedId = w->getFirstId();
+            if (excludedId == UINT_MAX) {
+                continue;
+            }
 
             // selects words subset by length
             const map<uint32_t, set<uint32_t> >& wordsByLength =
