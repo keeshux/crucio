@@ -236,7 +236,7 @@ LanguageDictionary::LanguageDictionary(const set<string>& words) :
         WordSet *ws = m_index->getWordSet(length);
         ws->load(subwords);
         
-        //        cout << "length " << length << " = " << subwords.size() << " words (" << ws->getSize() << " loaded)" << endl;
+//        cout << "length " << length << " = " << subwords.size() << " words (" << ws->getSize() << " loaded)" << endl;
     }
 #else
     // loads words
@@ -336,7 +336,7 @@ LanguageDictionary::LanguageDictionary(const string& filename) : m_filename(file
         WordSet *ws = m_index->getWordSet(len);
         ws->load(*subwords);
         
-        //        cout << "length " << len << " = " << subwords->size() << " words (" << ws->getSize() << " loaded)" << endl;
+//        cout << "length " << len << " = " << subwords->size() << " words (" << ws->getSize() << " loaded)" << endl;
         
         // release temporary vector immediately afterwards
         // reduces overall memory usage, there's no need to
@@ -406,6 +406,7 @@ LanguageDictionary::~LanguageDictionary() {
 
 bool LanguageDictionary::getMatchings(const string& pattern,
                               MatchingResult* const res, const set<uint32_t>* const excluded) const {
+
     const uint32_t len = pattern.length();
     
     // initially empty result
@@ -541,6 +542,7 @@ bool LanguageDictionary::getMatchings(const string& pattern,
 
 bool LanguageDictionary::getPossible(const MatchingResult* const res,
                              const uint32_t pos, ABMask* const possible) const {
+
     const uint32_t len = res->getWordsLength();
     
     // initially empty letter mask
