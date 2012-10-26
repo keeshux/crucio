@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,8 +45,8 @@ void crucio::printInputDescription(ostream& out,
 //    out << "dictionary = '" << d.getFilename() << "', " <<
 //            d.getSize() << " valid words" << endl;
     out << "grid = '"  << g.getFilename() << "', " <<
-            g.getRows() << "x" << g.getColumns() << ", " <<
-            "interlock degree " << g.getInterlockDegree() << "%" << endl;
+        g.getRows() << "x" << g.getColumns() << ", " <<
+        "interlock degree " << g.getInterlockDegree() << "%" << endl;
 
     out << endl;
 
@@ -66,7 +66,7 @@ void crucio::printInputDescription(ostream& out,
     out << "walk heuristic = " << walkType << endl;
     out << "unique words = " << (unique ? "yes" : "no") << endl;
     out << "deterministic filling = " << (deterministic ? "yes" : "no") <<
-            endl;
+        endl;
     out << "verbose = " << (verbose ? "yes" : "no") << endl;
 
     out << endl;
@@ -92,7 +92,7 @@ void crucio::printModelDescription(ostream& out, const Model& m) {
 
         // position in the grid
         out << "l" << li << " = (" << lCl->getRow() << "," <<
-                lCl->getColumn() << ")" << endl;
+            lCl->getColumn() << ")" << endl;
 
         // words it belongs to
         const list<LetterPosition>& letterWords = m.getLetterWords(li);
@@ -124,7 +124,7 @@ void crucio::printModelDescription(ostream& out, const Model& m) {
         const Cell* const defCl = def->getStartCell();
         out << "\tlength: " << def->getLength() << endl;
         out << "\tstarts at: " << "(" << defCl->getRow() << "," <<
-                defCl->getColumn() << ")" << endl;
+            defCl->getColumn() << ")" << endl;
 
         // letters
         const vector<uint32_t>& wordLetters = m.getWordLetters(wi);
@@ -139,7 +139,7 @@ void crucio::printModelDescription(ostream& out, const Model& m) {
 
         // crossings (vector is never empty if no isolated cells in the grid)
         const list<pair<uint32_t, WordCrossing> >& neighbours =
-                m.getWordNeighbours(wi);
+            m.getWordNeighbours(wi);
         out << "\tcrossings: ";
         list<pair<uint32_t, WordCrossing> >::const_iterator nbIt;
         for (nbIt = neighbours.begin(); nbIt != neighbours.end(); ++nbIt) {
@@ -147,7 +147,7 @@ void crucio::printModelDescription(ostream& out, const Model& m) {
             const uint32_t pos = nbIt->second.getPosition();
             const uint32_t cwPos = nbIt->second.getCPosition();
             out << "w" << wi << "[" << pos << "]" << "=" <<
-                    "w" << cwi << "[" << cwPos << "]";
+                "w" << cwi << "[" << cwPos << "]";
             out << " ";
         }
         out << endl;
@@ -228,7 +228,7 @@ void crucio::printOutput(ostream& out, const Model& m) {
 
         if (def->getDirection() == Definition::ACROSS) {
             out << def->getNumber() << " ACROSS (" <<
-                    defCl->getRow() << "," << defCl->getColumn() << ") = ";
+                defCl->getRow() << "," << defCl->getColumn() << ") = ";
             out << "'" << w->get() << "'" << endl;
         }
     }
@@ -241,7 +241,7 @@ void crucio::printOutput(ostream& out, const Model& m) {
 
         if (def->getDirection() == Definition::DOWN) {
             out << def->getNumber() << " DOWN (" <<
-                    defCl->getRow() << "," << defCl->getColumn() << ") = ";
+                defCl->getRow() << "," << defCl->getColumn() << ") = ";
             out << "'" << w->get() << "'" << endl;
         }
     }
@@ -259,7 +259,7 @@ void crucio::printOutput(ostream& out, const Model& m) {
         //const pair<map<uint32_t, set<string> >::iterator, bool> res =
         //      wordsMap.insert(make_pair(len, set<string>()));
         const pair<map<uint32_t, multiset<string> >::iterator, bool> res =
-                wordsMap.insert(make_pair(len, multiset<string>()));
+            wordsMap.insert(make_pair(len, multiset<string>()));
         res.first->second.insert(w->get());
     }
 
@@ -285,10 +285,10 @@ void crucio::printOutput(ostream& out, const Model& m) {
 /* Output */
 
 Output::Output(const Model& m) :
-        m_rows(0),
-        m_columns(0),
-        m_cellsData(),
-        m_defsData() {
+    m_rows(0),
+    m_columns(0),
+    m_cellsData(),
+    m_defsData() {
     uint32_t i, j;
     uint32_t wi;
 
@@ -333,7 +333,7 @@ Output::Output(const Model& m) :
         i = defCl->getRow();
         j = defCl->getColumn();
         const DefinitionData dData(def->getDirection(), def->getNumber(),
-                i, j, w->get());
+                                   i, j, w->get());
 
         // insertion
         m_defsData.insert(dData);
@@ -342,19 +342,19 @@ Output::Output(const Model& m) :
         m_cellsData[i][j].m_number = dData.getNumber();
     }
 
-/*  set<DefinitionData>::const_iterator d;
-    for (d = m_defsData.begin(); d != m_defsData.end(); ++d) {
-        cout << d->getNumber() << " " << (d->getDirection() == Definition::ACROSS ? "ORIZZONTALE" : "VERTICALE") <<
-                " = \'" << d->getString() << "\' starts at (" << d->getStartRow() << "," << d->getStartColumn() << ")" <<
-                endl;
-    }*/
+    /*  set<DefinitionData>::const_iterator d;
+        for (d = m_defsData.begin(); d != m_defsData.end(); ++d) {
+            cout << d->getNumber() << " " << (d->getDirection() == Definition::ACROSS ? "ORIZZONTALE" : "VERTICALE") <<
+                    " = \'" << d->getString() << "\' starts at (" << d->getStartRow() << "," << d->getStartColumn() << ")" <<
+                    endl;
+        }*/
 }
 
 Output::Output(istream& in) :
-        m_rows(0),
-        m_columns(0),
-        m_cellsData(),
-        m_defsData() {
+    m_rows(0),
+    m_columns(0),
+    m_cellsData(),
+    m_defsData() {
 
     // 32-bit integer buffer (big endian)
     char numBuf[4];
@@ -410,7 +410,7 @@ Output::Output(istream& in) :
 
         // data creation
         const DefinitionData dData((Definition::Direction) dir, (uint32_t) number,
-                i, j, wordBuf);
+                                   i, j, wordBuf);
 
         // insertion
         m_defsData.insert(dData);
@@ -422,12 +422,12 @@ Output::Output(istream& in) :
     // deallocates temporary buffers
     delete gridBuf;
 
-/*  set<DefinitionData>::const_iterator d;
-    for (d = m_defsData.begin(); d != m_defsData.end(); ++d) {
-        cout << d->getNumber() << " " << (d->getDirection() == Definition::ACROSS ? "ORIZZONTALE" : "VERTICALE") <<
-                " = \'" << d->getString() << "\' starts at (" << d->getStartRow() << "," << d->getStartColumn() << ")" <<
-                endl;
-    }*/
+    /*  set<DefinitionData>::const_iterator d;
+        for (d = m_defsData.begin(); d != m_defsData.end(); ++d) {
+            cout << d->getNumber() << " " << (d->getDirection() == Definition::ACROSS ? "ORIZZONTALE" : "VERTICALE") <<
+                    " = \'" << d->getString() << "\' starts at (" << d->getStartRow() << "," << d->getStartColumn() << ")" <<
+                    endl;
+        }*/
 }
 
 void Output::printRaw(ostream& out) const {
@@ -510,7 +510,7 @@ void Output::printLatex(ostream& out,
 
     // puzzle
     puzzleOut << "\t\\begin{Puzzle}{" << m_columns << "}{" <<
-            m_rows << "}" << endl;
+              m_rows << "}" << endl;
     for (i = 0; i < m_rows; ++i) {
         puzzleOut << "\t\t";
         for (j = 0; j < m_columns; ++j) {
@@ -569,14 +569,14 @@ void Output::printLatex(ostream& out,
 
         // split by direction
         const set<DefinitionData>::const_iterator dDefIt =
-                find_if(m_defsData.begin(), m_defsData.end(), IsDown());
+            find_if(m_defsData.begin(), m_defsData.end(), IsDown());
 
         // prints across
         cluesOut << "\t\\begin{PuzzleClues}{\\textbf{Across --}}" << endl;
         for (defIt = m_defsData.begin(); defIt != dDefIt; ++defIt) {
             const DefinitionData& dData = *defIt;
             cluesOut << "\t\t\\Clue{" << dData.getNumber() << "}{" <<
-                    dData.getString() << "}{" << changeMe << "}" << endl;
+                     dData.getString() << "}{" << changeMe << "}" << endl;
         }
         cluesOut << "\t\\end{PuzzleClues}" << endl;
 
@@ -585,7 +585,7 @@ void Output::printLatex(ostream& out,
         for (; defIt != m_defsData.end(); ++defIt) {
             const DefinitionData& dData = *defIt;
             cluesOut << "\t\t\\Clue{" << dData.getNumber() << "}{" <<
-                    dData.getString() << "}{" << changeMe << "}" << endl;
+                     dData.getString() << "}{" << changeMe << "}" << endl;
         }
         cluesOut << "\t\\end{PuzzleClues}" << endl;
     }
@@ -596,7 +596,7 @@ void Output::printLatex(ostream& out,
     //if (m_rows < m_columns) {
     //  out << "\\documentclass[landscape]{article}" << endl;
     //} else {
-        out << "\\documentclass{article}" << endl;
+    out << "\\documentclass{article}" << endl;
     //}
     out << "\\pagestyle{empty}" << endl;
     out << "\\pagenumbering{none}" << endl;
@@ -605,9 +605,9 @@ void Output::printLatex(ostream& out,
     // puzzle settings
     out << "\\usepackage[small]{cwpuzzle}" << endl;
     out << "\\renewcommand{\\PuzzleBlackBox}{" \
-            "\\rule{.75\\PuzzleUnitlength}{.75\\PuzzleUnitlength}}" << endl;
+        "\\rule{.75\\PuzzleUnitlength}{.75\\PuzzleUnitlength}}" << endl;
     out << "\\renewcommand{\\PuzzleWordsText}[1]{\\textbf{#1 letters} -- }" <<
-            endl;
+        endl;
 
     // begin
     out << "\\begin{document}" << endl;

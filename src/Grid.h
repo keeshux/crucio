@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -109,16 +109,16 @@ namespace crucio {
         std::list<const Cell*> m_nearCells;
 
         Cell(const Grid* const parent, const uint32_t row,
-                const uint32_t column, const char value,
-                const bool crossing) :
-                m_parent(parent),
-                m_row(row),
-                m_column(column),
-                m_value(value),
-                m_crossing(crossing),
-                m_acrossDef(0),
-                m_downDef(0),
-                m_nearCells() {
+             const uint32_t column, const char value,
+             const bool crossing) :
+            m_parent(parent),
+            m_row(row),
+            m_column(column),
+            m_value(value),
+            m_crossing(crossing),
+            m_acrossDef(0),
+            m_downDef(0),
+            m_nearCells() {
         }
 
         // called by grid after ctor
@@ -166,7 +166,7 @@ namespace crucio {
 
         // crossing definitions
         const std::list<std::pair<uint32_t, std::pair<const Definition*, uint32_t> > >&
-                getCrossingDefinitions() const {
+        getCrossingDefinitions() const {
 
             return m_crossingDefinitions;
         }
@@ -181,18 +181,18 @@ namespace crucio {
 
         const Cell* m_startCell;
         std::list<std::pair<uint32_t, std::pair<const Definition*, uint32_t> > >
-                m_crossingDefinitions;
+        m_crossingDefinitions;
 
         Definition(const Grid* const parent, const uint32_t index,
-                const Direction dir, const uint32_t number,
-                const uint32_t length) :
-                m_parent(parent),
-                m_index(index),
-                m_direction(dir),
-                m_number(number),
-                m_length(length),
-                m_startCell(0),
-                m_crossingDefinitions() {
+                   const Direction dir, const uint32_t number,
+                   const uint32_t length) :
+            m_parent(parent),
+            m_index(index),
+            m_direction(dir),
+            m_number(number),
+            m_length(length),
+            m_startCell(0),
+            m_crossingDefinitions() {
         }
 
         // called by grid after ctor
@@ -205,7 +205,7 @@ namespace crucio {
     class CellCompare {
     public:
         bool operator()(const Cell* const cl1,
-                const Cell* const cl2) const {
+                        const Cell* const cl2) const {
             return (std::make_pair(cl1->getRow(), cl1->getColumn()) <
                     std::make_pair(cl2->getRow(), cl2->getColumn()));
         }
@@ -214,7 +214,7 @@ namespace crucio {
     class DefinitionCompare {
     public:
         bool operator()(const Definition* const d1,
-                const Definition* const d2) const {
+                        const Definition* const d2) const {
             return (std::make_pair(d1->getNumber(), d1->getDirection()) <
                     std::make_pair(d2->getNumber(), d2->getDirection()));
         }
@@ -303,14 +303,14 @@ namespace crucio {
         // statistics
         double getInterlockDegree() const {
             return ((double) m_crossings /
-                (m_whiteCells + m_fixedCells)) * 100;
+                    (m_whiteCells + m_fixedCells)) * 100;
         }
 
     private:
         void initGrid(const char** charsGrid,
-                const uint32_t rows, const uint32_t columns);
+                      const uint32_t rows, const uint32_t columns);
         static uint32_t getReachableFrom(const Cell* const cl,
-                std::set<const Cell*, CellCompare>* const visited);
+                                         std::set<const Cell*, CellCompare>* const visited);
 
         const std::string m_filename;
         uint32_t m_rows;

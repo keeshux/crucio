@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@
 
 namespace crucio {
 
-    // formatted output functions
+// formatted output functions
     void printInputDescription(std::ostream& out,
                                const Dictionary& d,
                                const Grid& g,
@@ -45,7 +45,7 @@ namespace crucio {
     void printModelGrid(std::ostream& out, const Model& m);
     void printOutput(std::ostream& out, const Model& m);
 
-    // crucio output manager
+// crucio output manager
     class Output {
     public:
         Output(const Model& m);
@@ -60,9 +60,9 @@ namespace crucio {
         class CellData {
         public:
             CellData() :
-                    m_number(0),
-                    m_unfilled('\0'),
-                    m_filled('\0') {
+                m_number(0),
+                m_unfilled('\0'),
+                m_filled('\0') {
             }
 
             uint32_t m_number;
@@ -73,13 +73,13 @@ namespace crucio {
         class DefinitionData {
         public:
             DefinitionData(const Definition::Direction dir, const uint32_t number,
-                    const uint32_t startRow, const uint32_t startColumn,
-                    const std::string& str) :
-                    m_direction(dir),
-                    m_number(number),
-                    m_startRow(startRow),
-                    m_startColumn(startColumn),
-                    m_string(str) {
+                           const uint32_t startRow, const uint32_t startColumn,
+                           const std::string& str) :
+                m_direction(dir),
+                m_number(number),
+                m_startRow(startRow),
+                m_startColumn(startColumn),
+                m_string(str) {
             }
 
             const Definition::Direction getDirection() const {

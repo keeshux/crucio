@@ -24,21 +24,21 @@
 #include "Dictionary.h"
 
 namespace crucio {
-    
+
     class SolutionDictionary : public Dictionary {
     public:
         SolutionDictionary();
         virtual ~SolutionDictionary();
-        
+
         virtual bool getMatchings(const std::string& pattern, MatchingResult* const res,
                                   const std::set<uint32_t>* const excluded = 0) const;
-        
+
         virtual bool getPossible(const MatchingResult* const res, const uint32_t pos,
                                  ABMask* const possible) const;
-        
+
         virtual bool getPossible(const MatchingResult* const res,
                                  std::vector<ABMask>* const possibleVector) const;
-        
+
     private:
     };
 }

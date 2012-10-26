@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -112,7 +112,7 @@ void Definition::calculateCrossingDefinitions() {
             def = crsCl->getDownDef();
             if (def) {
                 m_crossingDefinitions.push_back(make_pair(pos,
-                        make_pair(def, crsPos)));
+                                                make_pair(def, crsPos)));
             }
 
             // next definition cell
@@ -137,7 +137,7 @@ void Definition::calculateCrossingDefinitions() {
             def = crsCl->getAcrossDef();
             if (def) {
                 m_crossingDefinitions.push_back(make_pair(pos,
-                        make_pair(def, crsPos)));
+                                                make_pair(def, crsPos)));
             }
 
             // next definition cell
@@ -152,33 +152,33 @@ void Definition::calculateCrossingDefinitions() {
 
 Grid::Grid(const char** charsGrid,
            const uint32_t rows, const uint32_t columns) :
-        m_filename(""),
-        m_rows(0),
-        m_columns(0),
-        m_whiteCells(0),
-        m_blackCells(0),
-        m_fixedCells(0),
-        m_words(0),
-        m_crossings(0),
-        m_cells(0),
-        m_acrossDefinitions(),
-        m_downDefinitions() {
+    m_filename(""),
+    m_rows(0),
+    m_columns(0),
+    m_whiteCells(0),
+    m_blackCells(0),
+    m_fixedCells(0),
+    m_words(0),
+    m_crossings(0),
+    m_cells(0),
+    m_acrossDefinitions(),
+    m_downDefinitions() {
 
     initGrid(charsGrid, rows, columns);
 }
 
 Grid::Grid(const string& filename) :
-        m_filename(filename),
-        m_rows(0),
-        m_columns(0),
-        m_whiteCells(0),
-        m_blackCells(0),
-        m_fixedCells(0),
-        m_words(0),
-        m_crossings(0),
-        m_cells(0),
-        m_acrossDefinitions(),
-        m_downDefinitions() {
+    m_filename(filename),
+    m_rows(0),
+    m_columns(0),
+    m_whiteCells(0),
+    m_blackCells(0),
+    m_fixedCells(0),
+    m_words(0),
+    m_crossings(0),
+    m_cells(0),
+    m_acrossDefinitions(),
+    m_downDefinitions() {
 
     // file reading
     ifstream gridIn;
@@ -186,19 +186,19 @@ Grid::Grid(const string& filename) :
     string line;
     istringstream* dataIn = 0;
     uint32_t rows, columns;
-    
+
     // temporary characters matrix
     char** charsGrid;
-    
+
     // cells indexes
     uint32_t i, j;
-    
+
     // opens grid file
     gridIn.open(filename.c_str());
     if (!gridIn.is_open()) {
         throw GridException("grid: unable to open grid file");
     }
-    
+
     // reads rows and columns count
     if (gridIn.eof()) {
         throw GridException("grid: unexpected EOF");
@@ -208,7 +208,7 @@ Grid::Grid(const string& filename) :
         throw GridException("grid: unexpected EOF");
     }
     getline(gridIn, columnLine);
-    
+
     // converts strings to integers
     dataIn = new istringstream(rowLine);
     *dataIn >> rows;
@@ -216,13 +216,13 @@ Grid::Grid(const string& filename) :
     dataIn = new istringstream(columnLine);
     *dataIn >> columns;
     delete dataIn;
-    
+
     // size range check
     if ((rows < MIN_SIZE) || (rows > MAX_SIZE) ||
-        (columns < MIN_SIZE) || (columns > MAX_SIZE)) {
+            (columns < MIN_SIZE) || (columns > MAX_SIZE)) {
         throw GridException("grid: size out of [MIN_SIZE, MAX_SIZE]");
     }
-    
+
     // allocates a (rows, columns) chars matrix
     charsGrid = (char**) malloc(rows * sizeof(char*));
     for (i = 0; i < rows; ++i) {
@@ -231,7 +231,7 @@ Grid::Grid(const string& filename) :
             charsGrid[i][j] = '\0';
         }
     }
-    
+
     // reads by row
     i = 0;
     while (getline(gridIn, line)) {
@@ -241,38 +241,38 @@ Grid::Grid(const string& filename) :
         if (line.length() != columns) {
             throw GridException("grid: bad row length");
         }
-        
+
         // current row
         j = 0;
         string::const_iterator rowIt;
         for (rowIt = line.begin(); rowIt != line.end(); ++rowIt) {
             const char ch = *rowIt;
-            
+
             // checks format
             if (!Cell::isLegal(ch)) {
                 throw GridException("grid: illegal character");
             }
-            
+
             // stores character
             charsGrid[i][j] = ch;
-            
+
             // next column
             ++j;
         }
-        
+
         // next row
         ++i;
     }
     if (i != rows) {
         throw GridException("grid: bad rows count");
     }
-    
+
     // closes file
     gridIn.close();
-    
+
     // complete initialization
     initGrid((const char**) charsGrid, rows, columns);
-    
+
     // deallocate temporary matrix
     for (i = 0; i < rows; ++i) {
         free(charsGrid[i]);
@@ -332,13 +332,13 @@ void Grid::initGrid(const char** charsGrid,
 
                     // checks for definition start
                     const bool leftWall = ((j == 0) ||
-                            (charsGrid[i][j - 1] == Cell::BLACK));
+                                           (charsGrid[i][j - 1] == Cell::BLACK));
                     const bool rightWall = ((j == m_columns - 1) ||
-                            (charsGrid[i][j + 1] == Cell::BLACK));
+                                            (charsGrid[i][j + 1] == Cell::BLACK));
                     const bool topWall = ((i == 0) ||
-                            (charsGrid[i - 1][j] == Cell::BLACK));
+                                          (charsGrid[i - 1][j] == Cell::BLACK));
                     const bool bottomWall = ((i == m_rows - 1) ||
-                            (charsGrid[i + 1][j] == Cell::BLACK));
+                                             (charsGrid[i + 1][j] == Cell::BLACK));
 
                     // unreachable cell
                     if (leftWall && rightWall &&
@@ -362,8 +362,8 @@ void Grid::initGrid(const char** charsGrid,
 
                         // creates definition details
                         acrossDef = new Definition(this,
-                                m_acrossDefinitions.size(),
-                                Definition::ACROSS, defNumber, defLength);
+                                                   m_acrossDefinitions.size(),
+                                                   Definition::ACROSS, defNumber, defLength);
 
                         // puts definitions into vector
                         m_acrossDefinitions.push_back(acrossDef);
@@ -385,8 +385,8 @@ void Grid::initGrid(const char** charsGrid,
 
                         // creates definition details
                         downDef = new Definition(this,
-                                m_downDefinitions.size(),
-                                Definition::DOWN, defNumber, defLength);
+                                                 m_downDefinitions.size(),
+                                                 Definition::DOWN, defNumber, defLength);
 
                         // puts definitions into vector
                         m_downDefinitions.push_back(downDef);
@@ -394,7 +394,7 @@ void Grid::initGrid(const char** charsGrid,
 
                     // crossing condition
                     crossing = ((!leftWall || !rightWall) &&
-                            (!topWall || !bottomWall));
+                                (!topWall || !bottomWall));
 
                     // increases crossings
                     if (crossing) {
@@ -507,13 +507,13 @@ bool Grid::isConnected() const {
 }
 
 uint32_t Grid::getReachableFrom(const Cell* const cl,
-        set<const Cell*, CellCompare>* const visited) {
+                                set<const Cell*, CellCompare>* const visited) {
 
     uint32_t reachable = 0;
 
     // skips visited cells
     const pair<set<const Cell*,
-            CellCompare>::iterator, bool> res = visited->insert(cl);
+          CellCompare>::iterator, bool> res = visited->insert(cl);
     if (!res.second) {
         return 0;
     }

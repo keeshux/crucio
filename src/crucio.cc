@@ -38,28 +38,28 @@ int main(int argc, char* argv[]) {
 
         // switches
         SwitchArg uniqueArg("U", "unique", "Fill grid with unique words",
-                false);
+                            false);
         SwitchArg determArg("D", "deterministic", "Cycle until deterministic " \
-                "filling (required for fill-in puzzles)", false);
+                            "filling (required for fill-in puzzles)", false);
         SwitchArg verboseArg("v", "verbose", "Print out algorithmic steps",
-                false);
+                             false);
 
         // labeled arguments
         ValueArg<string> dictArg("d", "dictionary", "Dictionary file",
-                true, "", "dictionary");
+                                 true, "", "dictionary");
         ValueArg<string> gridArg("g", "grid", "Grid file", true,
-                "", "grid");
+                                 "", "grid");
         ValueArg<string> fillArg("f", "fill", "Filling strategy", false,
-                "letter", &allowedFillVals);
+                                 "letter", &allowedFillVals);
         ValueArg<string> walkArg("w", "walk", "Cell graph walk for variable " \
-                "ordering", false, "bfs", &allowedWalkVals);
+                                 "ordering", false, "bfs", &allowedWalkVals);
         ValueArg<uint32_t> seedArg("r", "seed", "Random seed", false,
-                nowTicks * nowTicks, "seed");
+                                   nowTicks * nowTicks, "seed");
 
         // unlabeled arguments
         UnlabeledValueArg<string> fileArg("file", "Output file " \
-                "for reuse in external applications (NOTE: " \
-                "big endian byte order)", true, "", "output");
+                                          "for reuse in external applications (NOTE: " \
+                                          "big endian byte order)", true, "", "output");
 
         // arguments insertion (last to first)
         cmd.add(gridArg);
@@ -81,13 +81,13 @@ int main(int argc, char* argv[]) {
 
         // chooses dictionary
         switch (modelType) {
-            case Model::WORDS:
-                inDict = new LanguageDictionary(dictArg.getValue());
-                break;
+        case Model::WORDS:
+            inDict = new LanguageDictionary(dictArg.getValue());
+            break;
 
-            case Model::NUMBERS:
-                inDict = new SolutionDictionary();
-                break;
+        case Model::NUMBERS:
+            inDict = new SolutionDictionary();
+            break;
         }
 
 #ifndef USE_BENCHMARK
@@ -100,9 +100,9 @@ int main(int argc, char* argv[]) {
 
         // prints out input description
         printInputDescription(cout, *inDict, inGrid,
-                fillArg.getValue(), walkArg.getValue(),
-                uniqueArg.getValue(), determArg.getValue(),
-                seedArg.getValue(), verboseArg.getValue());
+                              fillArg.getValue(), walkArg.getValue(),
+                              uniqueArg.getValue(), determArg.getValue(),
+                              seedArg.getValue(), verboseArg.getValue());
 
         // model building
         Model inModel(modelType, inDict, &inGrid);
@@ -143,35 +143,35 @@ int main(int argc, char* argv[]) {
         switch (inCpl->compile(&inModel, *inWalk)) {
         case Compiler::SUCCESS: {
 
-            // success!
-            status = 0;
+                // success!
+                status = 0;
 
-            // prints out results
-            cout << "[OUTPUT]" << endl << endl;
-            //printModelGrid(cout, inModel);
-            printOutput(cout, inModel);
+                // prints out results
+                cout << "[OUTPUT]" << endl << endl;
+                //printModelGrid(cout, inModel);
+                printOutput(cout, inModel);
 
 #ifndef USE_BENCHMARK
-            // builds result data and writes them to output file
-            const Output outData(inModel);
-            outData.printRaw(outFile);
-            outFile.close();
+                // builds result data and writes them to output file
+                const Output outData(inModel);
+                outData.printRaw(outFile);
+                outFile.close();
 #endif
 
-            break;
-        }
+                break;
+            }
         case Compiler::FAILURE_IMPOSSIBLE: {
-            cout << "failure: no solutions found" << endl;
-            break;
-        }
+                cout << "failure: no solutions found" << endl;
+                break;
+            }
         case Compiler::FAILURE_OVERCONSTRAINED: {
-            cout << "failure: model is overconstrained" << endl;
-            break;
-        }
+                cout << "failure: model is overconstrained" << endl;
+                break;
+            }
         case Compiler::FAILURE_ND_GRID: {
-            cout << "failure: grid layout forces non-determinism" << endl;
-            break;
-        }
+                cout << "failure: grid layout forces non-determinism" << endl;
+                break;
+            }
         }
 
 #ifndef USE_BENCHMARK

@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,15 +32,15 @@ namespace crucio {
     class Word {
     public:
         Word(const Dictionary* const dict, const Definition* defRef) :
-                m_dictionary(dict),
-                m_defRef(defRef),
-                m_mask(defRef->getLength(),
-                        Dictionary::ANY_CHAR),
-                m_wildcards(defRef->getLength()),
-                m_letterMasks(defRef->getLength(),
-                        ABMask(Dictionary::ANY_MASK)),
-                m_matchings(dict->createMatchingResult(defRef->getLength())),
-                m_excluded() {
+            m_dictionary(dict),
+            m_defRef(defRef),
+            m_mask(defRef->getLength(),
+                   Dictionary::ANY_CHAR),
+            m_wildcards(defRef->getLength()),
+            m_letterMasks(defRef->getLength(),
+                          ABMask(Dictionary::ANY_MASK)),
+            m_matchings(dict->createMatchingResult(defRef->getLength())),
+            m_excluded() {
         }
         ~Word() {
             m_dictionary->destroyMatchingResult(m_matchings);
@@ -61,7 +61,7 @@ namespace crucio {
         void set(const std::string& mask) {
             m_mask = mask;
             m_wildcards = count(m_mask.begin(), m_mask.end(),
-                    Dictionary::ANY_CHAR);
+                                Dictionary::ANY_CHAR);
         }
         void unset() {
             std::fill(m_mask.begin(), m_mask.end(), Dictionary::ANY_CHAR);

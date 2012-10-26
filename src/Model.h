@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,12 +35,12 @@
 
 namespace crucio {
 
-    // <word index, position in the word>
+// <word index, position in the word>
     class LetterPosition {
     public:
         LetterPosition(const uint32_t wi, const uint32_t pos) :
-                m_wi(wi),
-                m_pos(pos) {
+            m_wi(wi),
+            m_pos(pos) {
         }
 
         uint32_t getWordIndex() const {
@@ -55,12 +55,12 @@ namespace crucio {
         uint32_t m_pos;
     };
 
-    // <word position, crossing word position>
+// <word position, crossing word position>
     class WordCrossing {
     public:
         WordCrossing(const uint32_t pos, const uint32_t cwPos) :
-                m_pos(pos),
-                m_cwPos(cwPos) {
+            m_pos(pos),
+            m_cwPos(cwPos) {
         }
 
         uint32_t getPosition() const {
@@ -81,10 +81,10 @@ namespace crucio {
             WORDS,
             NUMBERS
         };
-        
+
         Model(const Type type, const Dictionary* const d, const Grid* const g);
         ~Model();
-        
+
         // model type
         Type type() const {
             return m_type;
@@ -132,7 +132,7 @@ namespace crucio {
             return m_words[wi];
         }
         int getWordIndexByPos(const Definition::Direction dir,
-                const uint32_t i, const uint32_t j) const {
+                              const uint32_t i, const uint32_t j) const {
             return ((dir == Definition::ACROSS) ?
                     m_mappings[i][j].m_wiAcross :
                     m_mappings[i][j].m_wiDown);
@@ -149,7 +149,7 @@ namespace crucio {
             return m_lettersWords[li];
         }
         const std::list<std::pair<uint32_t, LetterPosition> >&
-                getLetterNeighbours(const uint32_t li) const {
+        getLetterNeighbours(const uint32_t li) const {
             return m_lettersNeighbours[li];
         }
 
@@ -167,7 +167,7 @@ namespace crucio {
             return m_wordsLetters[wi][pos];
         }
         const std::list<std::pair<uint32_t, WordCrossing> >&
-                getWordNeighbours(const uint32_t wi) const {
+        getWordNeighbours(const uint32_t wi) const {
             return m_wordsNeighbours[wi];
         }
 
@@ -210,12 +210,12 @@ namespace crucio {
             int m_wiDown;
 
             LWInfo() :
-                    m_li(-1),
-                    m_wiAcross(-1),
-                    m_wiDown(-1) {
+                m_li(-1),
+                m_wiAcross(-1),
+                m_wiDown(-1) {
             }
         };
-        
+
         // model type with related dictionary
         const Type m_type;
         const Dictionary* const m_dictionary;
@@ -235,14 +235,14 @@ namespace crucio {
         std::vector<ABMask> m_initLettersDomains;
         std::vector<std::list<LetterPosition> > m_lettersWords;
         std::vector<std::list<std::pair<uint32_t, LetterPosition> > >
-                m_lettersNeighbours;
+        m_lettersNeighbours;
 
         // links from words
         std::vector<std::string> m_initWords;
         std::vector<std::set<uint32_t> > m_initWordsDomains;
         std::vector<std::vector<uint32_t> > m_wordsLetters;
         std::vector<std::list<std::pair<uint32_t, WordCrossing> > >
-                m_wordsNeighbours;
+        m_wordsNeighbours;
 
         // maps words given their length
         std::map<uint32_t, std::set<uint32_t> > m_wordsByLength;

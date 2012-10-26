@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,12 +27,12 @@ using namespace std;
 #define CRUCIO_BJ_FAST
 
 WordCompiler::WordCompiler() :
-        m_domains(),
-        m_order(),
-        m_revOrder(),
-        m_deps(),
-        m_revDeps(),
-        m_bj() {
+    m_domains(),
+    m_order(),
+    m_revOrder(),
+    m_deps(),
+    m_revDeps(),
+    m_bj() {
 }
 
 Compiler::Result WordCompiler::configure(const Walk& w) {
@@ -43,7 +43,7 @@ Compiler::Result WordCompiler::configure(const Walk& w) {
     if (m_model->type() != Model::WORDS) {
         return Compiler::FAILURE_IMPOSSIBLE;
     }
-    
+
     // words count
     const uint32_t wordsNum = m_model->getWordsNum();
 
@@ -63,7 +63,7 @@ Compiler::Result WordCompiler::configure(const Walk& w) {
 
         // computes dependencies from related words
         const list<pair<uint32_t, WordCrossing> >& neighbours =
-                m_model->getWordNeighbours(wi);
+            m_model->getWordNeighbours(wi);
         list<pair<uint32_t, WordCrossing> >::const_iterator nbIt;
         for (nbIt = neighbours.begin(); nbIt != neighbours.end(); ++nbIt) {
             const uint32_t rWi = nbIt->first;
@@ -92,8 +92,8 @@ Compiler::Result WordCompiler::configure(const Walk& w) {
                     const uint32_t dPos = dIt->second.getCPosition();
 
                     *m_verboseOut << "w" << dWi << " " <<
-                            "(w" << wi << "[" << pos << "]=" <<
-                            "w" << dWi << "[" << dPos << "])";
+                                  "(w" << wi << "[" << pos << "]=" <<
+                                  "w" << dWi << "[" << dPos << "])";
                     *m_verboseOut << " ";
                 }
                 *m_verboseOut << endl;
@@ -109,8 +109,8 @@ Compiler::Result WordCompiler::configure(const Walk& w) {
                     const uint32_t dPos = dIt->second.getCPosition();
 
                     *m_verboseOut << "w" << dWi << " " <<
-                            "(w" << wi << "[" << pos << "]=" <<
-                            "w" << dWi << "[" << dPos << "])";
+                                  "(w" << wi << "[" << pos << "]=" <<
+                                  "w" << dWi << "[" << dPos << "])";
                     *m_verboseOut << " ";
                 }
                 *m_verboseOut << endl;
@@ -178,7 +178,7 @@ bool WordCompiler::compileFrom(const uint32_t i) {
         set<uint32_t> domainSet = m_domains[wi];
         if (isVerbose()) {
             *m_verboseOut << "pattern for " << wi << " = \'" << w->get() <<
-                    "\' (" << domainSet.size() << " matchings)" << endl;
+                          "\' (" << domainSet.size() << " matchings)" << endl;
         }
 
         // current and previous assignment
@@ -249,7 +249,7 @@ bool WordCompiler::compileFrom(const uint32_t i) {
 
             if (isVerbose()) {
                 *m_verboseOut << "jump from " << m_order[m_bj.getOrigin()] <<
-                        " to " << m_order[m_bj.getDestination()] << endl;
+                              " to " << m_order[m_bj.getDestination()] << endl;
                 *m_verboseOut << endl;
             }
         }
@@ -313,7 +313,7 @@ bool WordCompiler::assign(const uint32_t wi,
 
         // selects words subset by length
         const map<uint32_t, set<uint32_t> >& wordsByLength =
-                m_model->getWordsByLength();
+            m_model->getWordsByLength();
         const set<uint32_t>& subset = wordsByLength.find(wLen)->second;
 
         // updates exclusion lists and recalculates domains
@@ -344,7 +344,7 @@ bool WordCompiler::assign(const uint32_t wi,
 
                 if (slDomRemCount > 0) {
                     *m_verboseOut << "\tword " << slWi <<
-                            ": removed " << slDomRemCount << " matchings, ";
+                                  ": removed " << slDomRemCount << " matchings, ";
                     *m_verboseOut << "now " << slDomNewCount << endl;
                 }
             }
@@ -357,7 +357,7 @@ bool WordCompiler::assign(const uint32_t wi,
 #endif
                 if (isVerbose()) {
                     *m_verboseOut << "\tFC failed at " << slWi <<
-                        " (UNIQUE)" << endl;
+                                  " (UNIQUE)" << endl;
                 }
                 return false;
             }
@@ -400,7 +400,7 @@ bool WordCompiler::assign(const uint32_t wi,
 
             if (dDomRemCount > 0) {
                 *m_verboseOut << "\tword " << dWi <<
-                        ": removed " << dDomRemCount << " matchings, ";
+                              ": removed " << dDomRemCount << " matchings, ";
                 *m_verboseOut << "now " << dDomNewCount << endl;
             }
         }
@@ -447,7 +447,7 @@ void WordCompiler::retire(const uint32_t wi,
 
             // selects words subset by length
             const map<uint32_t, set<uint32_t> >& wordsByLength =
-                    m_model->getWordsByLength();
+                m_model->getWordsByLength();
             const set<uint32_t>& subset = wordsByLength.find(wLen)->second;
 
             // updates exclusion lists

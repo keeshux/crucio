@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,12 +24,12 @@ using namespace crucio;
 using namespace std;
 
 LetterCompiler::LetterCompiler() :
-        m_domains(),
-        m_order(),
-        m_revOrder(),
-        m_deps(),
-        m_revDeps(),
-        m_bj() {
+    m_domains(),
+    m_order(),
+    m_revOrder(),
+    m_deps(),
+    m_revDeps(),
+    m_bj() {
 }
 
 Compiler::Result LetterCompiler::configure(const Walk& w) {
@@ -38,17 +38,17 @@ Compiler::Result LetterCompiler::configure(const Walk& w) {
 
     // prepare alphabet conversions
     switch (m_model->type()) {
-        case Model::WORDS:
-            m_alphabetSize = LETTERS_COUNT;
-            m_index2Char = &index2Letter;
-            m_char2Index = &letter2Index;
-            break;
-            
-        case Model::NUMBERS:
-            m_alphabetSize = DIGITS_COUNT;
-            m_index2Char = &index2Number;
-            m_char2Index = &number2Index;
-            break;
+    case Model::WORDS:
+        m_alphabetSize = LETTERS_COUNT;
+        m_index2Char = &index2Letter;
+        m_char2Index = &letter2Index;
+        break;
+
+    case Model::NUMBERS:
+        m_alphabetSize = DIGITS_COUNT;
+        m_index2Char = &index2Number;
+        m_char2Index = &number2Index;
+        break;
     }
 
     // letters count
@@ -70,7 +70,7 @@ Compiler::Result LetterCompiler::configure(const Walk& w) {
 
         // computes dependencies from related letters
         const list<pair<uint32_t, LetterPosition> >& neighbours =
-                m_model->getLetterNeighbours(li);
+            m_model->getLetterNeighbours(li);
         list<pair<uint32_t, LetterPosition> >::const_iterator nbIt;
         for (nbIt = neighbours.begin(); nbIt != neighbours.end(); ++nbIt) {
             const uint32_t rLi = nbIt->first;
@@ -98,8 +98,8 @@ Compiler::Result LetterCompiler::configure(const Walk& w) {
                     const LetterPosition& dLp = dIt->second;
 
                     *m_verboseOut << "l" << dLi <<
-                            " (w" << dLp.getWordIndex() <<
-                            "[" << dLp.getPosition() << "])";
+                                  " (w" << dLp.getWordIndex() <<
+                                  "[" << dLp.getPosition() << "])";
                     *m_verboseOut << " ";
                 }
                 *m_verboseOut << endl;
@@ -114,8 +114,8 @@ Compiler::Result LetterCompiler::configure(const Walk& w) {
                     const LetterPosition& dLp = dIt->second;
 
                     *m_verboseOut << "l" << dLi <<
-                            " (w" << dLp.getWordIndex() <<
-                            "[" << dLp.getPosition() << "])";
+                                  " (w" << dLp.getWordIndex() <<
+                                  "[" << dLp.getPosition() << "])";
                     *m_verboseOut << " ";
                 }
                 *m_verboseOut << endl;
@@ -231,7 +231,7 @@ bool LetterCompiler::compileFrom(const uint32_t i) {
 
             if (isVerbose()) {
                 *m_verboseOut << "jump from " << m_order[m_bj.getOrigin()] <<
-                        " to " << m_order[m_bj.getDestination()] << endl;
+                              " to " << m_order[m_bj.getDestination()] << endl;
                 *m_verboseOut << endl;
             }
         }
@@ -257,21 +257,21 @@ char LetterCompiler::choose(ABMask* const domainMask) {
     } while (!(*domainMask)[vi]);
 
     // better method for sparse bitmask
-/*  uint32_t active[m_alphabetSize];
-    uint32_t ai = 0;
-    for (vi = 0; vi < m_alphabetSize; ++vi) {
+    /*  uint32_t active[m_alphabetSize];
+        uint32_t ai = 0;
+        for (vi = 0; vi < m_alphabetSize; ++vi) {
 
-        // saves active bit position
-        if ((*domainMask)[vi]) {
-            active[ai] = vi;
-            ++ai;
+            // saves active bit position
+            if ((*domainMask)[vi]) {
+                active[ai] = vi;
+                ++ai;
+            }
         }
-    }
 
-    // chooses randomly among active bits
-    const uint32_t chosenAi = rand() % ai;
-    vi = active[chosenAi];
-*/
+        // chooses randomly among active bits
+        const uint32_t chosenAi = rand() % ai;
+        vi = active[chosenAi];
+    */
 #endif
 
     // marks vi-th value as visited
@@ -319,7 +319,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
             // selects words subset by length
             const map<uint32_t, set<uint32_t> >& wordsByLength =
-                    m_model->getWordsByLength();
+                m_model->getWordsByLength();
             const set<uint32_t>& subset = wordsByLength.find(wLen)->second;
 
             // updates exclusion lists and recalculates domains
@@ -341,7 +341,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
                 // domains update
                 const vector<uint32_t>& wordLetters =
-                        m_model->getWordLetters(slWi);
+                    m_model->getWordLetters(slWi);
                 for (uint32_t slwPos = 0; slwPos < wLen; ++slwPos) {
                     const int slwLi = wordLetters[slwPos];
 
@@ -361,7 +361,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
                     if (isVerbose() && remValues.any()) {
                         *m_verboseOut << "\tletter " << slwLi <<
-                                ": removed " << remValues << ", ";
+                                      ": removed " << remValues << ", ";
                         *m_verboseOut << "now " << *slwDom << endl;
                     }
 
@@ -373,7 +373,7 @@ bool LetterCompiler::assign(const uint32_t li,
 #endif
                         if (isVerbose()) {
                             *m_verboseOut << "\tFC failed at " <<
-                                    slwLi << " (UNIQUE)" << endl;
+                                          slwLi << " (UNIQUE)" << endl;
                         }
                         return false;
                     }
@@ -406,7 +406,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
         if (isVerbose() && remValues.any()) {
             *m_verboseOut << "\tletter " << dLi <<
-                    ": removed " << remValues << ", ";
+                          ": removed " << remValues << ", ";
             *m_verboseOut << "now " << *dDom << endl;
         }
 
@@ -453,7 +453,7 @@ void LetterCompiler::retire(const uint32_t li,
 
             // selects words subset by length
             const map<uint32_t, set<uint32_t> >& wordsByLength =
-                    m_model->getWordsByLength();
+                m_model->getWordsByLength();
             const set<uint32_t>& subset = wordsByLength.find(wLen)->second;
 
             // updates exclusion lists

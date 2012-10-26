@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,11 +25,11 @@ using namespace crucio;
 using namespace std;
 
 Compiler::Compiler() :
-        m_unique(false),
-        m_deterministic(false),
-        m_verbose(false),
-        m_model(0),
-        m_verboseOut(0) {
+    m_unique(false),
+    m_deterministic(false),
+    m_verbose(false),
+    m_model(0),
+    m_verboseOut(0) {
 }
 
 Compiler::~Compiler() {
@@ -54,11 +54,11 @@ Compiler::Result Compiler::compile(Model* const m, const Walk& w) {
     // prior check for non-determinism
     if (isDeterministic()) {
         const map<uint32_t, set<uint32_t> >& wordsByLength =
-                m_model->getWordsByLength();
+            m_model->getWordsByLength();
 
         // no length mapping to one-and-only-one word
         if (find_if(wordsByLength.begin(), wordsByLength.end(),
-                IsSimpleDomain()) == wordsByLength.end()) {
+                    IsSimpleDomain()) == wordsByLength.end()) {
             return FAILURE_ND_GRID;
         }
     }
@@ -179,7 +179,7 @@ bool Compiler::isDeterministicSolution() const {
 
         // updates crossing words
         const list<pair<uint32_t, WordCrossing> >& neighbours =
-                m_model->getWordNeighbours(sWi);
+            m_model->getWordNeighbours(sWi);
         list<pair<uint32_t, WordCrossing> >::const_iterator nbIt;
         for (nbIt = neighbours.begin(); nbIt != neighbours.end(); ++nbIt) {
             Word* const cw = solWords[nbIt->first];

@@ -3,13 +3,13 @@
  * crucio
  *
  * Copyright 2007 Davide De Rosa
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ using namespace std;
 /* Walk */
 
 void Walk::getReverseOrder(const vector<uint32_t>& order,
-        vector<uint32_t>* const revOrder) {
+                           vector<uint32_t>* const revOrder) {
     uint32_t li, ordLi;
 
     // order maps (variable order -> variable index)
@@ -77,8 +77,8 @@ void BFSWalk::visitLetters(const Model& m, vector<uint32_t>* const order) const 
 
             // checks for cell not to have been visited already
             const pair<set<const Cell*,
-                    CellCompare>::iterator, bool> res =
-                    visited.insert(adjCl);
+                  CellCompare>::iterator, bool> res =
+                      visited.insert(adjCl);
             if (res.second) {
 
                 // cell can now be put into the queue
@@ -112,25 +112,25 @@ void BFSWalk::visitWords(const Model& m, vector<uint32_t>* const order) const {
         // visits associated variable
         const Cell* const vCl = v->getStartCell();
         const int wi = m.getWordIndexByPos(v->getDirection(),
-                vCl->getRow(), vCl->getColumn());
+                                           vCl->getRow(), vCl->getColumn());
         order->push_back(wi);
         toVisit.pop();
 
         // enumerates definition neighbourhood
         const list<pair<uint32_t, pair<const Definition*, uint32_t> > >&
-                adjacencies = v->getCrossingDefinitions();
+        adjacencies = v->getCrossingDefinitions();
 
         // explores adjacencies
         list<pair<uint32_t,
-                pair<const Definition*, uint32_t> > >::const_iterator adjIt;
+             pair<const Definition*, uint32_t> > >::const_iterator adjIt;
         for (adjIt = adjacencies.begin(); adjIt !=
                 adjacencies.end(); ++adjIt) {
             const Definition* const adjDef = adjIt->second.first;
 
             // checks for definition not to have been visited already
             const pair<set<const Definition*,
-                    DefinitionCompare>::iterator, bool> res =
-                    visited.insert(adjDef);
+                  DefinitionCompare>::iterator, bool> res =
+                      visited.insert(adjDef);
             if (res.second) {
 
                 // definition can now be put into the queue
@@ -167,13 +167,13 @@ void DFSWalk::visitWords(const Model& m, vector<uint32_t>* const order) const {
 }
 
 void DFSWalk::recursiveVisitLetters(const Model& m,
-        const Cell* const v, vector<uint32_t>* const order,
-        set<const Cell*, CellCompare>* const visited) {
+                                    const Cell* const v, vector<uint32_t>* const order,
+                                    set<const Cell*, CellCompare>* const visited) {
 
     // skips visited cells
     const pair<set<const Cell*,
-            CellCompare>::iterator, bool> res =
-            visited->insert(v);
+          CellCompare>::iterator, bool> res =
+              visited->insert(v);
     if (!res.second) {
         return;
     }
@@ -194,13 +194,13 @@ void DFSWalk::recursiveVisitLetters(const Model& m,
 }
 
 void DFSWalk::recursiveVisitWords(const Model& m,
-        const Definition* const v, vector<uint32_t>* const order,
-        set<const Definition*, DefinitionCompare>* const visited) {
+                                  const Definition* const v, vector<uint32_t>* const order,
+                                  set<const Definition*, DefinitionCompare>* const visited) {
 
     // skips visited definitions
     const pair<set<const Definition*,
-            DefinitionCompare>::iterator, bool> res =
-            visited->insert(v);
+          DefinitionCompare>::iterator, bool> res =
+              visited->insert(v);
     if (!res.second) {
         return;
     }
@@ -208,12 +208,12 @@ void DFSWalk::recursiveVisitWords(const Model& m,
     // visits associated variable
     const Cell* const vCl = v->getStartCell();
     const int wi = m.getWordIndexByPos(v->getDirection(),
-            vCl->getRow(), vCl->getColumn());
+                                       vCl->getRow(), vCl->getColumn());
     order->push_back(wi);
 
     // enumerates definition neighbourhood
     const list<pair<uint32_t, pair<const Definition*, uint32_t> > >&
-            adjacencies = v->getCrossingDefinitions();
+    adjacencies = v->getCrossingDefinitions();
 
     // recursively gets into adjacencies
     list<pair<uint32_t, pair<const Definition*, uint32_t> > >::const_iterator adjIt;

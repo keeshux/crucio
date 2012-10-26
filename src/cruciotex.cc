@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 
         // unlabeled arguments
         UnlabeledValueArg<string> fileArg("file", "Input file as " \
-                "written by CRUCIO", true, "", "crucio_output", cmd);
+                                          "written by CRUCIO", true, "", "crucio_output", cmd);
 
         // switches
         SwitchArg solArg("s", "solution", "Include solution", cmd, false);
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
         ifstream inFile(fileArg.getValue().c_str(), ios::binary);
         if (!inFile.is_open()) {
             cerr << "error: unable to open \'" << fileArg.getValue() <<
-                    "\'" << endl;
+                 "\'" << endl;
             return -1;
         }
 
