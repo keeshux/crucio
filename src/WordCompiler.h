@@ -38,9 +38,9 @@ namespace crucio {
         WordCompiler();
 
     protected:
-        virtual Compiler::Result configure(const Walk&);
+        virtual Compiler::Result configure(const Walk& w);
         virtual void reset();
-        virtual bool compileFrom(const uint32_t);
+        virtual bool compileFrom(const uint32_t i);
 
     private:
 
@@ -53,12 +53,17 @@ namespace crucio {
         Backjumper m_bj;
 
         // subproblems
-        void choose(const uint32_t, std::set<uint32_t>* const, std::string* const);
-        bool assign(const uint32_t, const std::string&, std::string* const,
-                std::stack<std::pair<uint32_t, uint32_t> >* const,
-                std::set<uint32_t>* const);
-        void retire(const uint32_t, const std::string&,
-                std::stack<std::pair<uint32_t, uint32_t> >* const);
+        void choose(const uint32_t wLen,
+                    std::set<uint32_t>* const domainSet,
+                    std::string* const v);
+        bool assign(const uint32_t wi,
+                    const std::string& v,
+                    std::string* const oldV,
+                    std::stack<std::pair<uint32_t, uint32_t> >* const remStack,
+                    std::set<uint32_t>* const failed);
+        void retire(const uint32_t wi,
+                    const std::string& oldV,
+                    std::stack<std::pair<uint32_t, uint32_t> >* const remStack);
     };
 }
 

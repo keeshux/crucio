@@ -153,6 +153,9 @@ void WordSet::load(const vector<string>& words) {
 WordSet::WordSet(const uint32_t len) : m_words(), m_length(len), m_cpMatrix(len * LETTERS_COUNT) {
 }
 
+WordSet::~WordSet() {
+}
+
 void WordSet::insert(const string& word) {
     
     // words MUST have fixed length

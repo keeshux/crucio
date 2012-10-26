@@ -258,8 +258,10 @@ bool WordCompiler::compileFrom(const uint32_t i) {
     }
 }
 
-void WordCompiler::choose(const uint32_t wLen, set<uint32_t>* const domainSet,
-        string* const v) {
+void WordCompiler::choose(const uint32_t wLen,
+                          set<uint32_t>* const domainSet,
+                          string* const v) {
+
     uint32_t vi = 0;
     set<uint32_t>::iterator viIt;
 
@@ -288,8 +290,11 @@ void WordCompiler::choose(const uint32_t wLen, set<uint32_t>* const domainSet,
     domainSet->erase(viIt);
 }
 
-bool WordCompiler::assign(const uint32_t wi, const string& v, string* const oldV,
-        stack<pair<uint32_t, uint32_t> >* const remStack, set<uint32_t>* const failed) {
+bool WordCompiler::assign(const uint32_t wi,
+                          const string& v,
+                          string* const oldV,
+                          stack<pair<uint32_t, uint32_t> >* const remStack,
+                          set<uint32_t>* const failed) {
 
     // gets word object and its length
     Word* const w = m_model->getWord(wi);
@@ -416,8 +421,9 @@ bool WordCompiler::assign(const uint32_t wi, const string& v, string* const oldV
     return true;
 }
 
-void WordCompiler::retire(const uint32_t wi, const string& oldV,
-        stack<pair<uint32_t, uint32_t> >* const remStack) {
+void WordCompiler::retire(const uint32_t wi,
+                          const string& oldV,
+                          stack<pair<uint32_t, uint32_t> >* const remStack) {
 
     // gets word object and its length
     Word* const w = m_model->getWord(wi);

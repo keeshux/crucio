@@ -32,22 +32,29 @@
 namespace crucio {
 
     // formatted output functions
-    void printInputDescription(std::ostream&, const Dictionary&,
-            const Grid&, const std::string&, const std::string&,
-            const bool, const bool, const uint32_t, const bool);
-    void printModelDescription(std::ostream&, const Model&);
-    void printModelGrid(std::ostream&, const Model&);
-    void printOutput(std::ostream&, const Model&);
+    void printInputDescription(std::ostream& out,
+                               const Dictionary& d,
+                               const Grid& g,
+                               const std::string& fillType,
+                               const std::string& walkType,
+                               const bool unique,
+                               const bool deterministic,
+                               const uint32_t seed,
+                               const bool verbose);
+    void printModelDescription(std::ostream& out, const Model& m);
+    void printModelGrid(std::ostream& out, const Model& m);
+    void printOutput(std::ostream& out, const Model& m);
 
     // crucio output manager
     class Output {
     public:
-        Output(const Model&);
-        Output(std::istream&);
+        Output(const Model& m);
+        Output(std::istream& in);
 
-        void printRaw(std::ostream&) const;
-        void printLatex(std::ostream&, const bool = false,
-                const bool = false) const;
+        void printRaw(std::ostream& out) const;
+        void printLatex(std::ostream& out,
+                        const bool solution = false,
+                        const bool fillIn = false) const;
 
     private:
         class CellData {

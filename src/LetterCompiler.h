@@ -38,9 +38,9 @@ namespace crucio {
         LetterCompiler();
 
     protected:
-        virtual Compiler::Result configure(const Walk&);
+        virtual Compiler::Result configure(const Walk& w);
         virtual void reset();
-        virtual bool compileFrom(const uint32_t);
+        virtual bool compileFrom(const uint32_t i);
 
     private:
 
@@ -56,12 +56,13 @@ namespace crucio {
         uint32_t m_alphabetSize;
 
         // subproblems
-        char choose(ABMask* const);
-        bool assign(const uint32_t, const char,
-                std::stack<std::pair<uint32_t, ABMask> >* const,
-                std::set<uint32_t>* const);
-        void retire(const uint32_t,
-                std::stack<std::pair<uint32_t, ABMask> >* const);
+        char choose(ABMask* const domainMask);
+        bool assign(const uint32_t li,
+                    const char v,
+                    std::stack<std::pair<uint32_t, ABMask> >* const remStack,
+                    std::set<uint32_t>* const failed);
+        void retire(const uint32_t li,
+                    std::stack<std::pair<uint32_t, ABMask> >* const remStack);
 
         // alphabet pointers
         char (*m_index2Char)(const uint32_t i);

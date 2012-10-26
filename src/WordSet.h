@@ -74,11 +74,11 @@ namespace crucio {
     // wordset of fixed length
     class WordSet {
     public:
-        WordSet(const uint32_t);
+        WordSet(const uint32_t len);
         ~WordSet();
         
         // load a words array (must be uppercase)
-        void load(const std::vector<std::string>&);
+        void load(const std::vector<std::string>& words);
         
 //        bool contains(const std::string& word) const {
 //            return std::binary_search(m_words.begin(),
@@ -159,10 +159,10 @@ namespace crucio {
     // wordset of fixed length
     class WordSet {
     public:
-        WordSet(const uint32_t);
+        WordSet(const uint32_t len);
         
         // inserts a word (must be uppercase)
-        void insert(const std::string&);
+        void insert(const std::string& word);
         
 //        bool contains(const std::string& word) const {
 //            return binary_search(m_words.begin(),
@@ -269,6 +269,6 @@ namespace crucio {
     };
 }
 
-std::ostream& operator<<(std::ostream&, const crucio::ABMask&);
+std::ostream& operator<<(std::ostream& out, const crucio::ABMask& m);
 
 #endif

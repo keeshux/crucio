@@ -82,7 +82,7 @@ namespace crucio {
             NUMBERS
         };
         
-        Model(const Type, const Dictionary* const, const Grid* const);
+        Model(const Type type, const Dictionary* const d, const Grid* const g);
         ~Model();
         
         // model type

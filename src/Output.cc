@@ -25,10 +25,15 @@ using namespace std;
 
 /* <namespace> */
 
-void crucio::printInputDescription(ostream& out, const Dictionary& d,
-        const Grid& g, const string& fillType, const string& walkType,
-        const bool unique, const bool deterministic,
-        const uint32_t seed, const bool verbose) {
+void crucio::printInputDescription(ostream& out,
+                                   const Dictionary& d,
+                                   const Grid& g,
+                                   const string& fillType,
+                                   const string& walkType,
+                                   const bool unique,
+                                   const bool deterministic,
+                                   const uint32_t seed,
+                                   const bool verbose) {
 
     // grid indexes
     uint32_t i, j;
@@ -493,8 +498,10 @@ void Output::printRaw(ostream& out) const {
     delete gridBuf;
 }
 
-void Output::printLatex(ostream& out, const bool solution,
-        const bool fillIn) const {
+void Output::printLatex(ostream& out,
+                        const bool solution,
+                        const bool fillIn) const {
+
     uint32_t i, j;
 
     // string buffers

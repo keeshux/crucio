@@ -281,8 +281,10 @@ char LetterCompiler::choose(ABMask* const domainMask) {
     return m_index2Char(vi);
 }
 
-bool LetterCompiler::assign(const uint32_t li, const char v,
-        stack<pair<uint32_t, ABMask> >* const remStack, set<uint32_t>* const failed) {
+bool LetterCompiler::assign(const uint32_t li,
+                            const char v,
+                            stack<pair<uint32_t, ABMask> >* const remStack,
+                            set<uint32_t>* const failed) {
 
     // gets letter object
     Letter* const l = m_model->getLetter(li);
@@ -425,7 +427,7 @@ bool LetterCompiler::assign(const uint32_t li, const char v,
 }
 
 void LetterCompiler::retire(const uint32_t li,
-        stack<pair<uint32_t, ABMask> >* const remStack) {
+                            stack<pair<uint32_t, ABMask> >* const remStack) {
 
     // gets letter object
     Letter* const l = m_model->getLetter(li);
