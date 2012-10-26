@@ -31,6 +31,13 @@ const char Dictionary::ANY_CHAR = '-';
 // all ones 26-bit mask (any [A-Z] letter)
 const ABMask Dictionary::ANY_MASK = ABMask(0x03FFFFFF);
 
+Dictionary::Dictionary() :
+        m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH)) {
+}
+
+Dictionary::~Dictionary() {
+}
+
 MatchingResult* Dictionary::createMatchingResult(const uint32_t len) const {
     return new MatchingResult(this, len);
 }

@@ -23,6 +23,38 @@
 using namespace crucio;
 using namespace std;
 
+/* WordSetIndex */
+
+WordSetIndex::WordSetIndex(const uint32_t minLength, const uint32_t maxLength) :
+        m_minLength(minLength),
+        m_maxLength(maxLength),
+        m_wordSets(maxLength - minLength + 1) {
+    
+    const uint32_t wsSize = m_wordSets.size();
+    for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
+        m_wordSets[wsi] = new WordSet(getReverseHash(wsi));
+    }
+}
+
+WordSetIndex::~WordSetIndex() {
+    const uint32_t wsSize = m_wordSets.size();
+    for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
+        delete m_wordSets[wsi];
+    }
+}
+
+// computes size as wordsets sizes sum
+uint32_t WordSetIndex::getSize() const {
+    uint32_t totalSize = 0;
+    vector<WordSet*>::const_iterator wsIt;
+    for (wsIt = m_wordSets.begin(); wsIt !=
+         m_wordSets.end(); ++wsIt) {
+        const WordSet* const ws = *wsIt;
+        totalSize += ws->getSize();
+    }
+    return totalSize;
+}
+
 /* <global> */
 
 ostream& operator<<(ostream& out, const ABMask& m) {

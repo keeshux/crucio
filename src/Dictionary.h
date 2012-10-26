@@ -38,11 +38,8 @@ namespace crucio {
         static const uint32_t MIN_LENGTH = 2;
         static const uint32_t MAX_LENGTH = 32;
         
-        Dictionary() :
-                m_index(new WordSetIndex(MIN_LENGTH, MAX_LENGTH)) {
-        }
-        virtual ~Dictionary() {
-        }
+        Dictionary();
+        virtual ~Dictionary();
         
         // proxy for MatchingResult ctors/dctors
         MatchingResult* createMatchingResult(const uint32_t len) const;
@@ -143,6 +140,7 @@ namespace crucio {
         }
         void getIdsIntersection(std::set<uint32_t>* const s,
                                 std::set<uint32_t>* const removed) const {
+
             std::set<uint32_t>::iterator sIdIt, sNextIdIt;
             for (sIdIt = s->begin(); sIdIt != s->end(); sIdIt = sNextIdIt) {
                 sNextIdIt = sIdIt;
