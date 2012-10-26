@@ -29,7 +29,7 @@
 #define CRUCIO_BJ
 #define CRUCIO_BJ_FAST
 
-#include <assert.h>
+#include <cassert>
 #include <bitset>
 
 namespace crucio
