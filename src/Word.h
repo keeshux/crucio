@@ -42,7 +42,8 @@ namespace crucio
             m_letterMasks(defRef->getLength(),
                           ABMask(Dictionary::ANY_MASK)),
             m_matchings(dict->createMatchingResult(defRef->getLength())),
-            m_excluded() {
+            m_excludedIDs(),
+            m_excludedWords() {
         }
         ~Word() {
             m_dictionary->destroyMatchingResult(m_matchings);
@@ -90,12 +91,14 @@ namespace crucio
 
         // rematches pattern, updates matching result
         void doMatch() {
-            m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
+            m_dictionary->getMatchings(m_mask, m_matchings,
+                                       &m_excludedIDs, &m_excludedWords);
         }
 
         // rematches pattern, updates matching result and letter masks
         void doMatchUpdating() {
-            m_dictionary->getMatchings(m_mask, m_matchings, &m_excluded);
+            m_dictionary->getMatchings(m_mask, m_matchings,
+                                       &m_excludedIDs, &m_excludedWords);
 
             // updates letters masks
             m_dictionary->getPossible(m_matchings, &m_letterMasks);
@@ -108,11 +111,17 @@ namespace crucio
         }
 
         // exclusion list management for doMatch()
-        void exclude(const uint32_t id) {
-            m_excluded.insert(id);
+        void excludeID(const uint32_t id) {
+            m_excludedIDs.insert(id);
         }
-        void include(const uint32_t id) {
-            m_excluded.erase(id);
+        void includeID(const uint32_t id) {
+            m_excludedIDs.erase(id);
+        }
+        void excludeWord(const std::string& word) {
+            m_excludedWords.insert(word);
+        }
+        void includeWord(const std::string& word) {
+            m_excludedWords.erase(word);
         }
 
         // current domains
@@ -143,7 +152,10 @@ namespace crucio
         uint32_t m_wildcards;
         std::vector<ABMask> m_letterMasks;
         MatchingResult* m_matchings;
-        std::set<uint32_t> m_excluded;
+
+        // both ID based and word based
+        std::set<uint32_t> m_excludedIDs;
+        std::set<std::string> m_excludedWords;
     };
 }
 

@@ -336,7 +336,7 @@ bool LetterCompiler::assign(const uint32_t li,
                 Word* const slw = m_model->getWord(slWi);
 
                 // excludes completed word and rematches pattern
-                slw->exclude(excludedID);
+                slw->excludeID(excludedID);
                 slw->doMatchUpdating();
 
                 // domains update
@@ -466,7 +466,7 @@ void LetterCompiler::retire(const uint32_t li,
                 Word* const slw = m_model->getWord(slWi);
 
                 // reincludes completed word
-                slw->include(excludedID);
+                slw->includeID(excludedID);
             }
         }
 
