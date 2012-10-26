@@ -312,7 +312,7 @@ bool WordCompiler::assign(const uint32_t wi,
     if (isUnique()) {
 
         // excluded word ID
-        const uint32_t excludedId = w->getFirstId();
+        const uint32_t excludedId = w->getID();
         if (excludedId == UINT_MAX) {
             return true;
         }
@@ -449,7 +449,7 @@ void WordCompiler::retire(const uint32_t wi,
         if (isUnique()) {
 
             // excluded word ID
-            const uint32_t excludedId = w->getFirstId();
+            const uint32_t excludedId = w->getID();
             if (excludedId == UINT_MAX) {
                 continue;
             }

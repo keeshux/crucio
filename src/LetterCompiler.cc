@@ -312,7 +312,7 @@ bool LetterCompiler::assign(const uint32_t li,
             }
 
             // excluded word ID
-            const uint32_t excludedId = w->getFirstId();
+            const uint32_t excludedId = w->getID();
             if (excludedId == UINT_MAX) {
                 continue;
             }
@@ -449,7 +449,7 @@ void LetterCompiler::retire(const uint32_t li,
         if (isUnique() && w->isComplete()) {
 
             // excluded word ID
-            const uint32_t excludedId = w->getFirstId();
+            const uint32_t excludedId = w->getID();
             if (excludedId == UINT_MAX) {
                 continue;
             }

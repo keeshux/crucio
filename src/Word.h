@@ -101,6 +101,12 @@ namespace crucio
             m_dictionary->getPossible(m_matchings, &m_letterMasks);
         }
 
+        // word id id dictionary (only after matching a complete mask!)
+        // UINT_MAX if no dictionary existence check
+        const uint32_t getID() const {
+            return m_matchings->getFirstWordId();
+        }
+        
         // exclusion list management for doMatch()
         void exclude(const uint32_t id) {
             m_excluded.insert(id);
@@ -125,11 +131,6 @@ namespace crucio
         // true if no wildcards in pattern
         bool isComplete() const {
             return (m_wildcards == 0);
-        }
-
-        // retrieves first matching word (only useful if isComplete())
-        const uint32_t getFirstId() const {
-            return m_matchings->getFirstWordId();
         }
 
     private:
