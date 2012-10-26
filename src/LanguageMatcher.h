@@ -50,6 +50,7 @@ namespace crucio
         
         virtual uint32_t addCustomWord(const std::string& word);
         virtual const std::string& getCustomWord(const uint32_t id) const;
+        virtual uint32_t getCustomWordID(const std::string& word) const;
         virtual uint32_t removeCustomWordID(const uint32_t id);
 
     private:

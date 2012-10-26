@@ -63,9 +63,19 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
 
 uint32_t SolutionMatcher::addCustomWord(const string& word)
 {
-    const uint32_t id = m_lastWordID;
+    // search existing words
+    uint32_t id = getCustomWordID(word);
+    if (id != UINT_MAX) {
+        return id;
+    }
+
+    // add new word
+    id = m_lastWordID;
+
+    // forward and reverse
+    cout << "adding '" << word << "' with id " << id << endl;
     m_customWords.insert(make_pair(id, word));
-//    cout << "added '" << word << "' with id " << endl;
+    m_customIDs.insert(make_pair(word, id));
     ++m_lastWordID;
     
     return id;
@@ -73,15 +83,31 @@ uint32_t SolutionMatcher::addCustomWord(const string& word)
 
 const string& SolutionMatcher::getCustomWord(const uint32_t id) const
 {
-    return m_customWords.find(id)->second;
+    static const string dummy = "";
+    
+    const map<uint32_t, string>::const_iterator wordIt = m_customWords.find(id);
+    if (wordIt == m_customWords.end()) {
+        return dummy;
+    }
+    return wordIt->second;
+}
+
+uint32_t SolutionMatcher::getCustomWordID(const string& word) const
+{
+    const map<string, uint32_t>::const_iterator idIt = m_customIDs.find(word);
+    if (idIt == m_customIDs.end()) {
+        return UINT_MAX;
+    }
+    return idIt->second;
 }
 
 uint32_t SolutionMatcher::removeCustomWordID(const uint32_t id)
 {
     const map<uint32_t, string>::iterator wordIt = m_customWords.find(id);
-//    const string word = wordIt->second;
-//    cout << "removed '" << word << "'" << endl;
+    const string& word = wordIt->second;
+    cout << "removing '" << word << "'" << endl;
+    m_customIDs.erase(wordIt->second);
     m_customWords.erase(wordIt);
 
-    return UINT_MAX;
+    return id;
 }

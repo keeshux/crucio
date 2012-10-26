@@ -53,6 +53,7 @@ namespace crucio
         // dynamic custom entries
         virtual uint32_t addCustomWord(const std::string& word) = 0;
         virtual const std::string& getCustomWord(const uint32_t id) const = 0;
+        virtual uint32_t getCustomWordID(const std::string& word) const = 0;
         virtual uint32_t removeCustomWordID(const uint32_t id) = 0;
 
     };
@@ -119,6 +120,9 @@ namespace crucio
         }
         const std::string& getCustomWord(const uint32_t id) const {
             return m_matcher->getCustomWord(id);
+        }
+        uint32_t getCustomWordID(const std::string& word) const {
+            return m_matcher->getCustomWordID(word);
         }
         uint32_t removeCustomWordID(const uint32_t id) {
             return m_matcher->removeCustomWordID(id);

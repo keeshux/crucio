@@ -527,6 +527,11 @@ const string& LanguageMatcher::getCustomWord(const uint32_t id) const
     return dummy;
 }
 
+uint32_t LanguageMatcher::getCustomWordID(const string& word) const
+{
+    return UINT_MAX;
+}
+
 uint32_t LanguageMatcher::removeCustomWordID(const uint32_t id)
 {
     return UINT_MAX;

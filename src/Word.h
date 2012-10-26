@@ -40,7 +40,6 @@ namespace crucio
             m_wildcards(defRef->getLength()),
             m_letterMasks(defRef->getLength(), ABMask(ANY_MASK)),
             m_matchings(dict->createMatchingResult(defRef->getLength())),
-            m_customID(UINT_MAX),
             m_excluded() {
         }
         ~Word() {
@@ -107,19 +106,19 @@ namespace crucio
             assert(isComplete());
 
             // search existing dictionary
-            return m_matchings->getFirstID();
+            uint32_t id = m_matchings->getFirstID();
+            if (id == UINT_MAX) {
+                id = m_dictionary->addCustomWord(m_mask);
+            }
+            return id;
         }
         uint32_t addCustomID() {
-            m_customID = m_dictionary->addCustomWord(m_mask);
-            return m_customID;
+            return m_dictionary->addCustomWord(m_mask);
         }
         uint32_t removeCustomID() {
-            m_dictionary->removeCustomWordID(m_customID);
-
-            const uint32_t oldCustomID = m_customID;
-            m_customID = UINT_MAX;
-
-            return oldCustomID;
+            const uint32_t id = m_dictionary->getCustomWordID(m_mask);
+            m_dictionary->removeCustomWordID(id);
+            return id;
         }
 
         // exclusions management for doMatch()
@@ -160,7 +159,6 @@ namespace crucio
         MatchingResult* m_matchings;
 
         // ID based exclusions
-        uint32_t m_customID; // optional, UINT_MAX
         std::set<uint32_t> m_excluded;
     };
 }
