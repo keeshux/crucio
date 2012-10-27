@@ -342,10 +342,6 @@ bool LetterCompiler::assign(const uint32_t li,
                 slw->exclude(excludedID);
                 slw->doMatchUpdating();
                 
-                if (isVerbose()) {
-//                    slw->
-                }
-
                 // domains update
                 const vector<uint32_t>& wordLetters =
                     m_model->getWordLetters(slWi);
