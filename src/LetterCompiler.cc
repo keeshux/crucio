@@ -309,7 +309,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
             if (isVerbose()) {
                 *crucio_vout << "completed word " <<
-                             w->getDefinition()->getIndex() << ": " << w->get() << "" << endl;
+                             *w->getDefinition() << ": " << w->get() << "" << endl;
             }
 
             // excluded word ID

@@ -75,12 +75,18 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
     // character position in a word or pattern
     uint32_t pos;
 
-//    cout << "word " << word->getDefinition()->getIndex() << " pattern '" << word->get() << "', exclusions (" << exclusions.size() << "):" << endl;
+    if (isVerbose()) {
+        *crucio_vout << "\tword " << *word->getDefinition() <<
+                     " pattern: " << word->get() << " (" <<
+                     exclusions.size() << " exclusions)" << endl;
+    }
 
     // only check words with a single missing character
     const uint32_t wildcards = word->getWildcards();
     if (wildcards > 1) {
-//        cout << "\tmultiple wildcards, skipped" << endl;
+        if (isVerbose()) {
+            *crucio_vout << "\t\tskipped multiple wildcards" << endl;
+        }
         return true;
     }
 
@@ -100,11 +106,16 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
 
         // ignore unmatching exclusions
         if (!isMatchingExclusion(pattern, xword)) {
-//            cout << "\t" << xword << ", skipped" << endl;
+            if (isVerbose()) {
+                *crucio_vout << "\t\tskipped unmatching exclusion: " <<
+                             xword << endl;
+            }
             continue;
         }
 
-//        cout << "\t" << xword << endl;
+        if (isVerbose()) {
+            *crucio_vout << "\t\tanalyzing exclusion: " << xword << endl;
+        }
 
         // reset excluded word letters in masks
         for (pos = 0; pos < len; ++pos) {
@@ -115,15 +126,19 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
                 continue;
             }
 
-//            cout << "\t\tBEFORE: domain[" << pos << "] = " <<
-//                    ABMaskString(alphabet, *possible) << endl;
+            if (isVerbose()) {
+                *crucio_vout << "\t\t\tBEFORE: domain[" << pos << "] = " <<
+                             ABMaskString(alphabet, *possible) << endl;
+            }
 
             const char xch = xword.at(pos);
             const uint32_t xi = character2Index(alphabet, xch);
             possible->reset(xi);
 
-//            cout << "\t\tAFTER: domain[" << pos << "] = " <<
-//                    ABMaskString(alphabet, *possible) << endl;
+            if (isVerbose()) {
+                *crucio_vout << "\t\t\tAFTER:  domain[" << pos << "] = " <<
+                             ABMaskString(alphabet, *possible) << endl;
+            }
         }
     }
 
@@ -142,7 +157,10 @@ uint32_t SolutionMatcher::addCustomWord(const string& word)
     id = m_lastWordID;
 
     // forward and reverse
-//    cout << "adding '" << word << "' with id " << id << endl;
+    if (isVerbose()) {
+        *crucio_vout << "adding custom word: " << word <<
+                     " (id = " << id << ")" << endl;
+    }
     m_customWords.insert(make_pair(id, word));
     m_customIDs.insert(make_pair(word, id));
     ++m_lastWordID;
@@ -173,8 +191,10 @@ uint32_t SolutionMatcher::getCustomWordID(const string& word) const
 uint32_t SolutionMatcher::removeCustomWordID(const uint32_t id)
 {
     const map<uint32_t, string>::iterator wordIt = m_customWords.find(id);
-//    const string& word = wordIt->second;
-//    cout << "removing '" << word << "'" << endl;
+    if (isVerbose()) {
+        const string& word = wordIt->second;
+        *crucio_vout << "removing custom word: " << word << endl;
+    }
     m_customIDs.erase(wordIt->second);
     m_customWords.erase(wordIt);
 
