@@ -155,6 +155,9 @@ namespace crucio
         }
 
         // true if no wildcards in pattern
+        const uint32_t getWildcards() const {
+            return m_wildcards;
+        }
         bool isComplete() const {
             return (m_wildcards == 0);
         }

@@ -49,6 +49,9 @@ namespace crucio
         std::map<uint32_t, std::string> m_customWords;
         std::map<std::string, uint32_t> m_customIDs;
         uint32_t m_lastWordID;
+
+        static bool isMatchingExclusion(const std::string& pattern,
+                                        const std::string& exclusion);
     };
 }
 

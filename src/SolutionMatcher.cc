@@ -24,9 +24,11 @@
 using namespace crucio;
 using namespace std;
 
-bool isMatchingExclusion(const string& pattern, const string& exclusion) {
+// pattern matches exclusion for each assigned letter (!= ANY_CHAR)
+bool SolutionMatcher::isMatchingExclusion(const string& pattern,
+                                          const string& exclusion)
+{
     const uint32_t len = pattern.length();
-    
     for (uint32_t pos = 0; pos < len; ++pos) {
         if ((pattern[pos] != ANY_CHAR) &&
             (pattern[pos] != exclusion[pos])) {
@@ -75,8 +77,8 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
 
 //    cout << "word " << word->getDefinition()->getIndex() << " pattern '" << word->get() << "', exclusions (" << exclusions.size() << "):" << endl;
 
-    // XXX: known in Word
-    const uint32_t wildcards = count(pattern.begin(), pattern.end(), ANY_CHAR);
+    // only check words with a single missing character
+    const uint32_t wildcards = word->getWildcards();
     if (wildcards > 1) {
 //        cout << "\tmultiple wildcards, skipped" << endl;
         return true;
@@ -89,20 +91,20 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
     }
     
     // filter out through exclusions
-    set<uint32_t>::const_iterator exIt;
-    for (exIt = exclusions.begin(); exIt != exclusions.end(); ++exIt) {
+    set<uint32_t>::const_iterator xIt;
+    for (xIt = exclusions.begin(); xIt != exclusions.end(); ++xIt) {
 
         // current excluded word
-        const uint32_t wi = *exIt;
-        const string& exWord = getCustomWord(wi);
+        const uint32_t wi = *xIt;
+        const string& xword = getCustomWord(wi);
         
         // ignore unmatching exclusions
-        if (!isMatchingExclusion(pattern, exWord)) {
-//            cout << "\t" << exWord << ", skipped" << endl;
+        if (!isMatchingExclusion(pattern, xword)) {
+//            cout << "\t" << xword << ", skipped" << endl;
             continue;
         }
 
-//        cout << "\t" << exWord << endl;
+//        cout << "\t" << xword << endl;
         
         // reset excluded word letters in masks
         for (pos = 0; pos < len; ++pos) {
@@ -116,7 +118,7 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
 //            cout << "\t\tBEFORE: domain[" << pos << "] = " <<
 //                    ABMaskString(alphabet, *possible) << endl;
 
-            const char xch = exWord.at(pos);
+            const char xch = xword.at(pos);
             const uint32_t xi = character2Index(alphabet, xch);
             possible->reset(xi);
 
