@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 
         // unlabeled arguments
         UnlabeledValueArg<string> fileArg("file", "Input file as " \
-                                          "written by CRUCIO", true, "", "crucio_output", cmd);
+                                          "written by CRUCIO", true, "", "crucio_voutput", cmd);
 
         // switches
         SwitchArg solArg("s", "solution", "Include solution", cmd, false);

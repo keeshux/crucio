@@ -81,44 +81,44 @@ Compiler::Result WordCompiler::configure(const Walk& walk)
         }
 
         if (isVerbose()) {
-            *m_verboseOut << "w" << wi << endl;
+            *crucio_vout << "w" << wi << endl;
             list<pair<uint32_t, WordCrossing> >::const_iterator dIt;
 
             // affecting words
             const list<pair<uint32_t, WordCrossing> >& wiDeps = m_deps[wi];
             if (!wiDeps.empty()) {
-                *m_verboseOut << "\tdepends on: ";
+                *crucio_vout << "\tdepends on: ";
                 for (dIt = wiDeps.begin(); dIt != wiDeps.end(); ++dIt) {
                     const uint32_t dWi = dIt->first;
                     const uint32_t pos = dIt->second.getPosition();
                     const uint32_t dPos = dIt->second.getCPosition();
 
-                    *m_verboseOut << "w" << dWi << " " <<
+                    *crucio_vout << "w" << dWi << " " <<
                                   "(w" << wi << "[" << pos << "]=" <<
                                   "w" << dWi << "[" << dPos << "])";
-                    *m_verboseOut << " ";
+                    *crucio_vout << " ";
                 }
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
             }
 
             // affected words
             const list<pair<uint32_t, WordCrossing> >& wiRevDeps = m_revDeps[wi];
             if (!wiRevDeps.empty()) {
-                *m_verboseOut << "\trestricts: ";
+                *crucio_vout << "\trestricts: ";
                 for (dIt = wiRevDeps.begin(); dIt != wiRevDeps.end(); ++dIt) {
                     const uint32_t dWi = dIt->first;
                     const uint32_t pos = dIt->second.getPosition();
                     const uint32_t dPos = dIt->second.getCPosition();
 
-                    *m_verboseOut << "w" << dWi << " " <<
+                    *crucio_vout << "w" << dWi << " " <<
                                   "(w" << wi << "[" << pos << "]=" <<
                                   "w" << dWi << "[" << dPos << "])";
-                    *m_verboseOut << " ";
+                    *crucio_vout << " ";
                 }
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
             }
 
-            *m_verboseOut << endl;
+            *crucio_vout << endl;
         }
     }
 
@@ -180,7 +180,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
         // admittable domain
         set<uint32_t> domainSet = m_domains[wi];
         if (isVerbose()) {
-            *m_verboseOut << "pattern for " << wi << " = \'" << w->get() <<
+            *crucio_vout << "pattern for " << wi << " = \'" << w->get() <<
                           "\' (" << domainSet.size() << " matchings)" << endl;
         }
 
@@ -206,7 +206,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
             choose(wLen, &domainSet, &v);
 
             if (isVerbose()) {
-                *m_verboseOut << "word " << wi << " = '" << v << "'" << endl;
+                *crucio_vout << "word " << wi << " = '" << v << "'" << endl;
             }
 
             // tries to assign v to current variable
@@ -216,9 +216,9 @@ bool WordCompiler::compileFrom(const uint32_t i)
             }
 
             if (isVerbose()) {
-                *m_verboseOut << endl;
-                printModelGrid(*m_verboseOut, *m_model);
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
+                printModelGrid(*crucio_vout, *m_model);
+                *crucio_vout << endl;
             }
 
             // recursively solved?
@@ -241,7 +241,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
         }
 
         if (isVerbose()) {
-            *m_verboseOut << "word " << wi << " ... BACKTRACK!" << endl;
+            *crucio_vout << "word " << wi << " ... BACKTRACK!" << endl;
         }
 
         // algorithm fails iff first variable backtracks
@@ -251,9 +251,9 @@ bool WordCompiler::compileFrom(const uint32_t i)
 #endif
 
             if (isVerbose()) {
-                *m_verboseOut << "jump from " << m_order[m_bj.getOrigin()] <<
+                *crucio_vout << "jump from " << m_order[m_bj.getOrigin()] <<
                               " to " << m_order[m_bj.getDestination()] << endl;
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
             }
         }
 
@@ -347,9 +347,9 @@ bool WordCompiler::assign(const uint32_t wi,
                 const uint32_t slDomRemCount = slDomOldCount - slDomNewCount;
 
                 if (slDomRemCount > 0) {
-                    *m_verboseOut << "\tword " << slWi <<
+                    *crucio_vout << "\tword " << slWi <<
                                   ": removed " << slDomRemCount << " matchings, ";
-                    *m_verboseOut << "now " << slDomNewCount << endl;
+                    *crucio_vout << "now " << slDomNewCount << endl;
                 }
             }
 
@@ -360,7 +360,7 @@ bool WordCompiler::assign(const uint32_t wi,
                 failed->insert(m_revOrder[slWi]);
 #endif
                 if (isVerbose()) {
-                    *m_verboseOut << "\tFC failed at " << slWi <<
+                    *crucio_vout << "\tFC failed at " << slWi <<
                                   " (UNIQUE)" << endl;
                 }
                 return false;
@@ -403,9 +403,9 @@ bool WordCompiler::assign(const uint32_t wi,
             const uint32_t dDomRemCount = dDomOldCount - dDomNewCount;
 
             if (dDomRemCount > 0) {
-                *m_verboseOut << "\tword " << dWi <<
+                *crucio_vout << "\tword " << dWi <<
                               ": removed " << dDomRemCount << " matchings, ";
-                *m_verboseOut << "now " << dDomNewCount << endl;
+                *crucio_vout << "now " << dDomNewCount << endl;
             }
         }
 
@@ -416,7 +416,7 @@ bool WordCompiler::assign(const uint32_t wi,
             failed->insert(m_revOrder[dWi]);
 #endif
             if (isVerbose()) {
-                *m_verboseOut << "\tFC failed at " << dWi << endl;
+                *crucio_vout << "\tFC failed at " << dWi << endl;
             }
             return false;
         }

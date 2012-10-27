@@ -77,42 +77,42 @@ Compiler::Result LetterCompiler::configure(const Walk& walk)
         }
 
         if (isVerbose()) {
-            *m_verboseOut << "l" << li << endl;
+            *crucio_vout << "l" << li << endl;
             list<pair<uint32_t, LetterPosition> >::const_iterator dIt;
 
             // affecting letters
             const list<pair<uint32_t, LetterPosition> >& liDeps = m_deps[li];
             if (!liDeps.empty()) {
-                *m_verboseOut << "\tdepends on: ";
+                *crucio_vout << "\tdepends on: ";
                 for (dIt = liDeps.begin(); dIt != liDeps.end(); ++dIt) {
                     const uint32_t dLi = dIt->first;
                     const LetterPosition& dLp = dIt->second;
 
-                    *m_verboseOut << "l" << dLi <<
+                    *crucio_vout << "l" << dLi <<
                                   " (w" << dLp.getWordIndex() <<
                                   "[" << dLp.getPosition() << "])";
-                    *m_verboseOut << " ";
+                    *crucio_vout << " ";
                 }
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
             }
 
             // affected letters
             const list<pair<uint32_t, LetterPosition> >& liRevDeps = m_revDeps[li];
             if (!liRevDeps.empty()) {
-                *m_verboseOut << "\trestricts: ";
+                *crucio_vout << "\trestricts: ";
                 for (dIt = liRevDeps.begin(); dIt != liRevDeps.end(); ++dIt) {
                     const uint32_t dLi = dIt->first;
                     const LetterPosition& dLp = dIt->second;
 
-                    *m_verboseOut << "l" << dLi <<
+                    *crucio_vout << "l" << dLi <<
                                   " (w" << dLp.getWordIndex() <<
                                   "[" << dLp.getPosition() << "])";
-                    *m_verboseOut << " ";
+                    *crucio_vout << " ";
                 }
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
             }
 
-            *m_verboseOut << endl;
+            *crucio_vout << endl;
         }
     }
 
@@ -155,7 +155,7 @@ bool LetterCompiler::compileFrom(const uint32_t i)
         // admittable domain
         ABMask domainMask = m_domains[li];
         if (isVerbose()) {
-            *m_verboseOut << "domain for " << li << " = " << ABMaskString(m_alphabet, domainMask) << endl;
+            *crucio_vout << "domain for " << li << " = " << ABMaskString(m_alphabet, domainMask) << endl;
         }
 
         // removal stack through forward checking
@@ -177,7 +177,7 @@ bool LetterCompiler::compileFrom(const uint32_t i)
             const char v = choose(&domainMask);
 
             if (isVerbose()) {
-                *m_verboseOut << "letter " << li << " = '" << v << "'" << endl;
+                *crucio_vout << "letter " << li << " = '" << v << "'" << endl;
             }
 
             // tries to assign v to current variable
@@ -187,9 +187,9 @@ bool LetterCompiler::compileFrom(const uint32_t i)
             }
 
             if (isVerbose()) {
-                *m_verboseOut << endl;
-                printModelGrid(*m_verboseOut, *m_model);
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
+                printModelGrid(*crucio_vout, *m_model);
+                *crucio_vout << endl;
             }
 
             // recursively solved?
@@ -212,7 +212,7 @@ bool LetterCompiler::compileFrom(const uint32_t i)
         }
 
         if (isVerbose()) {
-            *m_verboseOut << "letter " << li << " ... BACKTRACK!" << endl;
+            *crucio_vout << "letter " << li << " ... BACKTRACK!" << endl;
         }
 
         // algorithm fails iff first variable backtracks
@@ -222,9 +222,9 @@ bool LetterCompiler::compileFrom(const uint32_t i)
 #endif
 
             if (isVerbose()) {
-                *m_verboseOut << "jump from " << m_order[m_bj.getOrigin()] <<
+                *crucio_vout << "jump from " << m_order[m_bj.getOrigin()] <<
                               " to " << m_order[m_bj.getDestination()] << endl;
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
             }
         }
 
@@ -308,7 +308,7 @@ bool LetterCompiler::assign(const uint32_t li,
         if (isUnique() && w->isComplete()) {
 
             if (isVerbose()) {
-                *m_verboseOut << "completed word " <<
+                *crucio_vout << "completed word " <<
                         w->getDefinition()->getIndex() << ": " << w->get() << "" << endl;
             }
 
@@ -364,17 +364,17 @@ bool LetterCompiler::assign(const uint32_t li,
                     remStack->push(make_pair(slwLi, remValues));
 
                     if (isVerbose() && remValues.any()) {
-                        *m_verboseOut << "\tletter " << slwLi <<
+                        *crucio_vout << "\tletter " << slwLi <<
                                       ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
-                        *m_verboseOut << "now " << ABMaskString(m_alphabet, *slwDom);
-                        *m_verboseOut << " (UNIQUE)" << endl;
+                        *crucio_vout << "now " << ABMaskString(m_alphabet, *slwDom);
+                        *crucio_vout << " (UNIQUE)" << endl;
                     }
                     
                     // current assignment invalidated in other words
                     const uint32_t vi = character2Index(m_alphabet, v);
                     if (((uint32_t)slwLi == li) && remValues.test(vi)) {
                         if (isVerbose()) {
-                            *m_verboseOut << "\tletter " << li <<
+                            *crucio_vout << "\tletter " << li <<
                                 ": invalidated (UNIQUE)" << endl;
                         }
                         return false;
@@ -387,7 +387,7 @@ bool LetterCompiler::assign(const uint32_t li,
                         failed->insert(m_revOrder[slwLi]);
 #endif
                         if (isVerbose()) {
-                            *m_verboseOut << "\tFC failed at " <<
+                            *crucio_vout << "\tFC failed at " <<
                                           slwLi << " (UNIQUE)" << endl;
                         }
                         return false;
@@ -420,9 +420,9 @@ bool LetterCompiler::assign(const uint32_t li,
         remStack->push(make_pair(dLi, remValues));
 
         if (isVerbose() && remValues.any()) {
-            *m_verboseOut << "\tletter " << dLi <<
+            *crucio_vout << "\tletter " << dLi <<
                           ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
-            *m_verboseOut << "now " << ABMaskString(m_alphabet, *dDom) << endl;
+            *crucio_vout << "now " << ABMaskString(m_alphabet, *dDom) << endl;
         }
 
         // an empty domain implies failure
@@ -432,7 +432,7 @@ bool LetterCompiler::assign(const uint32_t li,
             failed->insert(m_revOrder[dLi]);
 #endif
             if (isVerbose()) {
-                *m_verboseOut << "\tFC failed at " << dLi << endl;
+                *crucio_vout << "\tFC failed at " << dLi << endl;
             }
             return false;
         }

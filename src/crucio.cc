@@ -76,6 +76,9 @@ int main(int argc, char* argv[])
         // command line parsing
         cmd.parse(argc, argv);
 
+        // verbosity
+        setVerbose(verboseArg.getValue());
+
         // allocates data structures through input arguments
         const Alphabet inAlphabet = crucio::LETTERS;
         const Grid inGrid(gridArg.getValue());
@@ -125,7 +128,6 @@ int main(int argc, char* argv[])
         }
         inCpl->setUnique(uniqueArg.getValue());
         inCpl->setDeterministic(determArg.getValue());
-        inCpl->setVerbose(verboseArg.getValue(), &cout);
 
         // walk selection
         if (walkArg.getValue() == "bfs") {

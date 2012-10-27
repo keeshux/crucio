@@ -27,9 +27,7 @@ using namespace std;
 Compiler::Compiler() :
     m_unique(false),
     m_deterministic(false),
-    m_verbose(false),
-    m_model(NULL),
-    m_verboseOut(NULL)
+    m_model(NULL)
 {
 }
 
@@ -87,17 +85,17 @@ Compiler::Result Compiler::compile(Model* const model, const Walk& walk)
         // posterior check for non-determinism
         if (isDeterministic()) {
             if (isVerbose()) {
-                *m_verboseOut << "deterministic solution check ... ";
+                *crucio_vout << "deterministic solution check ... ";
             }
             validSolution = isDeterministicSolution();
             if (isVerbose()) {
                 if (validSolution) {
-                    *m_verboseOut << "OK!" << endl;
+                    *crucio_vout << "OK!" << endl;
                 } else {
-                    *m_verboseOut << "FAILED!" << endl;
-                    *m_verboseOut << "algorithm will now restart" << endl;
+                    *crucio_vout << "FAILED!" << endl;
+                    *crucio_vout << "algorithm will now restart" << endl;
                 }
-                *m_verboseOut << endl;
+                *crucio_vout << endl;
             }
         }
     } while (!validSolution);

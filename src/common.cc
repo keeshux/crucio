@@ -23,6 +23,8 @@
 using namespace crucio;
 using namespace std;
 
+ostream* crucio::crucio_vout = NULL;
+
 string crucio::ABMaskString(const Alphabet alphabet, const ABMask mask)
 {
     string s = "";

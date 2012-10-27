@@ -56,15 +56,6 @@ namespace crucio
             return m_deterministic;
         }
 
-        // prints out algorithmic steps
-        void setVerbose(const bool verbose, std::ostream* const out) {
-            m_verbose = verbose;
-            m_verboseOut = out;
-        }
-        bool isVerbose() const {
-            return m_verbose;
-        }
-
         // algorithm execution
         Result compile(Model* const model, const Walk& walk);
 
@@ -97,7 +88,6 @@ namespace crucio
         // parameters
         bool m_unique;
         bool m_deterministic;
-        bool m_verbose;
 
         // determinism check
         bool isDeterministicSolution() const;
@@ -106,9 +96,6 @@ namespace crucio
 
         // model reference
         Model* m_model;
-
-        // verbose output stream reference
-        std::ostream* m_verboseOut;
     };
 }
 
