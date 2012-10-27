@@ -308,7 +308,8 @@ bool LetterCompiler::assign(const uint32_t li,
         if (isUnique() && w->isComplete()) {
 
             if (isVerbose()) {
-                *m_verboseOut << "completed word '" << w->get() << "'" << endl;
+                *m_verboseOut << "completed word " <<
+                        w->getDefinition()->getIndex() << ": " << w->get() << "" << endl;
             }
 
             // excluded word ID
@@ -365,9 +366,20 @@ bool LetterCompiler::assign(const uint32_t li,
                     if (isVerbose() && remValues.any()) {
                         *m_verboseOut << "\tletter " << slwLi <<
                                       ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
-                        *m_verboseOut << "now " << ABMaskString(m_alphabet, *slwDom) << endl;
+                        *m_verboseOut << "now " << ABMaskString(m_alphabet, *slwDom);
+                        *m_verboseOut << " (UNIQUE)" << endl;
                     }
-
+                    
+                    // current assignment invalidated in other words
+                    const uint32_t vi = character2Index(m_alphabet, v);
+                    if (((uint32_t)slwLi == li) && remValues.test(vi)) {
+                        if (isVerbose()) {
+                            *m_verboseOut << "\tletter " << li <<
+                                ": invalidated (UNIQUE)" << endl;
+                        }
+                        return false;
+                    }
+                    
                     // an empty domain implies failure
                     if (slwDom->none()) {
 #ifndef CRUCIO_BJ_FAST
