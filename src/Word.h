@@ -88,17 +88,21 @@ namespace crucio
 
         // rematches pattern, updates matching result
         void doMatch() {
-            m_dictionary->getMatchings(m_mask, m_matchings,
+            m_dictionary->getMatchings(m_mask,
+                                       m_matchings,
                                        &m_excluded);
         }
 
         // rematches pattern, updates matching result and letter masks
         void doMatchUpdating() {
-            m_dictionary->getMatchings(m_mask, m_matchings,
+            m_dictionary->getMatchings(m_mask,
+                                       m_matchings,
                                        &m_excluded);
 
             // updates letters masks
-            m_dictionary->getPossible(m_matchings, &m_letterMasks);
+            m_dictionary->getPossible(m_matchings,
+                                      &m_letterMasks,
+                                      &m_excluded);
         }
 
         // word id in dictionary (WARNING: only after matching a complete mask!)

@@ -46,7 +46,8 @@ namespace crucio
 
         virtual bool getPossible(WordSetIndex* const wsIndex,
                                  const MatchingResult* const res,
-                                 std::vector<ABMask>* const possibleVector);
+                                 std::vector<ABMask>* const possibleVector,
+                                 const std::set<uint32_t>* const exclusions);
         
         virtual uint32_t addCustomWord(const std::string& word);
         virtual const std::string& getCustomWord(const uint32_t id) const;

@@ -48,7 +48,8 @@ namespace crucio
         // return possible letters given a matching result
         virtual bool getPossible(WordSetIndex* const wsIndex,
                                  const MatchingResult* const res,
-                                 std::vector<ABMask>* const possibleVector) = 0;
+                                 std::vector<ABMask>* const possibleVector,
+                                 const std::set<uint32_t>* const exclusions) = 0;
 
         // dynamic custom entries
         virtual uint32_t addCustomWord(const std::string& word) = 0;
@@ -111,9 +112,11 @@ namespace crucio
                                            exclusions);
         }
         bool getPossible(const MatchingResult* const res,
-                         std::vector<ABMask>* const possibleVector) const {
+                         std::vector<ABMask>* const possibleVector,
+                         const std::set<uint32_t>* const exclusions) const {
 
-            return m_matcher->getPossible(m_index, res, possibleVector);
+            return m_matcher->getPossible(m_index, res,
+                                          possibleVector, exclusions);
         }
         uint32_t addCustomWord(const std::string& word) {
             return m_matcher->addCustomWord(word);

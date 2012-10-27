@@ -458,7 +458,8 @@ bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
 
 bool LanguageMatcher::getPossible(WordSetIndex* const wsIndex,
                                   const MatchingResult* const res,
-                                  vector<ABMask>* const possibleVector)
+                                  vector<ABMask>* const possibleVector,
+                                  const set<uint32_t>* const exclusions)
 {
     // fixed length for words in matching result
     const uint32_t len = res->getWordsLength();

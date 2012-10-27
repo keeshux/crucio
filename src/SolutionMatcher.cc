@@ -43,6 +43,14 @@ bool SolutionMatcher::getMatchings(WordSetIndex* const wsIndex,
                                    MatchingResult* const res,
                                    const set<uint32_t>* const exclusions)
 {
+    return true;
+}
+
+bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
+                                  const MatchingResult* const res,
+                                  vector<ABMask>* const possibleVector,
+                                  const set<uint32_t>* const exclusions)
+{
 //    cout << "exclusions (" << exclusions->size() << "):" << endl;
 //    for (set<uint32_t>::const_iterator i = exclusions->begin();
 //         i != exclusions->end();
@@ -50,14 +58,7 @@ bool SolutionMatcher::getMatchings(WordSetIndex* const wsIndex,
 //
 //        cout << "\t" << getCustomWord(*i) << endl;
 //    }
-    
-    return true;
-}
 
-bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
-                                  const MatchingResult* const res,
-                                  std::vector<ABMask>* const possibleVector)
-{
     return true;
 }
 
