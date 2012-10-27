@@ -582,3 +582,19 @@ ostream& operator<<(ostream& out, const Grid& g)
 
     return out;
 }
+
+ostream& operator<<(ostream& out, const Definition& def)
+{
+    switch (def.getDirection()) {
+        case Definition::ACROSS:
+            out << "A";
+            break;
+
+        case Definition::DOWN:
+            out << "D";
+            break;
+    }
+    out << def.getNumber();
+
+    return out;
+}

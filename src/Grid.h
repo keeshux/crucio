@@ -325,5 +325,6 @@ namespace crucio
 }
 
 std::ostream& operator<<(std::ostream& out, const crucio::Grid& g);
+std::ostream& operator<<(std::ostream& out, const crucio::Definition& def);
 
 #endif
