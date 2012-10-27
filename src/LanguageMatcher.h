@@ -44,7 +44,7 @@ namespace crucio
 
         virtual bool getPossible(WordSetIndex* const wsIndex,
                                  Word* const word);
-        
+
         virtual uint32_t addCustomWord(const std::string& word);
         virtual const std::string& getCustomWord(const uint32_t id) const;
         virtual uint32_t getCustomWordID(const std::string& word) const;

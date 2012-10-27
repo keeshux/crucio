@@ -40,9 +40,9 @@ namespace crucio
 #endif
 
     /* logging */
-    
+
     extern std::ostream* crucio_vout;
-    
+
     inline bool isVerbose()
     {
         return (crucio_vout != NULL);
@@ -55,7 +55,7 @@ namespace crucio
             crucio_vout = NULL;
         }
     }
-    
+
     /* global alphabet management (IMPORTANT: only uppercase letters!) */
 
     // alphabet kind (base character)
@@ -124,7 +124,7 @@ namespace crucio
 
     // ABMask string representation by alphabet
     std::string ABMaskString(const Alphabet alphabet, const ABMask mask);
-    
+
     /* exceptions */
 
     class CrucioException

@@ -89,8 +89,8 @@ Compiler::Result LetterCompiler::configure(const Walk& walk)
                     const LetterPosition& dLp = dIt->second;
 
                     *crucio_vout << "l" << dLi <<
-                                  " (w" << dLp.getWordIndex() <<
-                                  "[" << dLp.getPosition() << "])";
+                                 " (w" << dLp.getWordIndex() <<
+                                 "[" << dLp.getPosition() << "])";
                     *crucio_vout << " ";
                 }
                 *crucio_vout << endl;
@@ -105,8 +105,8 @@ Compiler::Result LetterCompiler::configure(const Walk& walk)
                     const LetterPosition& dLp = dIt->second;
 
                     *crucio_vout << "l" << dLi <<
-                                  " (w" << dLp.getWordIndex() <<
-                                  "[" << dLp.getPosition() << "])";
+                                 " (w" << dLp.getWordIndex() <<
+                                 "[" << dLp.getPosition() << "])";
                     *crucio_vout << " ";
                 }
                 *crucio_vout << endl;
@@ -223,7 +223,7 @@ bool LetterCompiler::compileFrom(const uint32_t i)
 
             if (isVerbose()) {
                 *crucio_vout << "jump from " << m_order[m_bj.getOrigin()] <<
-                              " to " << m_order[m_bj.getDestination()] << endl;
+                             " to " << m_order[m_bj.getDestination()] << endl;
                 *crucio_vout << endl;
             }
         }
@@ -309,7 +309,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
             if (isVerbose()) {
                 *crucio_vout << "completed word " <<
-                        w->getDefinition()->getIndex() << ": " << w->get() << "" << endl;
+                             w->getDefinition()->getIndex() << ": " << w->get() << "" << endl;
             }
 
             // excluded word ID
@@ -342,7 +342,7 @@ bool LetterCompiler::assign(const uint32_t li,
                 // excludes completed word and rematches pattern
                 slw->exclude(excludedID);
                 slw->doMatchUpdating();
-                
+
                 // domains update
                 const vector<uint32_t>& wordLetters =
                     m_model->getWordLetters(slWi);
@@ -365,21 +365,21 @@ bool LetterCompiler::assign(const uint32_t li,
 
                     if (isVerbose() && remValues.any()) {
                         *crucio_vout << "\tletter " << slwLi <<
-                                      ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
+                                     ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
                         *crucio_vout << "now " << ABMaskString(m_alphabet, *slwDom);
                         *crucio_vout << " (UNIQUE)" << endl;
                     }
-                    
+
                     // current assignment invalidated in other words
                     const uint32_t vi = character2Index(m_alphabet, v);
                     if (((uint32_t)slwLi == li) && remValues.test(vi)) {
                         if (isVerbose()) {
                             *crucio_vout << "\tletter " << li <<
-                                ": invalidated (UNIQUE)" << endl;
+                                         ": invalidated (UNIQUE)" << endl;
                         }
                         return false;
                     }
-                    
+
                     // an empty domain implies failure
                     if (slwDom->none()) {
 #ifndef CRUCIO_BJ_FAST
@@ -388,7 +388,7 @@ bool LetterCompiler::assign(const uint32_t li,
 #endif
                         if (isVerbose()) {
                             *crucio_vout << "\tFC failed at " <<
-                                          slwLi << " (UNIQUE)" << endl;
+                                         slwLi << " (UNIQUE)" << endl;
                         }
                         return false;
                     }
@@ -421,7 +421,7 @@ bool LetterCompiler::assign(const uint32_t li,
 
         if (isVerbose() && remValues.any()) {
             *crucio_vout << "\tletter " << dLi <<
-                          ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
+                         ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
             *crucio_vout << "now " << ABMaskString(m_alphabet, *dDom) << endl;
         }
 

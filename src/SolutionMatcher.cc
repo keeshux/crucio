@@ -26,13 +26,13 @@ using namespace std;
 
 // pattern matches exclusion for each assigned letter (!= ANY_CHAR)
 bool SolutionMatcher::isMatchingExclusion(const string& pattern,
-                                          const string& exclusion)
+        const string& exclusion)
 {
     const uint32_t len = pattern.length();
     for (uint32_t pos = 0; pos < len; ++pos) {
         if ((pattern[pos] != ANY_CHAR) &&
-            (pattern[pos] != exclusion[pos])) {
-            
+                (pattern[pos] != exclusion[pos])) {
+
             return false;
         }
     }
@@ -71,7 +71,7 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
     // fixed length for words in matching result
     const Alphabet alphabet = wsIndex->getAlphabet();
     const uint32_t len = res->getWordsLength();
-    
+
     // character position in a word or pattern
     uint32_t pos;
 
@@ -89,7 +89,7 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
         ABMask* const possible = &possibleVector[pos];
         setAnyMask(alphabet, possible);
     }
-    
+
     // filter out through exclusions
     set<uint32_t>::const_iterator xIt;
     for (xIt = exclusions.begin(); xIt != exclusions.end(); ++xIt) {
@@ -97,7 +97,7 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
         // current excluded word
         const uint32_t wi = *xIt;
         const string& xword = getCustomWord(wi);
-        
+
         // ignore unmatching exclusions
         if (!isMatchingExclusion(pattern, xword)) {
 //            cout << "\t" << xword << ", skipped" << endl;
@@ -105,11 +105,11 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
         }
 
 //        cout << "\t" << xword << endl;
-        
+
         // reset excluded word letters in masks
         for (pos = 0; pos < len; ++pos) {
             ABMask* const possible = &possibleVector[pos];
-            
+
             // skip unassigned characters
             if (pattern[pos] != ANY_CHAR) {
                 continue;
@@ -146,14 +146,14 @@ uint32_t SolutionMatcher::addCustomWord(const string& word)
     m_customWords.insert(make_pair(id, word));
     m_customIDs.insert(make_pair(word, id));
     ++m_lastWordID;
-    
+
     return id;
 }
 
 const string& SolutionMatcher::getCustomWord(const uint32_t id) const
 {
     static const string dummy = "";
-    
+
     const map<uint32_t, string>::const_iterator wordIt = m_customWords.find(id);
     if (wordIt == m_customWords.end()) {
         return dummy;

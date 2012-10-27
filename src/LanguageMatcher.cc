@@ -529,7 +529,7 @@ uint32_t LanguageMatcher::addCustomWord(const string& word)
 const string& LanguageMatcher::getCustomWord(const uint32_t id) const
 {
     static string dummy;
-    
+
     return dummy;
 }
 

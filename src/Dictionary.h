@@ -39,7 +39,7 @@ namespace crucio
 
         // delegated index loading
         virtual void loadIndex(WordSetIndex* const wsIndex) = 0;
-        
+
         // return words matching a pattern, excluding given IDs (optional)
         virtual bool getMatchings(WordSetIndex* const wsIndex,
                                   Word* const word) = 0;

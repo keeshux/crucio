@@ -94,8 +94,8 @@ Compiler::Result WordCompiler::configure(const Walk& walk)
                     const uint32_t dPos = dIt->second.getCPosition();
 
                     *crucio_vout << "w" << dWi << " " <<
-                                  "(w" << wi << "[" << pos << "]=" <<
-                                  "w" << dWi << "[" << dPos << "])";
+                                 "(w" << wi << "[" << pos << "]=" <<
+                                 "w" << dWi << "[" << dPos << "])";
                     *crucio_vout << " ";
                 }
                 *crucio_vout << endl;
@@ -111,8 +111,8 @@ Compiler::Result WordCompiler::configure(const Walk& walk)
                     const uint32_t dPos = dIt->second.getCPosition();
 
                     *crucio_vout << "w" << dWi << " " <<
-                                  "(w" << wi << "[" << pos << "]=" <<
-                                  "w" << dWi << "[" << dPos << "])";
+                                 "(w" << wi << "[" << pos << "]=" <<
+                                 "w" << dWi << "[" << dPos << "])";
                     *crucio_vout << " ";
                 }
                 *crucio_vout << endl;
@@ -181,7 +181,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
         set<uint32_t> domainSet = m_domains[wi];
         if (isVerbose()) {
             *crucio_vout << "pattern for " << wi << " = \'" << w->get() <<
-                          "\' (" << domainSet.size() << " matchings)" << endl;
+                         "\' (" << domainSet.size() << " matchings)" << endl;
         }
 
         // current and previous assignment
@@ -252,7 +252,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
 
             if (isVerbose()) {
                 *crucio_vout << "jump from " << m_order[m_bj.getOrigin()] <<
-                              " to " << m_order[m_bj.getDestination()] << endl;
+                             " to " << m_order[m_bj.getDestination()] << endl;
                 *crucio_vout << endl;
             }
         }
@@ -348,7 +348,7 @@ bool WordCompiler::assign(const uint32_t wi,
 
                 if (slDomRemCount > 0) {
                     *crucio_vout << "\tword " << slWi <<
-                                  ": removed " << slDomRemCount << " matchings, ";
+                                 ": removed " << slDomRemCount << " matchings, ";
                     *crucio_vout << "now " << slDomNewCount << endl;
                 }
             }
@@ -361,7 +361,7 @@ bool WordCompiler::assign(const uint32_t wi,
 #endif
                 if (isVerbose()) {
                     *crucio_vout << "\tFC failed at " << slWi <<
-                                  " (UNIQUE)" << endl;
+                                 " (UNIQUE)" << endl;
                 }
                 return false;
             }
@@ -404,7 +404,7 @@ bool WordCompiler::assign(const uint32_t wi,
 
             if (dDomRemCount > 0) {
                 *crucio_vout << "\tword " << dWi <<
-                              ": removed " << dDomRemCount << " matchings, ";
+                             ": removed " << dDomRemCount << " matchings, ";
                 *crucio_vout << "now " << dDomNewCount << endl;
             }
         }
