@@ -26,6 +26,7 @@
 
 namespace crucio
 {
+    class Word;
     class MatchingResult;
 
     /* Matcher: loading/matching implementation */
@@ -41,15 +42,11 @@ namespace crucio
         
         // return words matching a pattern, excluding given IDs (optional)
         virtual bool getMatchings(WordSetIndex* const wsIndex,
-                                  const std::string& pattern,
-                                  MatchingResult* const res,
-                                  const std::set<uint32_t>* const exclusions) = 0;
+                                  Word* const word) = 0;
 
         // return possible letters given a matching result
         virtual bool getPossible(WordSetIndex* const wsIndex,
-                                 const MatchingResult* const res,
-                                 std::vector<ABMask>* const possibleVector,
-                                 const std::set<uint32_t>* const exclusions) = 0;
+                                 Word* const word) = 0;
 
         // dynamic custom entries
         virtual uint32_t addCustomWord(const std::string& word) = 0;
@@ -104,19 +101,11 @@ namespace crucio
         void loadIndex() const {
             return m_matcher->loadIndex(m_index);
         }
-        bool getMatchings(const std::string& pattern,
-                          MatchingResult* const res,
-                          const std::set<uint32_t>* const exclusions) const {
-
-            return m_matcher->getMatchings(m_index, pattern, res,
-                                           exclusions);
+        bool getMatchings(Word* const word) const {
+            return m_matcher->getMatchings(m_index, word);
         }
-        bool getPossible(const MatchingResult* const res,
-                         std::vector<ABMask>* const possibleVector,
-                         const std::set<uint32_t>* const exclusions) const {
-
-            return m_matcher->getPossible(m_index, res,
-                                          possibleVector, exclusions);
+        bool getPossible(Word* const word) const {
+            return m_matcher->getPossible(m_index, word);
         }
         uint32_t addCustomWord(const std::string& word) {
             return m_matcher->addCustomWord(word);

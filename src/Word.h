@@ -38,7 +38,7 @@ namespace crucio
             m_defRef(defRef),
             m_mask(defRef->getLength(), ANY_CHAR),
             m_wildcards(defRef->getLength()),
-            m_letterMasks(defRef->getLength(), ABMask(ANY_MASK)),
+            m_letterMasks(defRef->getLength(), anyMask(dict->getAlphabet())),
             m_matchings(dict->createMatchingResult(defRef->getLength())),
             m_excluded() {
         }
@@ -52,6 +52,14 @@ namespace crucio
         }
         uint32_t getLength() const {
             return m_defRef->getLength();
+        }
+
+        // matching results
+        const MatchingResult* getMatchings() const {
+            return m_matchings;
+        }
+        MatchingResult* getMatchings() {
+            return m_matchings;
         }
 
         // assignment
@@ -88,21 +96,15 @@ namespace crucio
 
         // rematches pattern, updates matching result
         void doMatch() {
-            m_dictionary->getMatchings(m_mask,
-                                       m_matchings,
-                                       &m_excluded);
+            m_dictionary->getMatchings(this);
         }
 
         // rematches pattern, updates matching result and letter masks
         void doMatchUpdating() {
-            m_dictionary->getMatchings(m_mask,
-                                       m_matchings,
-                                       &m_excluded);
+            m_dictionary->getMatchings(this);
 
             // updates letters masks
-            m_dictionary->getPossible(m_matchings,
-                                      &m_letterMasks,
-                                      &m_excluded);
+            m_dictionary->getPossible(this);
         }
 
         // word id in dictionary (WARNING: only after matching a complete mask!)
@@ -132,9 +134,15 @@ namespace crucio
         void include(const int id) {
             m_excluded.erase(id);
         }
+        const std::set<uint32_t>& getExclusions() const {
+            return m_excluded;
+        }
 
         // current domains
         const std::vector<ABMask>& getAllowed() const {
+            return m_letterMasks;
+        }
+        std::vector<ABMask>& getAllowed() {
             return m_letterMasks;
         }
         ABMask getAllowed(const uint32_t i) const {

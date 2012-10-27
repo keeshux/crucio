@@ -58,9 +58,6 @@ namespace crucio
     // wildcard (any characater)
     const char ANY_CHAR = '-';
 
-    // all ones 26-bit mask (any [A-Z] letter)
-    const ABMask ANY_MASK = ABMask(0x03FFFFFF);
-
     // size by alphabet
     inline uint32_t alphabetSize(const Alphabet alphabet)
     {
@@ -75,6 +72,24 @@ namespace crucio
         // should never happen
         assert(false);
         return 0;
+    }
+
+    // totally active mask
+    inline ABMask anyMask(const Alphabet alphabet)
+    {
+        ABMask mask;
+        const uint32_t size = alphabetSize(alphabet);
+        for (size_t i = 0; i < size; ++i) {
+            mask.set(i);
+        }
+        return mask;
+    }
+    inline void setAnyMask(const Alphabet alphabet, ABMask* const mask)
+    {
+        const uint32_t size = alphabetSize(alphabet);
+        for (size_t i = 0; i < size; ++i) {
+            mask->set(i);
+        }
     }
 
     // maps i to i-th letter of alphabet

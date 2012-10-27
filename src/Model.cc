@@ -31,7 +31,7 @@ Model::Model(Dictionary* const d, const Grid* const g) :
     m_letters(g->getNonBlackCells()),
     m_words(g->getWords()),
     m_initLetters(g->getNonBlackCells(), ANY_CHAR),
-    m_initLettersDomains(g->getNonBlackCells(), ANY_MASK),
+    m_initLettersDomains(g->getNonBlackCells(), anyMask(d->getAlphabet())),
     m_lettersWords(g->getNonBlackCells()),
     m_lettersNeighbours(g->getNonBlackCells()),
     m_initWords(g->getWords()),

@@ -19,6 +19,7 @@
  */
 
 #include "LanguageMatcher.h"
+#include "Word.h"
 
 using namespace crucio;
 using namespace std;
@@ -275,10 +276,12 @@ void LanguageMatcher::loadFilename(WordSetIndex* const wsIndex) const
 }
 
 bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
-                                   const string& pattern,
-                                   MatchingResult* const res,
-                                   const set<uint32_t>* const exclusions)
+                                   Word* const word)
 {
+    const string& pattern = word->get();
+    MatchingResult* const res = word->getMatchings();
+    const set<uint32_t>& exclusions = word->getExclusions();
+
     const uint32_t len = pattern.length();
 
     // initially empty result
@@ -329,8 +332,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
         const uint32_t id = minSet->ids[idi];
 
         // skips excluded elements (if given)
-//        if (exclusions && (exclusions->find(id) != exclusions->end())) {
-        if (exclusions->find(id) != exclusions->end()) {
+        if (exclusions.find(id) != exclusions.end()) {
             continue;
         }
 
@@ -457,10 +459,11 @@ bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
 //}
 
 bool LanguageMatcher::getPossible(WordSetIndex* const wsIndex,
-                                  const MatchingResult* const res,
-                                  vector<ABMask>* const possibleVector,
-                                  const set<uint32_t>* const exclusions)
+                                  Word* const word)
 {
+    const MatchingResult* const res = word->getMatchings();
+    vector<ABMask>& possibleVector = word->getAllowed();
+
     // fixed length for words in matching result
     const uint32_t len = res->getWordsLength();
 
@@ -469,7 +472,7 @@ bool LanguageMatcher::getPossible(WordSetIndex* const wsIndex,
 
     // initially empty letter masks
     for (pos = 0; pos < len; ++pos) {
-        ABMask* const possible = &(*possibleVector)[pos];
+        ABMask* const possible = &possibleVector[pos];
         possible->reset();
     }
 
@@ -484,7 +487,7 @@ bool LanguageMatcher::getPossible(WordSetIndex* const wsIndex,
     // are matchings equal to whole subdictionary?
     if (res->isFull()) {
         for (pos = 0; pos < len; ++pos) {
-            ABMask* const possible = &(*possibleVector)[pos];
+            ABMask* const possible = &possibleVector[pos];
             ws->getPossibleAt(pos, possible);
         }
     } else {
@@ -502,7 +505,7 @@ bool LanguageMatcher::getPossible(WordSetIndex* const wsIndex,
 
             // finds possible letters at every position
             for (pos = 0; pos < len; ++pos) {
-                ABMask* const possible = &(*possibleVector)[pos];
+                ABMask* const possible = &possibleVector[pos];
 
                 // letter index at position pos in the word
                 const uint32_t chIndex = character2Index(m_alphabet, word[pos]);
