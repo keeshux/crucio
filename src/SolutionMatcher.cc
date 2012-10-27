@@ -73,20 +73,20 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
     // character position in a word or pattern
     uint32_t pos;
 
-    cout << "pattern '" << pattern << "' (" << static_cast<const void *>(&pattern) << "), exclusions (" << exclusions.size() << "):" << endl;
+//    cout << "word " << word->getDefinition()->getIndex() << " pattern '" << word->get() << "', exclusions (" << exclusions.size() << "):" << endl;
 
     // XXX: known in Word
     const uint32_t wildcards = count(pattern.begin(), pattern.end(), ANY_CHAR);
     if (wildcards > 1) {
-        cout << "\tmultiple wildcards, skipped" << endl;
+//        cout << "\tmultiple wildcards, skipped" << endl;
         return true;
     }
 
-//    // start from full letter masks
-//    for (pos = 0; pos < len; ++pos) {
-//        ABMask* const possible = &(*possibleVector)[pos];
-//        setAnyMask(alphabet, possible);
-//    }
+    // start from full letter masks
+    for (pos = 0; pos < len; ++pos) {
+        ABMask* const possible = &possibleVector[pos];
+        setAnyMask(alphabet, possible);
+    }
     
     // filter out through exclusions
     set<uint32_t>::const_iterator exIt;
@@ -98,31 +98,30 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
         
         // ignore unmatching exclusions
         if (!isMatchingExclusion(pattern, exWord)) {
-            cout << "\t" << exWord << ", skipped" << endl;
+//            cout << "\t" << exWord << ", skipped" << endl;
             continue;
         }
 
-        cout << "\t" << exWord << endl;
+//        cout << "\t" << exWord << endl;
         
         // reset excluded word letters in masks
         for (pos = 0; pos < len; ++pos) {
+            ABMask* const possible = &possibleVector[pos];
             
             // skip unassigned characters
             if (pattern[pos] != ANY_CHAR) {
                 continue;
             }
 
-            ABMask* const possible = &possibleVector[pos];
-
-            cout << "\t\tBEFORE: domain[" << pos << "] = " <<
-                    ABMaskString(alphabet, *possible) << endl;
+//            cout << "\t\tBEFORE: domain[" << pos << "] = " <<
+//                    ABMaskString(alphabet, *possible) << endl;
 
             const char xch = exWord.at(pos);
             const uint32_t xi = character2Index(alphabet, xch);
             possible->reset(xi);
 
-            cout << "\t\tAFTER: domain[" << pos << "] = " <<
-                    ABMaskString(alphabet, *possible) << endl;
+//            cout << "\t\tAFTER: domain[" << pos << "] = " <<
+//                    ABMaskString(alphabet, *possible) << endl;
         }
     }
 
