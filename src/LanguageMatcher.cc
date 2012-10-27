@@ -41,12 +41,14 @@ LanguageMatcher::LanguageMatcher(const set<string>* const words) :
     m_words(words),
     m_filename()
 {
+    assert(words != NULL);
 }
 
 LanguageMatcher::LanguageMatcher(const string& filename) :
     m_words(NULL),
     m_filename(filename)
 {
+    assert(!filename.empty());
 }
 
 LanguageMatcher::~LanguageMatcher()
