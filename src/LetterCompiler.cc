@@ -316,9 +316,9 @@ bool LetterCompiler::assign(const uint32_t li,
             uint32_t excludedID = w->getID();
             if (excludedID == UINT_MAX) {
                 excludedID = w->addCustomID(); // add custom dictionary entry
-            }
-            if (excludedID == UINT_MAX) {
-                continue;
+                if (excludedID == UINT_MAX) {
+                    continue;
+                }
             }
 
             // selects words subset by length
@@ -467,9 +467,9 @@ void LetterCompiler::retire(const uint32_t li,
             uint32_t excludedID = w->getID();
             if (excludedID == UINT_MAX) {
                 excludedID = w->removeCustomID();
-            }
-            if (excludedID == UINT_MAX) {
-                continue;
+                if (excludedID == UINT_MAX) {
+                    continue;
+                }
             }
 
             // selects words subset by length
