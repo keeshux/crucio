@@ -81,6 +81,12 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
                      exclusions.size() << " exclusions)" << endl;
     }
 
+    // start from full letter masks
+    for (pos = 0; pos < len; ++pos) {
+        ABMask* const possible = &possibleVector[pos];
+        setAnyMask(alphabet, possible);
+    }
+    
     // only check words with a single missing character
     const uint32_t wildcards = word->getWildcards();
     if (wildcards > 1) {
@@ -88,12 +94,6 @@ bool SolutionMatcher::getPossible(WordSetIndex* const wsIndex,
             *crucio_vout << "\t\tskipped multiple wildcards" << endl;
         }
         return true;
-    }
-
-    // start from full letter masks
-    for (pos = 0; pos < len; ++pos) {
-        ABMask* const possible = &possibleVector[pos];
-        setAnyMask(alphabet, possible);
     }
 
     // filter out through exclusions
