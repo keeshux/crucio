@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
     int status = -1;
 
     // heap objects
-    Matcher* inMatcher;
+    Matcher* inMatcher = NULL;
     Compiler* inCpl = NULL;
     Walk* inWalk = NULL;
 
