@@ -68,6 +68,15 @@ namespace crucio
             const char *getDirectionString() const;
         };
         
+        class Word
+        {
+        public:
+            CellAddress m_origin;
+            EntryDirection m_direction;
+            unsigned m_length;
+        };
+        
+        // TODO: constructor, immutable object
         class Step
         {
         public:
@@ -77,6 +86,7 @@ namespace crucio
             
             // returns distance (= max length)
             unsigned getBoundaries(CellAddress *lower, CellAddress *upper) const;
+            void getRandomWord(Word *word, CellAddress *lower, CellAddress *upper) const;
         };
         
         FillIn(const GridStructure &structure);

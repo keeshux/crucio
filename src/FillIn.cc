@@ -94,6 +94,7 @@ void FillIn::layout()
     list<Step>::iterator currentStep;
     Step baseStep;
     CellAddress lower, upper;
+    Word word;
 
     // base step
     baseStep.m_fillIn = this;
@@ -139,11 +140,10 @@ void FillIn::layout()
         
         cerr << "words can span from " << lower << " to " << upper << endl;
         
-//        // get a random definition given direction/range
-//        def.direction = ci->direction;
-//        ci->get_random_definition(&def, &first, &last);
-//        
-//        // place word in definition
+        // get a random word given step direction and boundaries
+        currentStep->getRandomWord(&word, &lower, &upper);
+        
+//        // place word into grid
 //        grid_place_word(cfg, &def);
 
         // 3) block surrounding cells
@@ -329,6 +329,12 @@ unsigned FillIn::Step::getBoundaries(CellAddress *lower, CellAddress *upper) con
     } else {
         return globalMaxLength;
     }
+}
+
+void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *upper) const
+{
+    // copy step direction
+    word->m_direction = m_direction;
 }
 
 void FillIn::finishFilling()
