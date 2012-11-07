@@ -173,8 +173,7 @@ namespace crucio
         const GridStructure m_structure;
         unsigned (*const m_randomizer)();
         Entry **m_entries;
-        unsigned *m_distribution;
-        unsigned m_distributionSize;
+        std::vector<unsigned> m_distribution;
 
         // subproblems
         void placeWord(const Word *word);
@@ -185,6 +184,7 @@ namespace crucio
         bool isDenseCrossing(const CellAddress *cell);
         void finishFilling();
 
+        // access
         Entry &getEntryAt(const unsigned i, const unsigned j)
         {
             return m_entries[i][j];
@@ -207,6 +207,7 @@ namespace crucio
         {
             return (EntryDirection)randomNumber(1, 2);
         }
+#warning TODO: templatize?
         std::vector<CellAddress>::const_iterator randomVectorElement(const std::vector<CellAddress> &elements) const
         {
             return elements.begin() + randomNumber(0, elements.size() - 1);
@@ -223,7 +224,7 @@ namespace crucio
             const float mu2 = (1 - cos(mu * M_PI)) / 2;
             return (y1 * (1 - mu2) + y2 * mu2);
         }
-        static unsigned *createDistribution(const unsigned min, const unsigned max, unsigned *distributionSize);
+        static void createDistribution(const unsigned min, const unsigned max, std::vector<unsigned> *distribution);
         unsigned randomWordLengthFromDistribution() const;
     };
 }

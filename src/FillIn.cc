@@ -82,9 +82,9 @@ FillIn::FillIn(const GridStructure &structure, unsigned (*randomizer)()) :
     }
 
     // prepare words distribution
-    m_distribution = createDistribution(m_structure.m_minLength, m_structure.m_maxLength, &m_distributionSize);
+    createDistribution(m_structure.m_minLength, m_structure.m_maxLength, &m_distribution);
 //    cerr << "distribution: { ";
-//    for (i = 0; i < m_distributionSize; ++i) {
+//    for (i = 0; i < m_distribution.size(); ++i) {
 //        cerr << m_distribution[i] << ", ";
 //    }
 //    cerr << " }" << endl;
@@ -989,14 +989,17 @@ CellAddress FillIn::randomCellAddress() const
 
 #pragma mark - Words distribution
 
-unsigned *FillIn::createDistribution(const unsigned min, const unsigned max, unsigned *distributionSize)
+void FillIn::createDistribution(const unsigned min, const unsigned max, std::vector<unsigned> *distribution)
 {
-    static unsigned buffer[200] = { 0 };
-    static unsigned knots[3] = { 0 };
+    // hardcoded parameters
     static unsigned knotsVals[3] = { 5, 10, 1 };
-    static unsigned *p;
-    static unsigned i, j, count;
-    static float mu;
+
+    // support variables
+    unsigned buffer[200] = { 0 };
+    unsigned knots[3] = { 0 };
+    unsigned *p;
+    unsigned i, j, count;
+    float mu;
     
     // interpolation
     const unsigned length = max - min;
@@ -1037,17 +1040,19 @@ unsigned *FillIn::createDistribution(const unsigned min, const unsigned max, uns
         //DDLog(@"mu of %d = %f", i, mu);
         //DDLog(@"frequency of %d = %d", range.location + i, count);
     }
-
-    // return resulting distribution size
-    *distributionSize = p - buffer;
-    //DDLog(@"distribution of length %d", *length);
     
-    return buffer;
+    // reserve adequate size
+    const unsigned size = p - buffer;
+    distribution->resize(size);
+    //DDLog(@"distribution of length %d", *length);
+
+    // copy local buffer
+    copy(buffer, buffer + size, distribution->begin());
 }
 
 unsigned FillIn::randomWordLengthFromDistribution() const
 {
-    return m_distribution[m_randomizer() % m_distributionSize];
+    return m_distribution[m_randomizer() % m_distribution.size()];
 }
 
 #pragma mark - Output
