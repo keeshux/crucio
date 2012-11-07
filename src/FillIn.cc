@@ -690,7 +690,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     }
     
     if (top_row != UINT_MAX) {
-        cerr << "\ttop row is %d" << top_row << endl;
+        cerr << "\ttop row is " << top_row << endl;
 
         from.m_row = top_row;
         from.m_column = origin->m_column;
@@ -699,7 +699,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     }
     
     if (bottom_row != UINT_MAX) {
-        cerr << "\tbottom row is %d" << bottom_row << endl;
+        cerr << "\tbottom row is " << bottom_row << endl;
 
         from.m_row = bottom_row;
         from.m_column = origin->m_column;
@@ -708,7 +708,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     }
     
     if (left_column != UINT_MAX) {
-        cerr << "\tleft column is %d" << left_column << endl;
+        cerr << "\tleft column is " << left_column << endl;
 
         from.m_row = origin->m_row;
         from.m_column = left_column;
@@ -717,7 +717,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     }
     
     if (right_column != UINT_MAX) {
-        cerr << "\tright column is %d" << right_column << endl;
+        cerr << "\tright column is " << right_column << endl;
 
         from.m_row = origin->m_row;
         from.m_column = right_column;
@@ -742,7 +742,7 @@ void FillIn::blockRow(const CellAddress *from, const EntryDirection direction, u
             ++length;
         }
 
-        cerr << "\t\tshort blocking from " << cell << " for %d" << length << endl;
+        cerr << "\t\tshort blocking from " << cell << " for " << length << endl;
     }
     
     for (; x < length; ++x) {
@@ -769,7 +769,7 @@ void FillIn::blockColumn(const CellAddress *from, const EntryDirection direction
             ++length;
         }
 
-        cerr << "\t\tshort blocking from " << cell << " for %d" << length << endl;
+        cerr << "\t\tshort blocking from " << cell << " for " << length << endl;
     }
     
     for (; x < length; ++x) {
