@@ -73,7 +73,29 @@ int main(int argc, char *argv[])
     cout << grid->getColumns() << endl;
     cout << *grid;
 
+    // words count by length
+    unsigned *defCount = new unsigned[maxLength + 1];
+    fill(defCount, defCount + maxLength + 1, 0);
+
+    // across + down words
+    const vector<Definition *> &across = grid->getAcrossDefinitions();
+    const vector<Definition *> &down = grid->getDownDefinitions();
+    vector<Definition *>::const_iterator di;
+    for (di = across.begin(); di != across.end(); ++di) {
+        ++defCount[(*di)->getLength()];
+    }
+    for (di = down.begin(); di != down.end(); ++di) {
+        ++defCount[(*di)->getLength()];
+    }
+
+    // print count by length
+    cerr << "lengths" << endl;
+    for (unsigned len = minLength; len <= maxLength; ++len) {
+        cerr << "\t" << len << " = " << defCount[len] << " words" << endl;
+    }
+
     // deallocation
+    delete defCount;
     delete grid;
     
     return 0;
