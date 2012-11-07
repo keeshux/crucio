@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     rows = atoi(argv[1]);
     columns = atoi(argv[2]);
     minLength = 2;
-    maxLength = 8;
+    maxLength = 12;
 #else
 //    rows = 5; columns = 9; minLength = 2; maxLength = 6;
     rows = 9; columns = 13; minLength = 2; maxLength = 7;
@@ -58,11 +58,23 @@ int main(int argc, char *argv[])
     structure.m_maxLength = maxLength;
     
     FillIn fillIn(structure);
-    cout << "grid is " << rows << "x" << columns << endl;
-    cout << "random seed = " << seed << endl;
+    cerr << "grid is " << rows << "x" << columns << endl;
+    cerr << "random seed = " << seed << endl;
     
+    // fill-in creation algorithm
     fillIn.layout();
-    cout << fillIn << endl;
+    cerr << fillIn << endl;
+
+    // produce grid object
+    Grid *grid = fillIn.createGrid();
+
+    // grid output in crucio format to stdout
+    cout << grid->getRows() << endl;
+    cout << grid->getColumns() << endl;
+    cout << *grid;
+
+    // deallocation
+    delete grid;
     
     return 0;
 }
