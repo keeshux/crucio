@@ -212,9 +212,11 @@ namespace crucio
         template <typename I>
         I randomElement(I begin, I end) const
         {
-            const size_t max = std::distance(begin, end) - 1;
+            const size_t max = std::distance(begin, end);
 
-            return begin + randomNumber(0, max);
+            I result = begin;
+            std::advance(result, randomNumber(0, max - 1));
+            return result;
         }
 
         // words distribution
