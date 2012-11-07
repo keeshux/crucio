@@ -401,7 +401,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     word->m_direction = m_direction;
     
     // cache limits
-    const GridStructure &structure = m_fillIn->getStructure();
+    const GridStructure &structure = m_fillIn->m_structure;
     const unsigned minLength = structure.m_minLength;
     const unsigned maxLength = structure.m_maxLength;
     
@@ -541,6 +541,9 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     // complete word structure
     word->m_origin = *def_begin;
     word->m_length = distance + 1;
+    
+    // ensure word is long enough
+    assert(word->m_length > m_fillIn->m_structure.m_minLength);
 
     cerr << "\tchosen random word: " << *word << endl;
 }
