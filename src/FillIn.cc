@@ -25,7 +25,7 @@ using namespace std;
 
 char FillIn::Entry::getDirectionChar(const EntryDirection direction)
 {
-    // TODO: shorten and
+    // TODO: shorten &&
     if ((direction & ENTRY_DIR_ACROSS) && (direction & ENTRY_DIR_DOWN)) {
         return 'C';
     } else if (direction & ENTRY_DIR_ACROSS) {
@@ -148,15 +148,19 @@ void FillIn::layout()
 
         // 3) block surrounding cells
         
+        // TODO
+
         // 4) print grid with new word
         
         cout << *this << endl;
         
         // 5) add word cells as new steps (invert direction)
         
-        // 6) remove step
+        // TODO
+        
+        // 6) remove analyzed step
 
-        crossable.erase(crossable.begin());
+        crossable.erase(currentStep);
     }
 
     // 7) commit remaining empty cells
