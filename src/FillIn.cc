@@ -416,7 +416,8 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
         switch (word->m_direction) {
             case ENTRY_DIR_ACROSS: {
 
-                for (; begin.m_column <= m_cell.m_column; ++begin.m_column) {
+                for (; (begin.m_column <= m_cell.m_column) &&
+                     (begin.m_column <= upper->m_column - minLength + 1); ++begin.m_column) {
                     
                     // none/black on the left
                     if ((begin.m_column == 0) ||
@@ -434,7 +435,8 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
             }
             case ENTRY_DIR_DOWN: {
                 
-                for (; begin.m_row <= m_cell.m_row; ++begin.m_row) {
+                for (; (begin.m_row <= m_cell.m_row) &&
+                     (begin.m_row <= upper->m_row - minLength + 1); ++begin.m_row) {
                     
                     // none/black on the top
                     if ((begin.m_row == 0) ||
@@ -543,7 +545,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     word->m_length = distance + 1;
     
     // ensure word is long enough
-    assert(word->m_length > m_fillIn->m_structure.m_minLength);
+    assert(word->m_length >= minLength);
 
     cerr << "\tchosen random word: " << *word << endl;
 }
