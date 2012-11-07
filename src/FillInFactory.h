@@ -25,12 +25,13 @@
 
 namespace crucio
 {
-    typedef struct {
+    struct GridStructure
+    {
         unsigned rows;
         unsigned columns;
         unsigned minLength;
         unsigned maxLength;
-    } GridStructure;
+    };
     
     class FillIn
     {
@@ -42,7 +43,28 @@ namespace crucio
         void complete();
         
     private:
+        enum EntryValue
+        {
+            ENTRY_VAL_NONE = '?',
+            ENTRY_VAL_WHITE = '-',
+            ENTRY_VAL_BLACK = '#'
+        };
+
+        enum EntryDirection
+        {
+            ENTRY_DIR_NONE = 0x0,
+            ENTRY_DIR_ACROSS = 0x1,
+            ENTRY_DIR_DOWN = 0x2
+        };
+        
+        struct GridEntry
+        {
+            EntryValue value;
+            EntryDirection direction;
+        };
+
         const GridStructure m_structure;
+        GridEntry **m_entries;
     };
 }
 

@@ -25,10 +25,25 @@ using namespace std;
 
 FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
 {
+    unsigned i, j;
+    
+    m_entries = new GridEntry*[m_structure.rows];
+    for (i = 0; i < m_structure.rows; ++i) {
+        m_entries[i] = new GridEntry[m_structure.columns];
+        for (i = 0; i < m_structure.rows; ++i) {
+            m_entries[i][j].value = ENTRY_VAL_NONE;
+        }
+    }
 }
 
 FillIn::~FillIn()
 {
+    unsigned i;
+    
+    for (i = 0; i < m_structure.rows; ++i) {
+        delete[] m_entries[i];
+    }
+    delete[] m_entries;
 }
 
 void FillIn::layout()
