@@ -47,6 +47,20 @@ namespace crucio
             EntryValue m_value;
             EntryDirection m_direction;
 
+            static EntryDirection getOppositeDirection(const EntryDirection direction)
+            {
+                if (direction == ENTRY_DIR_ACROSS) {
+                    return ENTRY_DIR_DOWN;
+                } else if (direction == ENTRY_DIR_DOWN) {
+                    return ENTRY_DIR_ACROSS;
+                } else {
+                    assert(false);
+
+                    // dummy
+                    return ENTRY_DIR_NONE;
+                }
+            }
+            
             static char getDirectionChar(const EntryDirection direction);
             static const char *getDirectionString(const EntryDirection direction);
 
@@ -95,7 +109,7 @@ namespace crucio
         // utilities
         static unsigned randomNumber(const unsigned min, const unsigned max)
         {
-            return min + rand() % (max - min);
+            return min + rand() % (max - min + 1);
         }
         static EntryDirection randomEntryDirection()
         {
