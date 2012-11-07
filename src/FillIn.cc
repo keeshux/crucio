@@ -1,5 +1,5 @@
 /*
- * FillInFactory.cc
+ * FillIn.cc
  * crucio
  *
  * Copyright 2012 Davide De Rosa
@@ -18,7 +18,7 @@
  *
  */
 
-#include "FillInFactory.h"
+#include "FillIn.h"
 
 using namespace crucio;
 using namespace std;

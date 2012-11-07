@@ -1,5 +1,5 @@
 /*
- * FillInFactory.h
+ * FillIn.h
  * crucio
  *
  * Copyright 2012 Davide De Rosa
@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef __FILLIN_FACTORY_H
-#define __FILLIN_FACTORY_H
+#ifndef __FILLIN_H
+#define __FILLIN_H
 
 #include "Grid.h"
 
