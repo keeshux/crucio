@@ -94,6 +94,8 @@ void FillIn::layout()
     list<Step>::iterator currentStep;
     CellAddress lower, upper;
     Word word;
+    CellAddress stepCell;
+    unsigned x, di, dj;
 
     // base step
     crossable.push_back(Step(this, randomCellAddress(), randomEntryDirection()));
@@ -102,6 +104,7 @@ void FillIn::layout()
 
         // 1) pick step from crossable
         
+        cerr << endl;
         cerr << "steps count = " << crossable.size() << endl;
         currentStep = crossable.begin(); // TODO: randomize
 
@@ -148,11 +151,38 @@ void FillIn::layout()
 
         // 4) print grid with new word
         
-        cout << *this << endl;
+        cerr << *this << endl;
         
         // 5) add word cells as new steps (invert direction)
         
-        // TODO
+        switch (word.m_direction) {
+            case ENTRY_DIR_ACROSS: {
+                di = 0;
+                dj = 1;
+                break;
+            }
+            case ENTRY_DIR_DOWN: {
+                di = 1;
+                dj = 0;
+                break;
+            }
+            default: {
+                assert(false);
+                break;
+            }
+        }
+        
+        // add new steps
+        for (x = 0; x < word.m_length; ++x) {
+            stepCell.m_row = word.m_origin.m_row + x * di;
+            stepCell.m_column = word.m_origin.m_column + x * dj;
+            
+            const Step step(this, stepCell, Entry::getOppositeDirection(word.m_direction));
+            cerr << "\tadding step: " << step << endl;
+
+            crossable.push_back(step);
+        }
+        //unique(crossable.begin(), crossable.end());
         
         // 6) remove analyzed step
 
