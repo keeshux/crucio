@@ -570,6 +570,13 @@ uint32_t Grid::getReachableFrom(const Cell* const cl,
 
 /* <global> */
 
+ostream& operator<<(ostream& out, const CellAddress& ca)
+{
+    out << "<" << ca.m_row << ", " << ca.m_column << ">";
+    
+    return out;
+}
+
 ostream& operator<<(ostream& out, const Grid& g)
 {
     for (uint32_t i = 0; i < g.getRows(); ++i) {
