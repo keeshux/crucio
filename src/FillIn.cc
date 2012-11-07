@@ -382,7 +382,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     vector<CellAddress>::const_iterator def_end;
     unsigned distance;
     
-    // IMPORTANT: definition MUST include this->cell in order to guarantee connection
+    // IMPORTANT: definition MUST include m_cell in order to guarantee connection
     //
     // ACROSS
     //
@@ -396,6 +396,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     //
     
     cerr << "\twords can span from " << *lower << " to " << *upper << endl;
+    assert(*lower != *upper);
     
     // word direction is step direction
     word->m_direction = m_direction;
