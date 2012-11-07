@@ -27,10 +27,10 @@ FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
 {
     unsigned i, j;
     
-    m_entries = new GridEntry*[m_structure.rows];
-    for (i = 0; i < m_structure.rows; ++i) {
-        m_entries[i] = new GridEntry[m_structure.columns];
-        for (j = 0; j < m_structure.columns; ++j) {
+    m_entries = new Entry*[m_structure.m_rows];
+    for (i = 0; i < m_structure.m_rows; ++i) {
+        m_entries[i] = new Entry[m_structure.m_columns];
+        for (j = 0; j < m_structure.m_columns; ++j) {
             m_entries[i][j].value = ENTRY_VAL_NONE;
         }
     }
@@ -40,7 +40,7 @@ FillIn::~FillIn()
 {
     unsigned i;
     
-    for (i = 0; i < m_structure.rows; ++i) {
+    for (i = 0; i < m_structure.m_rows; ++i) {
         delete[] m_entries[i];
     }
     delete[] m_entries;
@@ -54,8 +54,8 @@ void FillIn::complete()
 {
     unsigned i, j;
     
-    for (i = 0; i < m_structure.rows; ++i) {
-        for (i = 0; i < m_structure.rows; ++i) {
+    for (i = 0; i < m_structure.m_rows; ++i) {
+        for (j = 0; j < m_structure.m_columns; ++j) {
             EntryValue *value = &m_entries[i][j].value;
 
             // replace empty with black
@@ -75,9 +75,9 @@ ostream &operator<<(ostream &out, const FillIn &fi)
 {
     unsigned i, j;
     
-    const GridStructure structure = fi.getStructure();
-    for (i = 0; i < structure.rows; ++i) {
-        for (j = 0; j < structure.columns; ++j) {
+    const GridStructure &structure = fi.getStructure();
+    for (i = 0; i < structure.m_rows; ++i) {
+        for (j = 0; j < structure.m_columns; ++j) {
             out << fi.getEntryAt(i, j);
         }
         out << endl;

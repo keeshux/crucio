@@ -25,14 +25,6 @@
 
 namespace crucio
 {
-    struct GridStructure
-    {
-        unsigned rows;
-        unsigned columns;
-        unsigned minLength;
-        unsigned maxLength;
-    };
-    
     class FillIn
     {
     public:
@@ -72,14 +64,14 @@ namespace crucio
             ENTRY_DIR_DOWN      = 0x2
         };
 
-        struct GridEntry
+        struct Entry
         {
             EntryValue value;
             EntryDirection direction;
         };
 
         const GridStructure m_structure;
-        GridEntry **m_entries;
+        Entry **m_entries;
     };
 }
 

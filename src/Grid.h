@@ -43,6 +43,14 @@ namespace crucio
         unsigned m_column;
     };
     
+    struct GridStructure
+    {
+        unsigned m_rows;
+        unsigned m_columns;
+        unsigned m_minLength;
+        unsigned m_maxLength;
+    };
+    
     class Cell
     {
     public:
