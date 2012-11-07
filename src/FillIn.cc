@@ -145,15 +145,13 @@ void FillIn::layout()
         // place word into grid
         placeWord(&word);
 
-        // 3) block surrounding cells
-        
-        // TODO
+        // block surrounding cells
+        blockSurroundingCells(&word);
 
-        // 4) print grid with new word
-        
+        // print grid with new word
         cerr << *this << endl;
         
-        // 5) add word cells as new steps (invert direction)
+        // 3) add word cells as new steps (invert direction)
         
         switch (word.m_direction) {
             case ENTRY_DIR_ACROSS: {
@@ -172,7 +170,7 @@ void FillIn::layout()
             }
         }
         
-        // add new steps
+        // new steps
         for (x = 0; x < word.m_length; ++x) {
             stepCell.m_row = word.m_origin.m_row + x * di;
             stepCell.m_column = word.m_origin.m_column + x * dj;
@@ -184,12 +182,12 @@ void FillIn::layout()
         }
         //unique(crossable.begin(), crossable.end());
         
-        // 6) remove analyzed step
+        // 4) remove analyzed step
 
         crossable.erase(currentStep);
     }
 
-    // 7) commit remaining empty cells
+    // 5) commit remaining empty cells
 
     finishFilling();
 }
@@ -619,6 +617,219 @@ void FillIn::placeWord(const Word *word)
             break;
         }
     }
+}
+
+void FillIn::blockSurroundingCells(const Word *word)
+{
+    const CellAddress *origin = &word->m_origin;
+    CellAddress from;
+    unsigned top_row, bottom_row, left_column, right_column;
+    
+    cerr << "block surrounding cells" << endl;
+    
+    top_row = bottom_row = left_column = right_column = UINT_MAX;
+    
+    switch (word->m_direction) {
+        case ENTRY_DIR_ACROSS: {
+            
+            // top row
+            if (origin->m_row > 0) {
+                top_row = origin->m_row - 1;
+            }
+            
+            // bottom row
+            if (origin->m_row < m_structure.m_rows - 1) {
+                bottom_row = origin->m_row + 1;
+            }
+            
+            // left column
+            if (origin->m_column > 0) {
+                left_column = origin->m_column - 1;
+            }
+            
+            // right column
+            if (origin->m_column + word->m_length < m_structure.m_columns) {
+                right_column = origin->m_column + word->m_length;
+            }
+            
+            break;
+        }
+        case ENTRY_DIR_DOWN: {
+            
+            // top row
+            if (origin->m_row > 0) {
+                top_row = origin->m_row - 1;
+            }
+            
+            // bottom row
+            if (origin->m_row + word->m_length < m_structure.m_rows) {
+                bottom_row = origin->m_row + word->m_length;
+            }
+            
+            // left column
+            if (origin->m_column > 0) {
+                left_column = origin->m_column - 1;
+            }
+            
+            // right column
+            if (origin->m_column < m_structure.m_columns - 1) {
+                right_column = origin->m_column + 1;
+            }
+            
+            break;
+        }
+        default: {
+            assert(false);
+            break;
+        }
+    }
+    
+    if (top_row != UINT_MAX) {
+        cerr << "\ttop row is %d" << top_row << endl;
+
+        from.m_row = top_row;
+        from.m_column = origin->m_column;
+
+        blockRow(&from, word->m_direction, word->m_length);
+    }
+    
+    if (bottom_row != UINT_MAX) {
+        cerr << "\tbottom row is %d" << bottom_row << endl;
+
+        from.m_row = bottom_row;
+        from.m_column = origin->m_column;
+
+        blockRow(&from, word->m_direction, word->m_length);
+    }
+    
+    if (left_column != UINT_MAX) {
+        cerr << "\tleft column is %d" << left_column << endl;
+
+        from.m_row = origin->m_row;
+        from.m_column = left_column;
+
+        blockColumn(&from, word->m_direction, word->m_length);
+    }
+    
+    if (right_column != UINT_MAX) {
+        cerr << "\tright column is %d" << right_column << endl;
+
+        from.m_row = origin->m_row;
+        from.m_column = right_column;
+
+        blockColumn(&from, word->m_direction, word->m_length);
+    }
+}
+
+void FillIn::blockRow(const CellAddress *from, const EntryDirection direction, unsigned length)
+{
+    CellAddress cell = *from;
+    unsigned x = 0;
+    
+    if (direction == ENTRY_DIR_DOWN) {
+        length = 1;
+        
+        if (from->m_column > 0) {
+            --cell.m_column;
+            ++length;
+        }
+        if (from->m_column < m_structure.m_columns - 1) {
+            ++length;
+        }
+
+        cerr << "\t\tshort blocking from " << cell << " for %d" << length << endl;
+    }
+    
+    for (; x < length; ++x) {
+        if (blockCell(&cell)) {
+//            blocked->push_back(cell);
+        }
+        ++cell.m_column;
+    }
+}
+
+void FillIn::blockColumn(const CellAddress *from, const EntryDirection direction, unsigned length)
+{
+    CellAddress cell = *from;
+    unsigned x = 0;
+    
+    if (direction == ENTRY_DIR_ACROSS) {
+        length = 1;
+        
+        if (from->m_row > 0) {
+            --cell.m_row;
+            ++length;
+        }
+        if (from->m_row < m_structure.m_rows - 1) {
+            ++length;
+        }
+
+        cerr << "\t\tshort blocking from " << cell << " for %d" << length << endl;
+    }
+    
+    for (; x < length; ++x) {
+        if (blockCell(&cell)) {
+//            blocked->push_back(cell);
+        }
+        ++cell.m_row;
+    }
+}
+
+bool FillIn::blockCell(const CellAddress *cell)
+{
+    Entry &entry = getEntryAt(*cell);
+    
+//    cerr << "\t\tchecking cell " << *cell << endl;
+    
+    // skip black cells
+    if (entry.m_value != ENTRY_VAL_NONE) {
+        cerr << "\t\tskipping non-empty cell " << *cell << endl;
+        return false;
+    }
+    
+    // block dense cells
+    if (isDenseCrossing(cell)) {
+        entry.m_value = ENTRY_VAL_BLACK;
+        cerr << "\t\tblocked dense cell " << *cell << endl;
+        return true;
+    }
+    
+    return false;
+}
+
+// dense if new two words in opposite directions
+bool FillIn::isDenseCrossing(const CellAddress *cell)
+{
+    unsigned adjacencies[4] = { ENTRY_DIR_NONE };
+    unsigned acrossCount = 0, downCount = 0;
+    unsigned x = 0;
+    
+    // top
+    if (cell->m_row > 0) {
+        adjacencies[0] = getEntryAt(cell->m_row - 1, cell->m_column).m_direction;
+    }
+    // bottom
+    if (cell->m_row < m_structure.m_rows - 1) {
+        adjacencies[1] = getEntryAt(cell->m_row + 1, cell->m_column).m_direction;
+    }
+    // left
+    if (cell->m_column > 0) {
+        adjacencies[2] = getEntryAt(cell->m_row, cell->m_column - 1).m_direction;
+    }
+    // right
+    if (cell->m_column < m_structure.m_columns - 1) {
+        adjacencies[3] = getEntryAt(cell->m_row, cell->m_column + 1).m_direction;
+    }
+    
+    for (x = 0; x < 4; ++x) {
+        if (adjacencies[x] & ENTRY_DIR_ACROSS) {
+            ++acrossCount;
+        }
+        if (adjacencies[x] & ENTRY_DIR_DOWN) {
+            ++downCount;
+        }
+    }
+    return (acrossCount > 0) && (downCount > 0);
 }
 
 void FillIn::finishFilling()

@@ -145,6 +145,11 @@ namespace crucio
 
         // subproblems
         void placeWord(const Word *word);
+        void blockSurroundingCells(const Word *word);
+        void blockRow(const CellAddress *from, const EntryDirection direction, unsigned length);
+        void blockColumn(const CellAddress *from, const EntryDirection direction, unsigned length);
+        bool blockCell(const CellAddress *cell);
+        bool isDenseCrossing(const CellAddress *cell);
         void finishFilling();
 
         Entry &getEntryAt(const unsigned i, const unsigned j)
