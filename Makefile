@@ -1,5 +1,6 @@
 CRUCIO_NAME=crucio
 CRUCIOTEX_NAME=cruciotex
+FILLIN_NAME=fill-in
 
 CPP=g++
 OPTIMIZE=-O3 -DCRUCIO_C_ARRAYS
@@ -20,7 +21,7 @@ OBJS=common.o Grid.o Walk.o Backjumper.o Model.o \
     Compiler.o LetterCompiler.o WordCompiler.o Output.o \
 	crucio.o cruciotex.o
 
-all: $(CRUCIO_NAME) $(CRUCIOTEX_NAME)
+all: $(CRUCIO_NAME) $(CRUCIOTEX_NAME) $(FILLIN_NAME)
 
 CRUCIO_OBJS=common.o Grid.o Walk.o Backjumper.o Model.o \
     Dictionary.o WordSet.o LanguageMatcher.o SolutionMatcher.o \
@@ -35,15 +36,20 @@ CRUCIOTEX_OBJS=WordSet.o Output.o cruciotex.o
 $(CRUCIOTEX_NAME): $(CRUCIOTEX_OBJS)
 	$(CPP) -o $(CRUCIOTEX_NAME) $(CRUCIOTEX_OBJS)
 
+FILLIN_OBJS=Grid.o FillIn.o fill-in.o
+
+$(FILLIN_NAME): $(FILLIN_OBJS)
+	$(CPP) -o $(FILLIN_NAME) $(FILLIN_OBJS)
+
 $(OBJS): %.o: %.cc %.h
 	$(CPP) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o $(CRUCIO_NAME) $(CRUCIOTEX_NAME)
+	rm -f *.o $(CRUCIO_NAME) $(CRUCIOTEX_NAME) $(FILLIN_NAME)
 
 depend:
 	$(CPP) -MM $(SRC_DIR)/*.cc >depend
 
-remake: clean $(CRUCIO_NAME) $(CRUCIOTEX_NAME)
+remake: clean $(CRUCIO_NAME) $(CRUCIOTEX_NAME) $(FILLIN_NAME)
 
 include depend
