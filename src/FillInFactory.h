@@ -47,6 +47,10 @@ namespace crucio
         {
             return (char)m_entries[i][j].value;
         }
+        const char getEntryAt(const CellAddress &address) const
+        {
+            return getEntryAt(address.m_row, address.m_column);
+        }
 
         void layout();
         void complete();
@@ -54,12 +58,6 @@ namespace crucio
         Grid *createGrid() const;
         
     private:
-        struct EntryAddress
-        {
-            unsigned i;
-            unsigned j;
-        };
-        
         enum EntryValue
         {
             ENTRY_VAL_NONE      = '?',
