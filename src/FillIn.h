@@ -59,8 +59,6 @@ namespace crucio
         }
 
         void layout();
-        void complete();
-
         Grid *createGrid() const;
         
         const Entry &getEntryAt(const unsigned i, const unsigned j) const
@@ -83,11 +81,14 @@ namespace crucio
             EntryDirection m_direction;
         };
         
+        // subproblems
+        void finishFilling();
+
+        // utilities
         static unsigned randomNumber(const unsigned min, const unsigned max)
         {
             return min + rand() % (max - min);
         }
-
         static EntryDirection randomEntryDirection()
         {
             return (EntryDirection)randomNumber(1, 2);

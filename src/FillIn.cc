@@ -73,11 +73,37 @@ void FillIn::layout()
 
     while (!crossable.empty()) {
 
+        // 1) pick step from crossable
+        
+        // 2) place word
+        
+        // 3) block surrounding cells
+        
+        // 4) print grid with new word
+        
+        cout << *this << endl;
+        
+        // 5) add word cells as new steps (invert direction)
+        
+        // 6) remove step
+
         crossable.erase(crossable.begin());
     }
+
+    // 7) commit remaining empty cells
+
+    finishFilling();
 }
 
-void FillIn::complete()
+Grid *FillIn::createGrid() const
+{
+    // TODO
+    return NULL;
+}
+
+#pragma mark - Subproblems
+
+void FillIn::finishFilling()
 {
     unsigned i, j;
     
@@ -93,11 +119,7 @@ void FillIn::complete()
     }
 }
 
-Grid *FillIn::createGrid() const
-{
-    // TODO
-    return NULL;
-}
+#pragma mark - Utilities
 
 CellAddress FillIn::randomCellAddress() const
 {
