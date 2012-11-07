@@ -112,13 +112,12 @@ void FillIn::layout()
         // pick random step
 #warning TODO: randomize
         currentStep = crossable.begin();
+        cerr << "current step: " << *currentStep << endl;
 
         // related entry
         const Entry &currentEntry = currentStep->getEntry();
         const unsigned maxLength = currentStep->getBoundaries(&lower, &upper);
 
-        cerr << "current step at " << *currentStep << " with max length " << maxLength << endl;
-        
         // skip step in black cell
         if (currentEntry.m_value == ENTRY_VAL_BLACK) {
             cerr << "\tskipping (black cell)" << endl;
@@ -141,8 +140,6 @@ void FillIn::layout()
         }
 
         // 2) place word
-        
-        cerr << "words can span from " << lower << " to " << upper << endl;
         
         // get a random word given step direction and boundaries
         currentStep->getRandomWord(&word, &lower, &upper);
@@ -362,13 +359,19 @@ unsigned FillIn::Step::getBoundaries(CellAddress *lower, CellAddress *upper) con
     // max length from distance
     const unsigned maxLength = x2 - x1 + 1;
     const unsigned globalMaxLength = m_fillIn->m_structure.m_maxLength;
+    unsigned effectiveMaxLength = 0;
 
     // return global max length at most
     if (maxLength <= globalMaxLength) {
-        return maxLength;
+        effectiveMaxLength = maxLength;
     } else {
-        return globalMaxLength;
+        effectiveMaxLength = globalMaxLength;
     }
+
+    cerr << "\tmax word length is " << maxLength << endl;
+    cerr << "\tmax effective word length is " << effectiveMaxLength << endl;
+
+    return effectiveMaxLength;
 }
 
 void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *upper) const
@@ -394,6 +397,8 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     //      first.j = cell.j = last.j
     //
     
+    cerr << "\twords can span from " << *lower << " to " << *upper << endl;
+    
     // word direction is step direction
     word->m_direction = m_direction;
     
@@ -416,7 +421,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                     if (m_cell.m_column - begin.m_column < maxLength) {
                         possible_begin.push_back(begin);
                         
-                        cerr << "\tmay begin at " << begin << endl;
+                        cerr << "\t\tmay begin at " << begin << endl;
                     }
                 }
             }
@@ -434,7 +439,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                     if (m_cell.m_row - begin.m_row < maxLength) {
                         possible_begin.push_back(begin);
                         
-                        cerr << "\tmay begin at " << begin << endl;
+                        cerr << "\t\tmay begin at " << begin << endl;
                     }
                 }
             }
@@ -449,14 +454,18 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     
     // choose one randomly
     def_begin = random_element(possible_begin.begin(), possible_begin.end());
-    cerr << "chosen begin: " << *def_begin << endl;
+    cerr << "\tchosen begin: " << *def_begin << endl;
     
     // possible end (MUST include step cell to guarantee connection)
     end = m_cell;
     switch (word->m_direction) {
         case ENTRY_DIR_ACROSS: {
             
-            for (; (end.m_column < upper->m_column) &&
+            if (def_begin->m_column == word->m_origin.m_column) {
+                ++end.m_column;
+            }
+
+            for (; (end.m_column <= upper->m_column) &&
                  (end.m_column < def_begin->m_column + maxLength); ++end.m_column) {
                 
                 // no/black on the left
@@ -465,7 +474,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
 
                     possible_end.push_back(end);
                     
-                    cerr << "\tmay end at " << end << endl;
+                    cerr << "\t\tmay end at " << end << endl;
                 }
             }
             
@@ -473,7 +482,11 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
         }
         case ENTRY_DIR_DOWN: {
             
-            for (; (end.m_row < upper->m_row) &&
+            if (def_begin->m_row == word->m_origin.m_row) {
+                ++end.m_row;
+            }
+
+            for (; (end.m_row <= upper->m_row) &&
                  (end.m_row < def_begin->m_row + maxLength); ++end.m_row) {
                 
                 // no/black on the top
@@ -482,7 +495,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
 
                     possible_end.push_back(end);
                     
-                    cerr << "\tmay end at " << end << endl;
+                    cerr << "\t\tmay end at " << end << endl;
                 }
             }
             
@@ -496,7 +509,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     
     // choose one randomly
     def_end = random_element(possible_end.begin(), possible_end.end());
-    cerr << "chosen end: " << *def_end << endl;
+    cerr << "\tchosen end: " << *def_end << endl;
     
     switch (word->m_direction) {
         case ENTRY_DIR_ACROSS:
@@ -516,7 +529,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     word->m_origin = *def_begin;
     word->m_length = distance + 1;
 
-    cerr << "chosen random word: " << *word << endl;
+    cerr << "\tchosen random word: " << *word << endl;
 }
 
 void FillIn::placeWord(const Word *word)
@@ -900,7 +913,7 @@ ostream &operator<<(ostream &out, const FillIn::Word &word)
 
 ostream &operator<<(ostream &out, const FillIn::Step &step)
 {
-    out << step.getCell();
+    out << "step at " << step.getCell();
     out << " (" << FillIn::Entry::getDirectionString(step.getDirection()) << ")";
     
     return out;
