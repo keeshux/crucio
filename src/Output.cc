@@ -424,7 +424,7 @@ Output::Output(istream& in) :
     }
 
     // deallocates temporary buffers
-    delete gridBuf;
+    delete[] gridBuf;
 
     /*  set<DefinitionData>::const_iterator d;
         for (d = m_defsData.begin(); d != m_defsData.end(); ++d) {
@@ -499,7 +499,7 @@ void Output::printRaw(ostream& out) const
     }
 
     // deallocates temporary buffers
-    delete gridBuf;
+    delete[] gridBuf;
 }
 
 void Output::printLatex(ostream& out,
