@@ -378,8 +378,6 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
 {
     vector<CellAddress> possible_begin;
     vector<CellAddress> possible_end;
-    CellAddress begin;
-    CellAddress end;
     vector<CellAddress>::const_iterator def_begin;
     vector<CellAddress>::const_iterator def_end;
     unsigned distance;
@@ -407,48 +405,55 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     const unsigned minLength = structure.m_minLength;
     const unsigned maxLength = structure.m_maxLength;
     
-    // possible begin
-    begin = *lower;
-    switch (word->m_direction) {
-        case ENTRY_DIR_ACROSS: {
-            
-            for (; begin.m_column < m_cell.m_column; ++begin.m_column) {
-                
-                // no/black on the left
-                if ((begin.m_column == 0) ||
-                    (m_fillIn->getEntryAt(begin.m_row, begin.m_column - 1).m_value != ENTRY_VAL_WHITE)) {
+    // step cell is lower bound, start here
+    if (m_cell == *lower) {
+        possible_begin.push_back(m_cell);
+    }
+    // multiple
+    else {
+        CellAddress begin = *lower;
+
+        switch (word->m_direction) {
+            case ENTRY_DIR_ACROSS: {
+
+                for (; begin.m_column <= m_cell.m_column; ++begin.m_column) {
                     
-                    if (m_cell.m_column - begin.m_column < maxLength) {
-                        possible_begin.push_back(begin);
+                    // none/black on the left
+                    if ((begin.m_column == 0) ||
+                        (m_fillIn->getEntryAt(begin.m_row, begin.m_column - 1).m_value != ENTRY_VAL_WHITE)) {
                         
-                        cerr << "\t\tmay begin at " << begin << endl;
+                        if (m_cell.m_column - begin.m_column < maxLength) {
+                            possible_begin.push_back(begin);
+                            
+                            cerr << "\t\tmay begin at " << begin << endl;
+                        }
                     }
                 }
+            
+                break;
             }
-            
-            break;
-        }
-        case ENTRY_DIR_DOWN: {
-            
-            for (; begin.m_row < m_cell.m_row; ++begin.m_row) {
+            case ENTRY_DIR_DOWN: {
                 
-                // no/black on the top
-                if ((begin.m_row == 0) ||
-                    (m_fillIn->getEntryAt(begin.m_row - 1, begin.m_column).m_value != ENTRY_VAL_WHITE)) {
+                for (; begin.m_row <= m_cell.m_row; ++begin.m_row) {
                     
-                    if (m_cell.m_row - begin.m_row < maxLength) {
-                        possible_begin.push_back(begin);
+                    // none/black on the top
+                    if ((begin.m_row == 0) ||
+                        (m_fillIn->getEntryAt(begin.m_row - 1, begin.m_column).m_value != ENTRY_VAL_WHITE)) {
                         
-                        cerr << "\t\tmay begin at " << begin << endl;
+                        if (m_cell.m_row - begin.m_row < maxLength) {
+                            possible_begin.push_back(begin);
+                            
+                            cerr << "\t\tmay begin at " << begin << endl;
+                        }
                     }
                 }
+                
+                break;
             }
-            
-            break;
-        }
-        default: {
-            assert(false);
-            break;
+            default: {
+                assert(false);
+                break;
+            }
         }
     }
     
@@ -456,54 +461,62 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     def_begin = random_element(possible_begin.begin(), possible_begin.end());
     cerr << "\tchosen begin: " << *def_begin << endl;
     
-    // possible end (MUST include step cell to guarantee connection)
-    end = m_cell;
-    switch (word->m_direction) {
-        case ENTRY_DIR_ACROSS: {
-            
-            if (def_begin->m_column == word->m_origin.m_column) {
-                ++end.m_column;
-            }
+    // step cell is upper bound, end here
+    if (m_cell == *upper) {
+        possible_end.push_back(m_cell);
+    }
+    // multiple
+    else {
+        CellAddress end = m_cell;
 
-            for (; (end.m_column <= upper->m_column) &&
-                 (end.m_column < def_begin->m_column + maxLength); ++end.m_column) {
+        // IMPORTANT: MUST include step cell to guarantee connection
+        switch (word->m_direction) {
+            case ENTRY_DIR_ACROSS: {
                 
-                // no/black on the left
-                if ((end.m_column == structure.m_columns - 1) ||
-                    (m_fillIn->getEntryAt(end.m_row, end.m_column + 1).m_value != ENTRY_VAL_WHITE)) {
-
-                    possible_end.push_back(end);
-                    
-                    cerr << "\t\tmay end at " << end << endl;
+                if (def_begin->m_column == word->m_origin.m_column) {
+                    ++end.m_column;
                 }
-            }
-            
-            break;
-        }
-        case ENTRY_DIR_DOWN: {
-            
-            if (def_begin->m_row == word->m_origin.m_row) {
-                ++end.m_row;
-            }
 
-            for (; (end.m_row <= upper->m_row) &&
-                 (end.m_row < def_begin->m_row + maxLength); ++end.m_row) {
+                for (; (end.m_column <= upper->m_column) &&
+                     (end.m_column < def_begin->m_column + maxLength); ++end.m_column) {
+                    
+                    // none/black on the left
+                    if ((end.m_column == structure.m_columns - 1) ||
+                        (m_fillIn->getEntryAt(end.m_row, end.m_column + 1).m_value != ENTRY_VAL_WHITE)) {
+
+                        possible_end.push_back(end);
+                        
+                        cerr << "\t\tmay end at " << end << endl;
+                    }
+                }
                 
-                // no/black on the top
-                if ((end.m_row == structure.m_rows - 1) ||
-                    (m_fillIn->getEntryAt(end.m_row + 1, end.m_column).m_value != ENTRY_VAL_WHITE)) {
-
-                    possible_end.push_back(end);
-                    
-                    cerr << "\t\tmay end at " << end << endl;
-                }
+                break;
             }
-            
-            break;
-        }
-        default: {
-            assert(false);
-            break;
+            case ENTRY_DIR_DOWN: {
+                
+                if (def_begin->m_row == word->m_origin.m_row) {
+                    ++end.m_row;
+                }
+
+                for (; (end.m_row <= upper->m_row) &&
+                     (end.m_row < def_begin->m_row + maxLength); ++end.m_row) {
+                    
+                    // none/black on the top
+                    if ((end.m_row == structure.m_rows - 1) ||
+                        (m_fillIn->getEntryAt(end.m_row + 1, end.m_column).m_value != ENTRY_VAL_WHITE)) {
+
+                        possible_end.push_back(end);
+                        
+                        cerr << "\t\tmay end at " << end << endl;
+                    }
+                }
+                
+                break;
+            }
+            default: {
+                assert(false);
+                break;
+            }
         }
     }
     
