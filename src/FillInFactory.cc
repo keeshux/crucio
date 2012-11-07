@@ -63,6 +63,17 @@ FillIn::~FillIn()
 
 void FillIn::layout()
 {
+    list<Step> crossable;
+    Step step;
+
+    // base step
+    step.m_cell = randomCellAddress();
+    step.m_direction = randomEntryDirection();
+    crossable.push_back(step);
+
+    while (!crossable.empty()) {
+        crossable.erase(crossable.begin());
+    }
 }
 
 void FillIn::complete()
@@ -84,6 +95,14 @@ void FillIn::complete()
 Grid *FillIn::createGrid() const
 {
     return NULL;
+}
+
+CellAddress FillIn::randomCellAddress() const
+{
+    CellAddress cell;
+    cell.m_row = rand() % m_structure.m_rows;
+    cell.m_column = rand() % m_structure.m_columns;
+    return cell;
 }
 
 ostream &operator<<(ostream &out, const FillIn &fi)

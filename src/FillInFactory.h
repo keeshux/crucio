@@ -75,6 +75,24 @@ namespace crucio
     private:
         const GridStructure m_structure;
         Entry **m_entries;
+
+        class Step
+        {
+        public:
+            CellAddress m_cell;
+            EntryDirection m_direction;
+        };
+        
+        static unsigned randomNumber(const unsigned min, const unsigned max)
+        {
+            return min + rand() % (max - min);
+        }
+
+        static EntryDirection randomEntryDirection()
+        {
+            return (EntryDirection)randomNumber(1, 2);
+        }
+        CellAddress randomCellAddress() const;
     };
 }
 
