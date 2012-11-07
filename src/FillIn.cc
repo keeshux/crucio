@@ -361,12 +361,8 @@ unsigned FillIn::Step::getBoundaries(CellAddress *lower, CellAddress *upper) con
     const unsigned globalMaxLength = m_fillIn->m_structure.m_maxLength;
     unsigned effectiveMaxLength = 0;
 
-    // return global max length at most
-    if (maxLength <= globalMaxLength) {
-        effectiveMaxLength = maxLength;
-    } else {
-        effectiveMaxLength = globalMaxLength;
-    }
+    // global max length at most
+    effectiveMaxLength = min(maxLength, globalMaxLength);
 
     cerr << "\tmax word length is " << maxLength << endl;
     cerr << "\tmax effective word length is " << effectiveMaxLength << endl;
@@ -413,44 +409,77 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     // multiple
     else {
         CellAddress begin = *lower;
-
+        CellAddress end = m_cell;
+        unsigned possibleLength = 0;
+        unsigned position = 0;
+        
         switch (word->m_direction) {
             case ENTRY_DIR_ACROSS: {
 
-                for (; (begin.m_column <= m_cell.m_column) &&
-                     (begin.m_column <= upper->m_column - minLength + 1); ++begin.m_column) {
+                // admitted word lengths
+                for (possibleLength = minLength; possibleLength <= maxLength; ++possibleLength) {
                     
-                    // none/black on the left
-                    if ((begin.m_column == 0) ||
-                        (m_fillIn->getEntryAt(begin.m_row, begin.m_column - 1).m_value != ENTRY_VAL_WHITE)) {
-                        
-                        if (m_cell.m_column - begin.m_column < maxLength) {
-                            possible_begin.push_back(begin);
-                            
-                            cerr << "\t\tmay begin at " << begin << endl;
+                    // begin in [lower, step]
+                    for (position = lower->m_column; position <= m_cell.m_column; ++position) {
+                        begin.m_column = position;
+
+                        // not viable
+                        if (!isAcrossBegin(begin)) {
+                            continue;
+                        }
+
+                        // start if end in [step, upper]
+                        end.m_column = position + possibleLength - 1;
+
+                        if (isAcrossEnd(end) &&
+                            (end.m_column >= m_cell.m_column) &&
+                            (end.m_column <= upper->m_column)) {
+
+                            cerr << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
+
+                            // unique (TODO: set?)
+                            if (find(possible_begin.begin(), possible_begin.end(), begin) == possible_begin.end()) {
+                                possible_begin.push_back(begin);
+                            }
                         }
                     }
+                    
                 }
             
                 break;
             }
             case ENTRY_DIR_DOWN: {
                 
-                for (; (begin.m_row <= m_cell.m_row) &&
-                     (begin.m_row <= upper->m_row - minLength + 1); ++begin.m_row) {
+                // admitted word lengths
+                for (possibleLength = minLength; possibleLength <= maxLength; ++possibleLength) {
                     
-                    // none/black on the top
-                    if ((begin.m_row == 0) ||
-                        (m_fillIn->getEntryAt(begin.m_row - 1, begin.m_column).m_value != ENTRY_VAL_WHITE)) {
+                    // begin in [lower, step]
+                    for (position = lower->m_row; position <= m_cell.m_row; ++position) {
+                        begin.m_row = position;
                         
-                        if (m_cell.m_row - begin.m_row < maxLength) {
-                            possible_begin.push_back(begin);
+                        // not viable
+                        if (!isDownBegin(begin)) {
+                            continue;
+                        }
+
+                        // start if end in [step, upper]
+                        end.m_row = position + possibleLength - 1;
+                        
+                        if (isDownEnd(end) &&
+                            (end.m_row >= m_cell.m_row) &&
+                            (end.m_row <= upper->m_row)) {
                             
-                            cerr << "\t\tmay begin at " << begin << endl;
+                            cerr << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
+
+                            // unique (TODO: set?)
+                            if (find(possible_begin.begin(), possible_begin.end(), begin) == possible_begin.end()) {
+                                possible_begin.push_back(begin);
+                            }
                         }
                     }
+                    
                 }
-                
+
                 break;
             }
             default: {
@@ -471,46 +500,51 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     // multiple
     else {
         CellAddress end = m_cell;
-
-        // IMPORTANT: MUST include step cell to guarantee connection
+        CellAddress min_end = m_cell;
+        CellAddress max_end = m_cell;
+        
         switch (word->m_direction) {
             case ENTRY_DIR_ACROSS: {
                 
-                if (def_begin->m_column == word->m_origin.m_column) {
-                    ++end.m_column;
+                min_end.m_column = max(def_begin->m_column, m_cell.m_column);
+                if (min_end.m_column == def_begin->m_column) {
+                    ++min_end.m_column;
                 }
-
-                for (; (end.m_column <= upper->m_column) &&
-                     (end.m_column < def_begin->m_column + maxLength); ++end.m_column) {
-                    
-                    // none/black on the left
-                    if ((end.m_column == structure.m_columns - 1) ||
-                        (m_fillIn->getEntryAt(end.m_row, end.m_column + 1).m_value != ENTRY_VAL_WHITE)) {
-
-                        possible_end.push_back(end);
-                        
+                max_end.m_column = min(def_begin->m_column + maxLength - 1, upper->m_column);
+                
+                cerr << "\t\ttrying end range: " << min_end << " to " << max_end << endl;
+                
+                for (end.m_column = min_end.m_column; end.m_column <= max_end.m_column; ++end.m_column) {
+                    if (isAcrossEnd(end)) {
                         cerr << "\t\tmay end at " << end << endl;
+
+                        // unique (TODO: set?)
+                        if (find(possible_end.begin(), possible_end.end(), end) == possible_end.end()) {
+                            possible_end.push_back(end);
+                        }
                     }
                 }
-                
+                    
                 break;
             }
             case ENTRY_DIR_DOWN: {
                 
-                if (def_begin->m_row == word->m_origin.m_row) {
-                    ++end.m_row;
+                min_end.m_row = max(def_begin->m_row, m_cell.m_row);
+                if (min_end.m_row == def_begin->m_row) {
+                    ++min_end.m_row;
                 }
-
-                for (; (end.m_row <= upper->m_row) &&
-                     (end.m_row < def_begin->m_row + maxLength); ++end.m_row) {
-                    
-                    // none/black on the top
-                    if ((end.m_row == structure.m_rows - 1) ||
-                        (m_fillIn->getEntryAt(end.m_row + 1, end.m_column).m_value != ENTRY_VAL_WHITE)) {
-
-                        possible_end.push_back(end);
-                        
+                max_end.m_row = min(def_begin->m_row + maxLength - 1, upper->m_row);
+                
+                cerr << "\t\ttrying end range: " << min_end << " to " << max_end << endl;
+                
+                for (end.m_row = min_end.m_row; end.m_row <= max_end.m_row; ++end.m_row) {
+                    if (isDownEnd(end)) {
                         cerr << "\t\tmay end at " << end << endl;
+                        
+                        // unique (TODO: set?)
+                        if (find(possible_end.begin(), possible_end.end(), end) == possible_end.end()) {
+                            possible_end.push_back(end);
+                        }
                     }
                 }
                 
