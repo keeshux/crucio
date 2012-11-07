@@ -186,6 +186,8 @@ namespace crucio
     private:
         const GridStructure m_structure;
         Entry **m_entries;
+        unsigned *m_distribution;
+        unsigned m_distributionSize;
 
         // subproblems
         void placeWord(const Word *word);
@@ -227,6 +229,7 @@ namespace crucio
             return (y1 * (1 - mu2) + y2 * mu2);
         }
         static unsigned *createDistribution(const unsigned min, const unsigned max, unsigned *distributionSize);
+        unsigned randomWordLengthFromDistribution() const;
     };
 }
 

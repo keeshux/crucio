@@ -78,6 +78,14 @@ FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
             entry->m_direction = ENTRY_DIR_NONE;
         }
     }
+
+    // prepare words distribution
+    m_distribution = createDistribution(m_structure.m_minLength, m_structure.m_maxLength, &m_distributionSize);
+//    cerr << "distribution: { ";
+//    for (i = 0; i < m_distributionSize; ++i) {
+//        cerr << m_distribution[i] << ", ";
+//    }
+//    cerr << " }" << endl;
 }
 
 FillIn::~FillIn()
@@ -410,6 +418,9 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     
     cerr << "\twords can span from " << *lower << " to " << *upper << endl;
     assert(*lower != *upper);
+    
+    const unsigned preferredLength = m_fillIn->randomWordLengthFromDistribution();
+    cerr << "\tpreferred length is " << preferredLength << endl;
     
     // word direction is step direction
     word->m_direction = m_direction;
@@ -1002,6 +1013,11 @@ unsigned *FillIn::createDistribution(const unsigned min, const unsigned max, uns
     //DDLog(@"distribution of length %d", *length);
     
     return buffer;
+}
+
+unsigned FillIn::randomWordLengthFromDistribution() const
+{
+    return m_distribution[rand() % m_distributionSize];
 }
 
 #pragma mark - Output
