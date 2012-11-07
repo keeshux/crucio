@@ -72,6 +72,7 @@ void FillIn::layout()
     crossable.push_back(step);
 
     while (!crossable.empty()) {
+
         crossable.erase(crossable.begin());
     }
 }
@@ -94,14 +95,15 @@ void FillIn::complete()
 
 Grid *FillIn::createGrid() const
 {
+    // TODO
     return NULL;
 }
 
 CellAddress FillIn::randomCellAddress() const
 {
     CellAddress cell;
-    cell.m_row = rand() % m_structure.m_rows;
-    cell.m_column = rand() % m_structure.m_columns;
+    cell.m_row = randomNumber(0, m_structure.m_rows - 1);
+    cell.m_column = randomNumber(0, m_structure.m_columns - 1);
     return cell;
 }
 
