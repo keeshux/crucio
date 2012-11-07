@@ -76,17 +76,32 @@ namespace crucio
             unsigned m_length;
         };
         
-        // TODO: constructor, immutable object
         class Step
         {
         public:
-            FillIn *m_fillIn;
-            CellAddress m_cell;
-            EntryDirection m_direction;
+            Step(const FillIn *fillIn, const CellAddress &cell, const EntryDirection direction);
+            
+            const Entry &getEntry() const
+            {
+                return m_fillIn->getEntryAt(m_cell);
+            }
+            const CellAddress &getCell() const
+            {
+                return m_cell;
+            }
+            EntryDirection getDirection() const
+            {
+                return m_direction;
+            }
             
             // returns distance (= max length)
             unsigned getBoundaries(CellAddress *lower, CellAddress *upper) const;
             void getRandomWord(Word *word, CellAddress *lower, CellAddress *upper) const;
+
+        private:
+            const FillIn *const m_fillIn;
+            const CellAddress m_cell;
+            const EntryDirection m_direction;
         };
         
         FillIn(const GridStructure &structure);

@@ -92,15 +92,11 @@ void FillIn::layout()
 {
     list<Step> crossable;
     list<Step>::iterator currentStep;
-    Step baseStep;
     CellAddress lower, upper;
     Word word;
 
     // base step
-    baseStep.m_fillIn = this;
-    baseStep.m_cell = randomCellAddress();
-    baseStep.m_direction = randomEntryDirection();
-    crossable.push_back(baseStep);
+    crossable.push_back(Step(this, randomCellAddress(), randomEntryDirection()));
 
     while (!crossable.empty()) {
 
@@ -110,7 +106,7 @@ void FillIn::layout()
         currentStep = crossable.begin(); // TODO: randomize
 
         // related entry
-        const Entry &currentEntry = getEntryAt(currentStep->m_cell);
+        const Entry &currentEntry = currentStep->getEntry();
         const unsigned maxLength = currentStep->getBoundaries(&lower, &upper);
 
         cerr << "current step at " << *currentStep << " with max length " << maxLength << endl;
@@ -130,7 +126,7 @@ void FillIn::layout()
         }
         
         // skip step overlapping existing word
-        if (currentEntry.m_direction & currentStep->m_direction) {
+        if (currentEntry.m_direction & currentStep->getDirection()) {
             cerr << "\tskipping (overlapping existing word)" << endl;
             crossable.erase(currentStep);
             continue;
@@ -175,6 +171,13 @@ Grid *FillIn::createGrid() const
 }
 
 #pragma mark - Subproblems
+
+FillIn::Step::Step(const FillIn *fillIn, const CellAddress &cell, const EntryDirection direction) :
+        m_fillIn(fillIn),
+        m_cell(cell),
+        m_direction(direction)
+{
+}
 
 unsigned FillIn::Step::getBoundaries(CellAddress *lower, CellAddress *upper) const
 {
@@ -395,8 +398,8 @@ ostream &operator<<(ostream &out, const FillIn &fillIn)
 
 ostream &operator<<(ostream &out, const FillIn::Step &step)
 {
-    out << "<" << step.m_cell.m_row << ", " << step.m_cell.m_column << "> ";
-    out << "(" << FillIn::Entry::getDirectionString(step.m_direction) << ")";
+    out << "<" << step.getCell().m_row << ", " << step.getCell().m_column << "> ";
+    out << "(" << FillIn::Entry::getDirectionString(step.getDirection()) << ")";
     
     return out;
 }
