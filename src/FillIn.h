@@ -28,20 +28,6 @@
 
 namespace crucio
 {
-    template <typename I>
-    I random_element(I begin, I end)
-    {
-        const unsigned long n = std::distance(begin, end);
-//        const unsigned long divisor = (RAND_MAX + 1) / n;
-        
-        unsigned long k;
-//        do { k = std::rand() / divisor; } while (k >= n);
-        k = rand() % n;
-        
-        std::advance(begin, k);
-        return begin;
-    }
-
     class FillIn
     {
     public:
@@ -163,7 +149,7 @@ namespace crucio
             }
         };
         
-        FillIn(const GridStructure &structure);
+        FillIn(const GridStructure &structure, unsigned (*randomizer)());
         ~FillIn();
 
         const GridStructure &getStructure() const
@@ -185,6 +171,7 @@ namespace crucio
 
     private:
         const GridStructure m_structure;
+        unsigned (*const m_randomizer)();
         Entry **m_entries;
         unsigned *m_distribution;
         unsigned m_distributionSize;
@@ -208,13 +195,21 @@ namespace crucio
         }
 
         // utilities
-        static unsigned randomNumber(const unsigned min, const unsigned max)
+        unsigned randomNumber() const
         {
-            return min + rand() % (max - min + 1);
+            return m_randomizer();
         }
-        static EntryDirection randomEntryDirection()
+        unsigned randomNumber(const unsigned min, const unsigned max) const
+        {
+            return min + m_randomizer() % (max - min + 1);
+        }
+        EntryDirection randomEntryDirection() const
         {
             return (EntryDirection)randomNumber(1, 2);
+        }
+        std::vector<CellAddress>::const_iterator randomVectorElement(const std::vector<CellAddress> &elements) const
+        {
+            return elements.begin() + randomNumber(0, elements.size() - 1);
         }
         CellAddress randomCellAddress() const;
 

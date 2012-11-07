@@ -64,7 +64,9 @@ const char *FillIn::Entry::getDirectionString() const
     return getDirectionString(m_direction);
 }
 
-FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
+FillIn::FillIn(const GridStructure &structure, unsigned (*randomizer)()) :
+        m_structure(structure),
+        m_randomizer(randomizer)
 {
     unsigned i, j;
     
@@ -518,7 +520,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     }
     
     // choose one randomly
-    def_begin = random_element(possible_begin.begin(), possible_begin.end());
+    def_begin = m_fillIn->randomVectorElement(possible_begin);
     cerr << "\tchosen begin: " << *def_begin << endl;
     
     // step cell is upper bound, end here
@@ -586,7 +588,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     }
     
     // choose one randomly
-    def_end = random_element(possible_end.begin(), possible_end.end());
+    def_end = m_fillIn->randomVectorElement(possible_end);
     cerr << "\tchosen end: " << *def_end << endl;
     
     switch (word->m_direction) {
@@ -1017,7 +1019,7 @@ unsigned *FillIn::createDistribution(const unsigned min, const unsigned max, uns
 
 unsigned FillIn::randomWordLengthFromDistribution() const
 {
-    return m_distribution[rand() % m_distributionSize];
+    return m_distribution[m_randomizer() % m_distributionSize];
 }
 
 #pragma mark - Output

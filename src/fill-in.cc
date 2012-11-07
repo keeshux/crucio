@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     structure.m_minLength = minLength;
     structure.m_maxLength = maxLength;
     
-    FillIn fillIn(structure);
+    FillIn fillIn(structure, (unsigned (*)())&rand);
     cerr << "grid is " << rows << "x" << columns << endl;
     cerr << "random seed = " << seed << endl;
     
