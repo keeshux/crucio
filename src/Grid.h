@@ -37,6 +37,12 @@ namespace crucio
     class Grid;
     class Definition;
 
+    struct CellAddress
+    {
+        unsigned m_row;
+        unsigned m_column;
+    };
+    
     class Cell
     {
     public:
