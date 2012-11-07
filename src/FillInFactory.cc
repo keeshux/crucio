@@ -52,6 +52,18 @@ void FillIn::layout()
 
 void FillIn::complete()
 {
+    unsigned i, j;
+    
+    for (i = 0; i < m_structure.rows; ++i) {
+        for (i = 0; i < m_structure.rows; ++i) {
+            EntryValue *value = &m_entries[i][j].value;
+
+            // replace empty with black
+            if (*value == ENTRY_VAL_NONE) {
+                *value = ENTRY_VAL_BLACK;
+            }
+        }
+    }
 }
 
 ostream &operator<<(ostream &out, const FillIn &fi)

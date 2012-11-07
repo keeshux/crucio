@@ -45,16 +45,16 @@ namespace crucio
     private:
         enum EntryValue
         {
-            ENTRY_VAL_NONE = '?',
-            ENTRY_VAL_WHITE = '-',
-            ENTRY_VAL_BLACK = '#'
+            ENTRY_VAL_NONE      = '?',
+            ENTRY_VAL_WHITE     = '-',
+            ENTRY_VAL_BLACK     = '#'
         };
 
         enum EntryDirection
         {
-            ENTRY_DIR_NONE = 0x0,
-            ENTRY_DIR_ACROSS = 0x1,
-            ENTRY_DIR_DOWN = 0x2
+            ENTRY_DIR_NONE      = 0x0,
+            ENTRY_DIR_ACROSS    = 0x1,
+            ENTRY_DIR_DOWN      = 0x2
         };
         
         struct GridEntry
