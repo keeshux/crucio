@@ -49,7 +49,6 @@ int main(int argc, char *argv[])
     } else {
         seed = time(NULL);
     }
-    cerr << "random seed = " << seed << endl;
     srand(seed);
     
     GridStructure structure;
@@ -59,10 +58,11 @@ int main(int argc, char *argv[])
     structure.m_maxLength = maxLength;
     
     FillIn fillIn(structure);
-    cerr << "grid is " << rows << "x" << columns << endl;
+    cout << "grid is " << rows << "x" << columns << endl;
+    cout << "random seed = " << seed << endl;
     
     fillIn.layout();
-    cerr << fillIn << endl;
+    cout << fillIn << endl;
     
     return 0;
 }
