@@ -103,9 +103,9 @@ namespace crucio
             void getRandomWord(Word *word, CellAddress *lower, CellAddress *upper) const;
 
         private:
-            const FillIn *const m_fillIn;
-            const CellAddress m_cell;
-            const EntryDirection m_direction;
+            const FillIn *m_fillIn;
+            CellAddress m_cell;
+            EntryDirection m_direction;
 
             bool hasValidRow(const CellAddress &cl) const
             {
@@ -212,7 +212,9 @@ namespace crucio
         template <typename I>
         I randomElement(I begin, I end) const
         {
-            return begin + randomNumber(0, end - begin - 1);
+            const size_t max = std::distance(begin, end) - 1;
+
+            return begin + randomNumber(0, max);
         }
 
         // words distribution
