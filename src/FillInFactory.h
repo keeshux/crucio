@@ -21,7 +21,7 @@
 #ifndef __FILLIN_FACTORY_H
 #define __FILLIN_FACTORY_H
 
-#include "common.h"
+#include "Grid.h"
 
 namespace crucio
 {
@@ -41,6 +41,8 @@ namespace crucio
         
         void layout();
         void complete();
+
+        Grid *createGrid() const;
         
     private:
         enum EntryValue

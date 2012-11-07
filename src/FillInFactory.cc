@@ -66,6 +66,11 @@ void FillIn::complete()
     }
 }
 
+Grid *FillIn::createGrid() const
+{
+    return NULL;
+}
+
 ostream &operator<<(ostream &out, const FillIn &fi)
 {
     return out;
