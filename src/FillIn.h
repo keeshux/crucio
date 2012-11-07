@@ -21,6 +21,9 @@
 #ifndef __FILLIN_H
 #define __FILLIN_H
 
+#include <cstdlib>
+#include <cmath>
+
 #include "Grid.h"
 
 namespace crucio
@@ -212,6 +215,18 @@ namespace crucio
             return (EntryDirection)randomNumber(1, 2);
         }
         CellAddress randomCellAddress() const;
+
+        // words distribution
+        static float interpolateLinear(const float y1, const float y2, const float mu)
+        {
+            return (y1 + mu * (y2 - y1));
+        }
+        static float interpolateCosine(const float y1, const float y2, const float mu)
+        {
+            const float mu2 = (1 - cos(mu * M_PI)) / 2;
+            return (y1 * (1 - mu2) + y2 * mu2);
+        }
+        static unsigned *createDistribution(const unsigned min, const unsigned max, unsigned *distributionSize);
     };
 }
 

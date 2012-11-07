@@ -112,6 +112,7 @@ void FillIn::layout()
         // pick random step
 #warning TODO: randomize
         currentStep = crossable.begin();
+//        currentStep = random_element(crossable.begin(), crossable.end());
         cerr << "current step: " << *currentStep << endl;
 
         // related entry
@@ -943,6 +944,64 @@ CellAddress FillIn::randomCellAddress() const
     cell.m_row = randomNumber(0, m_structure.m_rows - 1);
     cell.m_column = randomNumber(0, m_structure.m_columns - 1);
     return cell;
+}
+
+#pragma mark - Words distribution
+
+unsigned *FillIn::createDistribution(const unsigned min, const unsigned max, unsigned *distributionSize)
+{
+    static unsigned buffer[200] = { 0 };
+    static unsigned knots[3] = { 0 };
+    static unsigned knotsVals[3] = { 5, 10, 1 };
+    static unsigned *p;
+    static unsigned i, j, count;
+    static float mu;
+    
+    // interpolation
+    const unsigned length = max - min;
+    knots[0] = 0;
+    knots[1] = length / 2.5;
+    knots[2] = length;
+    
+    //count = (range.length - i) / 2 + 1;
+    
+    // iteration
+    p = buffer;
+    
+    // high frequency - cosine
+    for (i = knots[0]; i < knots[1]; ++i) {
+        mu = (float)(i - knots[0]) / (knots[1] - knots[0]);
+        count = interpolateCosine(knotsVals[0], knotsVals[1], mu);
+        
+        // copy word length for count times
+        for (j = 0; j < count; ++j) {
+            *p = min + i;
+            ++p;
+        }
+        //DDLog(@"frequency of %d = %d", range.location + i, count);
+    }
+    
+    // low frequency - power (XXX: exclude longest, 1 might be added
+    // in random grid)
+    for (i = knots[1]; i < knots[2]; ++i) {
+        mu = (float)(i - knots[1]) / (knots[2] - knots[1]);
+        count = interpolateLinear(knotsVals[2], knotsVals[1], pow(1 - mu, 2));
+        
+        // copy word length for count times
+        for (j = 0; j < count; ++j) {
+            *p = min + i;
+            ++p;
+        }
+        
+        //DDLog(@"mu of %d = %f", i, mu);
+        //DDLog(@"frequency of %d = %d", range.location + i, count);
+    }
+
+    // return resulting distribution size
+    *distributionSize = p - buffer;
+    //DDLog(@"distribution of length %d", *length);
+    
+    return buffer;
 }
 
 #pragma mark - Output
