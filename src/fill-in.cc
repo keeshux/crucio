@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
 #if 1
     rows = atoi(argv[1]);
     columns = atoi(argv[2]);
-    minLength = 2;
-    maxLength = 12;
+    minLength = atoi(argv[3]);
+    maxLength = atoi(argv[4]);
 #else
 //    rows = 5; columns = 9; minLength = 2; maxLength = 6;
     rows = 9; columns = 13; minLength = 2; maxLength = 7;
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
 #endif
     
     unsigned seed = 0;
-    if (argc > 3) {
-        seed = atoi(argv[3]);
+    if (argc > 5) {
+        seed = atoi(argv[5]);
     } else {
         seed = time(NULL);
     }
