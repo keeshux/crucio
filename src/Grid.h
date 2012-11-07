@@ -41,6 +41,11 @@ namespace crucio
     {
         unsigned m_row;
         unsigned m_column;
+
+        bool operator==(const CellAddress &ca) const
+        {
+            return (ca.m_row == m_row) && (ca.m_column == m_column);
+        }
     };
     
     struct GridStructure
