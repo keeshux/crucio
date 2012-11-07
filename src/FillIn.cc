@@ -196,8 +196,24 @@ void FillIn::layout()
 
 Grid *FillIn::createGrid() const
 {
-    // TODO
-    return NULL;
+    unsigned i, j;
+
+    char **chars = new char*[m_structure.m_rows];
+    for (i = 0; i < m_structure.m_rows; ++i) {
+        chars[i] = new char[m_structure.m_columns];
+        for (j = 0; j < m_structure.m_columns; ++j) {
+            chars[i][j] = (char)m_entries[i][j].m_value;
+        }
+    }
+
+    Grid *grid = new Grid((const char **)chars, m_structure.m_rows, m_structure.m_columns);
+
+    for (i = 0; i < m_structure.m_rows; ++i) {
+        delete[] chars[i];
+    }
+    delete[] chars;
+
+    return grid;
 }
 
 #pragma mark - Subproblems
