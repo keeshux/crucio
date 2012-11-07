@@ -117,6 +117,27 @@ namespace crucio
             const FillIn *const m_fillIn;
             const CellAddress m_cell;
             const EntryDirection m_direction;
+
+            bool isAcrossBegin(const CellAddress &cl) const
+            {
+                return ((cl.m_column == 0) ||
+                        (m_fillIn->getEntryAt(cl.m_row, cl.m_column - 1).m_value != ENTRY_VAL_WHITE));
+            }
+            bool isAcrossEnd(const CellAddress &cl) const
+            {
+                return ((cl.m_column == m_fillIn->m_structure.m_columns - 1) ||
+                        (m_fillIn->getEntryAt(cl.m_row, cl.m_column + 1).m_value != ENTRY_VAL_WHITE));
+            }
+            bool isDownBegin(const CellAddress &cl) const
+            {
+                return ((cl.m_row == 0) ||
+                        (m_fillIn->getEntryAt(cl.m_row - 1, cl.m_column).m_value != ENTRY_VAL_WHITE));
+            }
+            bool isDownEnd(const CellAddress &cl) const
+            {
+                return ((cl.m_row == m_fillIn->m_structure.m_rows - 1) ||
+                        (m_fillIn->getEntryAt(cl.m_row + 1, cl.m_column).m_value != ENTRY_VAL_WHITE));
+            }
         };
         
         FillIn(const GridStructure &structure);
