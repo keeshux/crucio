@@ -30,7 +30,7 @@ FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
     m_entries = new GridEntry*[m_structure.rows];
     for (i = 0; i < m_structure.rows; ++i) {
         m_entries[i] = new GridEntry[m_structure.columns];
-        for (i = 0; i < m_structure.rows; ++i) {
+        for (j = 0; j < m_structure.columns; ++j) {
             m_entries[i][j].value = ENTRY_VAL_NONE;
         }
     }
@@ -73,5 +73,15 @@ Grid *FillIn::createGrid() const
 
 ostream &operator<<(ostream &out, const FillIn &fi)
 {
+    unsigned i, j;
+    
+    const GridStructure structure = fi.getStructure();
+    for (i = 0; i < structure.rows; ++i) {
+        for (j = 0; j < structure.columns; ++j) {
+            out << fi.getEntryAt(i, j);
+        }
+        out << endl;
+    }
+
     return out;
 }

@@ -38,13 +38,28 @@ namespace crucio
     public:
         FillIn(const GridStructure &structure);
         ~FillIn();
-        
+
+        const GridStructure &getStructure() const
+        {
+            return m_structure;
+        }
+        const char getEntryAt(const unsigned i, const unsigned j) const
+        {
+            return (char)m_entries[i][j].value;
+        }
+
         void layout();
         void complete();
 
         Grid *createGrid() const;
         
     private:
+        struct EntryAddress
+        {
+            unsigned i;
+            unsigned j;
+        };
+        
         enum EntryValue
         {
             ENTRY_VAL_NONE      = '?',
@@ -58,7 +73,7 @@ namespace crucio
             ENTRY_DIR_ACROSS    = 0x1,
             ENTRY_DIR_DOWN      = 0x2
         };
-        
+
         struct GridEntry
         {
             EntryValue value;
