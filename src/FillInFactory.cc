@@ -23,6 +23,19 @@
 using namespace crucio;
 using namespace std;
 
+char FillIn::Entry::getDirectionChar() const
+{
+    if ((direction & ENTRY_DIR_ACROSS) && (direction & ENTRY_DIR_DOWN)) {
+        return 'C';
+    } else if (direction & ENTRY_DIR_ACROSS) {
+        return 'A';
+    } else if (direction & ENTRY_DIR_DOWN) {
+        return 'D';
+    } else {
+        return '-';
+    }
+}
+
 FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
 {
     unsigned i, j;
@@ -31,7 +44,9 @@ FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
     for (i = 0; i < m_structure.m_rows; ++i) {
         m_entries[i] = new Entry[m_structure.m_columns];
         for (j = 0; j < m_structure.m_columns; ++j) {
-            m_entries[i][j].value = ENTRY_VAL_NONE;
+            Entry *entry = &m_entries[i][j];
+            entry->value = ENTRY_VAL_NONE;
+            entry->direction = ENTRY_DIR_NONE;
         }
     }
 }
@@ -73,12 +88,21 @@ Grid *FillIn::createGrid() const
 
 ostream &operator<<(ostream &out, const FillIn &fi)
 {
+    const GridStructure &structure = fi.getStructure();
     unsigned i, j;
     
-    const GridStructure &structure = fi.getStructure();
+    out << endl;
     for (i = 0; i < structure.m_rows; ++i) {
         for (j = 0; j < structure.m_columns; ++j) {
-            out << fi.getEntryAt(i, j);
+            out << (char)fi.getEntryAt(i, j).value;
+        }
+        out << endl;
+    }
+
+    out << endl;
+    for (i = 0; i < structure.m_rows; ++i) {
+        for (j = 0; j < structure.m_columns; ++j) {
+            out << fi.getEntryAt(i, j).getDirectionChar();
         }
         out << endl;
     }

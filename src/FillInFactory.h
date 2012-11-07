@@ -28,6 +28,28 @@ namespace crucio
     class FillIn
     {
     public:
+        enum EntryValue
+        {
+            ENTRY_VAL_NONE      = '?',
+            ENTRY_VAL_WHITE     = '-',
+            ENTRY_VAL_BLACK     = '#'
+        };
+        
+        enum EntryDirection
+        {
+            ENTRY_DIR_NONE      = 0x0,
+            ENTRY_DIR_ACROSS    = 0x1,
+            ENTRY_DIR_DOWN      = 0x2
+        };
+        
+        struct Entry
+        {
+            EntryValue value;
+            EntryDirection direction;
+
+            char getDirectionChar() const;
+        };
+        
         FillIn(const GridStructure &structure);
         ~FillIn();
 
@@ -35,41 +57,22 @@ namespace crucio
         {
             return m_structure;
         }
-        const char getEntryAt(const unsigned i, const unsigned j) const
-        {
-            return (char)m_entries[i][j].value;
-        }
-        const char getEntryAt(const CellAddress &address) const
-        {
-            return getEntryAt(address.m_row, address.m_column);
-        }
 
         void layout();
         void complete();
 
         Grid *createGrid() const;
         
+        const Entry &getEntryAt(const unsigned i, const unsigned j) const
+        {
+            return m_entries[i][j];
+        }
+        const Entry &getEntryAt(const CellAddress &address) const
+        {
+            return getEntryAt(address.m_row, address.m_column);
+        }
+
     private:
-        enum EntryValue
-        {
-            ENTRY_VAL_NONE      = '?',
-            ENTRY_VAL_WHITE     = '-',
-            ENTRY_VAL_BLACK     = '#'
-        };
-
-        enum EntryDirection
-        {
-            ENTRY_DIR_NONE      = 0x0,
-            ENTRY_DIR_ACROSS    = 0x1,
-            ENTRY_DIR_DOWN      = 0x2
-        };
-
-        struct Entry
-        {
-            EntryValue value;
-            EntryDirection direction;
-        };
-
         const GridStructure m_structure;
         Entry **m_entries;
     };
