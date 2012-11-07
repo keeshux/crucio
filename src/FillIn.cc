@@ -20,6 +20,8 @@
 
 #include "FillIn.h"
 
+#warning TODO: customize random function (also in random_element)
+
 using namespace crucio;
 using namespace std;
 
@@ -106,7 +108,10 @@ void FillIn::layout()
         
         cerr << endl;
         cerr << "steps count = " << crossable.size() << endl;
-        currentStep = crossable.begin(); // TODO: randomize
+
+        // pick random step
+#warning TODO: randomize
+        currentStep = crossable.begin();
 
         // related entry
         const Entry &currentEntry = currentStep->getEntry();
