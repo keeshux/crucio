@@ -44,10 +44,25 @@ namespace crucio
         
         struct Entry
         {
-            EntryValue value;
-            EntryDirection direction;
+            EntryValue m_value;
+            EntryDirection m_direction;
+
+            static char getDirectionChar(const EntryDirection direction);
+            static const char *getDirectionString(const EntryDirection direction);
 
             char getDirectionChar() const;
+            const char *getDirectionString() const;
+        };
+        
+        class Step
+        {
+        public:
+            FillIn *m_fillIn;
+            CellAddress m_cell;
+            EntryDirection m_direction;
+            
+            // returns distance (= max length)
+            unsigned getBoundaries(CellAddress *lower, CellAddress *upper) const;
         };
         
         FillIn(const GridStructure &structure);
@@ -74,13 +89,6 @@ namespace crucio
         const GridStructure m_structure;
         Entry **m_entries;
 
-        class Step
-        {
-        public:
-            CellAddress m_cell;
-            EntryDirection m_direction;
-        };
-        
         // subproblems
         void finishFilling();
 
@@ -97,6 +105,7 @@ namespace crucio
     };
 }
 
-std::ostream &operator<<(std::ostream &out, const crucio::FillIn &fi);
+std::ostream &operator<<(std::ostream &out, const crucio::FillIn &fillIn);
+std::ostream &operator<<(std::ostream &out, const crucio::FillIn::Step &step);
 
 #endif

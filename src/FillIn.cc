@@ -23,8 +23,9 @@
 using namespace crucio;
 using namespace std;
 
-char FillIn::Entry::getDirectionChar() const
+char FillIn::Entry::getDirectionChar(const EntryDirection direction)
 {
+    // TODO: shorten and
     if ((direction & ENTRY_DIR_ACROSS) && (direction & ENTRY_DIR_DOWN)) {
         return 'C';
     } else if (direction & ENTRY_DIR_ACROSS) {
@@ -36,6 +37,31 @@ char FillIn::Entry::getDirectionChar() const
     }
 }
 
+const char *FillIn::Entry::getDirectionString(const EntryDirection direction)
+{
+    switch (direction) {
+        case ENTRY_DIR_ACROSS:
+            return "across";
+            
+        case ENTRY_DIR_DOWN:
+            return "down";
+            
+        default:
+            assert(false);
+            return "";
+    }
+}
+
+char FillIn::Entry::getDirectionChar() const
+{
+    return getDirectionChar(m_direction);
+}
+
+const char *FillIn::Entry::getDirectionString() const
+{
+    return getDirectionString(m_direction);
+}
+
 FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
 {
     unsigned i, j;
@@ -45,8 +71,9 @@ FillIn::FillIn(const GridStructure &structure) : m_structure(structure)
         m_entries[i] = new Entry[m_structure.m_columns];
         for (j = 0; j < m_structure.m_columns; ++j) {
             Entry *entry = &m_entries[i][j];
-            entry->value = ENTRY_VAL_NONE;
-            entry->direction = ENTRY_DIR_NONE;
+
+            entry->m_value = ENTRY_VAL_NONE;
+            entry->m_direction = ENTRY_DIR_NONE;
         }
     }
 }
@@ -64,17 +91,50 @@ FillIn::~FillIn()
 void FillIn::layout()
 {
     list<Step> crossable;
-    Step step;
+    list<Step>::iterator currentStep;
+    Step baseStep;
+    CellAddress lower, upper;
 
     // base step
-    step.m_cell = randomCellAddress();
-    step.m_direction = randomEntryDirection();
-    crossable.push_back(step);
+    baseStep.m_fillIn = this;
+    baseStep.m_cell = randomCellAddress();
+    baseStep.m_direction = randomEntryDirection();
+    crossable.push_back(baseStep);
 
     while (!crossable.empty()) {
 
         // 1) pick step from crossable
         
+        cerr << "steps count = " << crossable.size() << endl;
+        currentStep = crossable.begin(); // TODO: randomize
+
+        // related entry
+        const Entry &currentEntry = getEntryAt(currentStep->m_cell);
+        const unsigned maxLength = currentStep->getBoundaries(&lower, &upper);
+
+        cerr << "current step at " << *currentStep << " with max length " << maxLength << endl;
+        
+        // skip step in black cell
+        if (currentEntry.m_value == ENTRY_VAL_BLACK) {
+            cerr << "\tskipping (black cell)" << endl;
+            crossable.erase(currentStep);
+            continue;
+        }
+        
+        // skip step under min length
+        if (maxLength < m_structure.m_minLength) {
+            cerr << "\tskipping (under min length)" << endl;
+            crossable.erase(currentStep);
+            continue;
+        }
+        
+        // skip step overlapping existing word
+        if (currentEntry.m_direction & currentStep->m_direction) {
+            cerr << "\tskipping (overlapping existing word)" << endl;
+            crossable.erase(currentStep);
+            continue;
+        }
+
         // 2) place word
         
         // 3) block surrounding cells
@@ -103,13 +163,18 @@ Grid *FillIn::createGrid() const
 
 #pragma mark - Subproblems
 
+unsigned FillIn::Step::getBoundaries(CellAddress *lower, CellAddress *upper) const
+{
+    return m_fillIn->getStructure().m_maxLength;
+}
+
 void FillIn::finishFilling()
 {
     unsigned i, j;
     
     for (i = 0; i < m_structure.m_rows; ++i) {
         for (j = 0; j < m_structure.m_columns; ++j) {
-            EntryValue *value = &m_entries[i][j].value;
+            EntryValue *value = &m_entries[i][j].m_value;
 
             // replace empty with black
             if (*value == ENTRY_VAL_NONE) {
@@ -129,15 +194,17 @@ CellAddress FillIn::randomCellAddress() const
     return cell;
 }
 
-ostream &operator<<(ostream &out, const FillIn &fi)
+#pragma mark - Output
+
+ostream &operator<<(ostream &out, const FillIn &fillIn)
 {
-    const GridStructure &structure = fi.getStructure();
+    const GridStructure &structure = fillIn.getStructure();
     unsigned i, j;
     
     out << endl;
     for (i = 0; i < structure.m_rows; ++i) {
         for (j = 0; j < structure.m_columns; ++j) {
-            out << (char)fi.getEntryAt(i, j).value;
+            out << (char)fillIn.getEntryAt(i, j).m_value;
         }
         out << endl;
     }
@@ -145,10 +212,18 @@ ostream &operator<<(ostream &out, const FillIn &fi)
     out << endl;
     for (i = 0; i < structure.m_rows; ++i) {
         for (j = 0; j < structure.m_columns; ++j) {
-            out << fi.getEntryAt(i, j).getDirectionChar();
+            out << fillIn.getEntryAt(i, j).getDirectionChar();
         }
         out << endl;
     }
 
+    return out;
+}
+
+ostream &operator<<(ostream &out, const FillIn::Step &step)
+{
+    out << "<" << step.m_cell.m_row << ", " << step.m_cell.m_column << "> ";
+    out << "(" << FillIn::Entry::getDirectionString(step.m_direction) << ")";
+    
     return out;
 }
