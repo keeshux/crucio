@@ -408,6 +408,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     vector<CellAddress> possibleEnd;
     vector<CellAddress>::const_iterator defBegin;
     vector<CellAddress>::const_iterator defEnd;
+    unsigned distance = 0;
 
     // IMPORTANT: definition MUST include m_cell in order to guarantee connection
     //
@@ -469,7 +470,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                             (end.m_column >= m_cell.m_column) &&
                             (end.m_column <= upper->m_column)) {
 
-                            cerr << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
+//                            cerr << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
 
                             // unique (TODO: set?)
                             if (find(possibleBegin.begin(), possibleBegin.end(), begin) == possibleBegin.end()) {
@@ -478,6 +479,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
 
                             // separate preferred begin cells
                             if (possibleLength == preferredLength) {
+//                                cerr << "\t\tpreferred may begin at " << begin << endl;
                                 preferredBegin.push_back(begin);
                             }
                         }
@@ -507,7 +509,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                             (end.m_row >= m_cell.m_row) &&
                             (end.m_row <= upper->m_row)) {
                             
-                            cerr << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
+//                            cerr << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
 
                             // unique (TODO: set?)
                             if (find(possibleBegin.begin(), possibleBegin.end(), begin) == possibleBegin.end()) {
@@ -516,6 +518,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                             
                             // separate preferred begin cells
                             if (possibleLength == preferredLength) {
+//                                cerr << "\t\tpreferred may begin at " << begin << endl;
                                 preferredBegin.push_back(begin);
                             }
                         }
@@ -532,16 +535,17 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     }
     
     // preferred length fits, stop here
-    if (false) {
-//    if (!preferredBegin.empty()) {
-//        defBegin = m_fillIn->randomVectorElement(preferredBegin);
-//        defEnd = defBegin + preferredLength;
-//
-//        cerr << "\tchosen begin: " << *defBegin << endl;
-//        cerr << "\tchosen end: " << *defEnd << endl;
+    if (!preferredBegin.empty()) {
+        defBegin = m_fillIn->randomVectorElement(preferredBegin);
+        distance = preferredLength - 1;
+
+        cerr << "\tapplying preferred word length " << preferredLength << endl;
+        cerr << "\tchosen begin: " << *defBegin << endl;
     }
     // otherwise choose begin and find random end in possible
     else {
+        cerr << "\tcomputing random word length " << preferredLength << endl;
+
         defBegin = m_fillIn->randomVectorElement(possibleBegin);
         cerr << "\tchosen begin: " << *defBegin << endl;
         
@@ -612,22 +616,21 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
         // choose one randomly
         defEnd = m_fillIn->randomVectorElement(possibleEnd);
         cerr << "\tchosen end: " << *defEnd << endl;
-    }
 
-    // length by begin/end distance
-    unsigned distance;
-    switch (word->m_direction) {
-        case ENTRY_DIR_ACROSS:
-            distance = defEnd->m_column - defBegin->m_column;
-            break;
-            
-        case ENTRY_DIR_DOWN:
-            distance = defEnd->m_row - defBegin->m_row;
-            break;
+        // length by begin/end distance
+        switch (word->m_direction) {
+            case ENTRY_DIR_ACROSS:
+                distance = defEnd->m_column - defBegin->m_column;
+                break;
+                
+            case ENTRY_DIR_DOWN:
+                distance = defEnd->m_row - defBegin->m_row;
+                break;
 
-        default:
-            assert(false);
-            break;
+            default:
+                assert(false);
+                break;
+        }
     }
     
     // complete word structure
