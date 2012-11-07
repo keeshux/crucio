@@ -45,8 +45,8 @@ namespace crucio
         enum EntryValue
         {
             ENTRY_VAL_NONE      = '?',
-            ENTRY_VAL_WHITE     = '-',
-            ENTRY_VAL_BLACK     = '#'
+            ENTRY_VAL_WHITE     = Cell::WHITE,
+            ENTRY_VAL_BLACK     = Cell::BLACK
         };
         
         enum EntryDirection
