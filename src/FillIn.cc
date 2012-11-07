@@ -137,6 +137,15 @@ void FillIn::layout()
 
         // 2) place word
         
+        cerr << "words can span from " << lower << " to " << upper << endl;
+        
+//        // get a random definition given direction/range
+//        def.direction = ci->direction;
+//        ci->get_random_definition(&def, &first, &last);
+//        
+//        // place word in definition
+//        grid_place_word(cfg, &def);
+
         // 3) block surrounding cells
         
         // 4) print grid with new word
@@ -165,7 +174,161 @@ Grid *FillIn::createGrid() const
 
 unsigned FillIn::Step::getBoundaries(CellAddress *lower, CellAddress *upper) const
 {
-    return m_fillIn->getStructure().m_maxLength;
+    unsigned x1, x2;
+    
+    switch (m_direction) {
+        case ENTRY_DIR_ACROSS: {
+            const bool has_top = (m_cell.m_row > 0);
+            const bool has_bottom = (m_cell.m_row < m_fillIn->m_structure.m_rows - 1);
+            bool tw, bw, ntw, nbw;
+            
+            x1 = x2 = m_cell.m_column;
+            
+            tw = bw = ntw = nbw = false;
+            while (x1 > 0) {
+                if (m_fillIn->getEntryAt(m_cell.m_row, x1 - 1).m_value == ENTRY_VAL_BLACK) {
+                    break;
+                }
+                
+                // top adjacency
+                if (has_top) {
+                    ntw = (m_fillIn->getEntryAt(m_cell.m_row - 1, x1 - 1).m_value == ENTRY_VAL_WHITE);
+                    if (tw && ntw) {
+                        break;
+                    }
+                    tw = ntw;
+                }
+                
+                // bottom adjacency
+                if (has_bottom) {
+                    nbw = (m_fillIn->getEntryAt(m_cell.m_row + 1, x1 - 1).m_value == ENTRY_VAL_WHITE);
+                    if (bw && nbw) {
+                        break;
+                    }
+                    bw = nbw;
+                }
+                
+                --x1;
+            }
+            
+            tw = bw = ntw = nbw = false;
+            while (x2 < m_fillIn->m_structure.m_columns - 1) {
+                if (m_fillIn->getEntryAt(m_cell.m_row, x2 + 1).m_value == ENTRY_VAL_BLACK) {
+                    break;
+                }
+                
+                // top adjacency
+                if (has_top) {
+                    ntw = (m_fillIn->getEntryAt(m_cell.m_row - 1, x2 + 1).m_value == ENTRY_VAL_WHITE);
+                    if (tw && ntw) {
+                        break;
+                    }
+                    tw = ntw;
+                }
+                
+                // bottom adjacency
+                if (has_bottom) {
+                    nbw = (m_fillIn->getEntryAt(m_cell.m_row + 1, x2 + 1).m_value == ENTRY_VAL_WHITE);
+                    if (bw && nbw) {
+                        break;
+                    }
+                    bw = nbw;
+                }
+                
+                ++x2;
+            }
+            
+            lower->m_row = m_cell.m_row;
+            lower->m_column = x1;
+            upper->m_row = m_cell.m_row;
+            upper->m_column = x2;
+            
+            break;
+        }
+        case ENTRY_DIR_DOWN: {
+            const bool has_left = (m_cell.m_column > 0);
+            const bool has_right = (m_cell.m_column < m_fillIn->m_structure.m_columns - 1);
+            bool lw, rw, nlw, nrw;
+            
+            x1 = x2 = m_cell.m_row;
+            
+            lw = rw = nlw = nrw = false;
+            while (x1 > 0) {
+                if (m_fillIn->getEntryAt(x1 - 1, m_cell.m_column).m_value == ENTRY_VAL_BLACK) {
+                    break;
+                }
+                
+                // left adjacency
+                if (has_left) {
+                    nlw = (m_fillIn->getEntryAt(x1 - 1, m_cell.m_column - 1).m_value == ENTRY_VAL_WHITE);
+                    if (lw && nlw) {
+                        break;
+                    }
+                    lw = nlw;
+                }
+                
+                // right adjacency
+                if (has_right) {
+                    nrw = (m_fillIn->getEntryAt(x1 - 1, m_cell.m_column + 1).m_value == ENTRY_VAL_WHITE);
+                    if (rw && nrw) {
+                        break;
+                    }
+                    rw = nrw;
+                }
+                
+                --x1;
+            }
+            
+            lw = rw = nlw = nrw = false;
+            while (x2 < m_fillIn->m_structure.m_rows - 1) {
+                if (m_fillIn->getEntryAt(x2 + 1, m_cell.m_column).m_value == ENTRY_VAL_BLACK) {
+                    break;
+                }
+                
+                // left adjacency
+                if (has_left) {
+                    nlw = (m_fillIn->getEntryAt(x2 + 1, m_cell.m_column - 1).m_value == ENTRY_VAL_WHITE);
+                    if (lw && nlw) {
+                        break;
+                    }
+                    lw = nlw;
+                }
+                
+                // right adjacency
+                if (has_right) {
+                    nrw = (m_fillIn->getEntryAt(x2 + 1, m_cell.m_column + 1).m_value == ENTRY_VAL_WHITE);
+                    if (rw && nrw) {
+                        break;
+                    }
+                    rw = nrw;
+                }
+                
+                ++x2;
+            }
+            
+            lower->m_row = x1;
+            lower->m_column = m_cell.m_column;
+            upper->m_row = x2;
+            upper->m_column = m_cell.m_column;
+            
+            break;
+        }
+        default: {
+            assert(false);
+            break;
+        }
+    }
+
+    // max length from distance
+    const unsigned maxLength = x2 - x1 + 1;
+    const unsigned globalMaxLength = m_fillIn->m_structure.m_maxLength;
+
+    // return global max length at most
+    if (maxLength <= globalMaxLength) {
+        return maxLength;
+    } else {
+        return globalMaxLength;
+    }
 }
 
 void FillIn::finishFilling()
