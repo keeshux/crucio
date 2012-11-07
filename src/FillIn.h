@@ -207,12 +207,13 @@ namespace crucio
         {
             return (EntryDirection)randomNumber(1, 2);
         }
-#warning TODO: templatize?
-        std::vector<CellAddress>::const_iterator randomVectorElement(const std::vector<CellAddress> &elements) const
-        {
-            return elements.begin() + randomNumber(0, elements.size() - 1);
-        }
         CellAddress randomCellAddress() const;
+
+        template <typename I>
+        I randomElement(I begin, I end) const
+        {
+            return begin + randomNumber(0, end - begin - 1);
+        }
 
         // words distribution
         static float interpolateLinear(const float y1, const float y2, const float mu)

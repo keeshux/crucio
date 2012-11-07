@@ -536,7 +536,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     
     // preferred length fits, stop here
     if (!preferredBegin.empty()) {
-        defBegin = m_fillIn->randomVectorElement(preferredBegin);
+        defBegin = m_fillIn->randomElement(preferredBegin.begin(), preferredBegin.end());
         distance = preferredLength - 1;
 
         cerr << "\tapplying preferred word length " << preferredLength << endl;
@@ -546,7 +546,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     else {
         cerr << "\tcomputing random word length " << preferredLength << endl;
 
-        defBegin = m_fillIn->randomVectorElement(possibleBegin);
+        defBegin = m_fillIn->randomElement(possibleBegin.begin(), possibleBegin.end());
         cerr << "\tchosen begin: " << *defBegin << endl;
         
         // step cell is upper bound, end here
@@ -614,7 +614,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
         }
         
         // choose one randomly
-        defEnd = m_fillIn->randomVectorElement(possibleEnd);
+        defEnd = m_fillIn->randomElement(possibleEnd.begin(), possibleEnd.end());
         cerr << "\tchosen end: " << *defEnd << endl;
 
         // length by begin/end distance
