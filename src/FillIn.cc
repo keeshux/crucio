@@ -142,8 +142,8 @@ void FillIn::layout()
         // get a random word given step direction and boundaries
         currentStep->getRandomWord(&word, &lower, &upper);
         
-//        // place word into grid
-//        grid_place_word(cfg, &def);
+        // place word into grid
+        placeWord(&word);
 
         // 3) block surrounding cells
         
@@ -514,6 +514,111 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     word->m_length = distance + 1;
 
     cerr << "chosen random word: " << *word << endl;
+}
+
+void FillIn::placeWord(const Word *word)
+{
+    const CellAddress *origin = &word->m_origin;
+    CellAddress whiteCell, blackCell;
+    unsigned x, di, dj;
+    
+    cerr << "placing word: " << *word << endl;
+    
+    switch (word->m_direction) {
+        case ENTRY_DIR_ACROSS: {
+            di = 0;
+            dj = 1;
+            break;
+        }
+        case ENTRY_DIR_DOWN: {
+            di = 1;
+            dj = 0;
+            break;
+        }
+        default: {
+            assert(false);
+            break;
+        }
+    }
+    
+    for (x = 0; x < word->m_length; ++x) {
+        whiteCell.m_row = origin->m_row + x * di;
+        whiteCell.m_column = origin->m_column + x * dj;
+        
+        cerr << "\tputting white cell in " << whiteCell << endl;
+
+        Entry &whiteEntry = getEntryAt(whiteCell);
+        whiteEntry.m_value = ENTRY_VAL_WHITE;
+        whiteEntry.m_direction = (EntryDirection)((unsigned)whiteEntry.m_direction | (unsigned)word->m_direction);
+    }
+    
+    // black cells
+    switch (word->m_direction) {
+        case ENTRY_DIR_ACROSS: {
+
+            if (origin->m_column > 0) {
+                blackCell.m_row = origin->m_row;
+                blackCell.m_column = origin->m_column - 1;
+
+                cerr << "\tputting black cell in " << blackCell << endl;
+
+                Entry &blackEntry = getEntryAt(blackCell);
+                assert(blackEntry.m_value != ENTRY_VAL_WHITE);
+                
+                blackEntry.m_value = ENTRY_VAL_BLACK;
+                blackEntry.m_direction = ENTRY_DIR_NONE;
+            }
+
+            if (origin->m_column + word->m_length < m_structure.m_columns) {
+                blackCell.m_row = origin->m_row;
+                blackCell.m_column = origin->m_column + word->m_length;
+
+                cerr << "\tputting black cell in " << blackCell << endl;
+
+                Entry &blackEntry = getEntryAt(blackCell);
+                assert(blackEntry.m_value != ENTRY_VAL_WHITE);
+                
+                blackEntry.m_value = ENTRY_VAL_BLACK;
+                blackEntry.m_direction = ENTRY_DIR_NONE;
+            }
+            
+            break;
+        }
+        case ENTRY_DIR_DOWN: {
+
+            if (origin->m_row > 0) {
+                blackCell.m_row = origin->m_row - 1;
+                blackCell.m_column = origin->m_column;
+
+                cerr << "\tputting black cell in " << blackCell << endl;
+
+                Entry &blackEntry = getEntryAt(blackCell);
+                assert(blackEntry.m_value != ENTRY_VAL_WHITE);
+                
+                blackEntry.m_value = ENTRY_VAL_BLACK;
+                blackEntry.m_direction = ENTRY_DIR_NONE;
+            }
+
+            if (origin->m_row + word->m_length < m_structure.m_rows) {
+                blackCell.m_row = origin->m_row + word->m_length;
+                blackCell.m_column = origin->m_column;
+
+                cerr << "\tputting black cell in " << blackCell << endl;
+
+                Entry &blackEntry = getEntryAt(blackCell);
+                assert(blackEntry.m_value != ENTRY_VAL_WHITE);
+                
+                blackEntry.m_value = ENTRY_VAL_BLACK;
+                blackEntry.m_direction = ENTRY_DIR_NONE;
+            }
+            
+            break;
+        }
+        default: {
+            assert(false);
+            break;
+        }
+    }
 }
 
 void FillIn::finishFilling()

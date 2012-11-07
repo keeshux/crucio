@@ -53,7 +53,8 @@ namespace crucio
         {
             ENTRY_DIR_NONE      = 0x0,
             ENTRY_DIR_ACROSS    = 0x1,
-            ENTRY_DIR_DOWN      = 0x2
+            ENTRY_DIR_DOWN      = 0x2,
+            ENTRY_DIR_BOTH      = 0x3 // ACROSS | DOWN
         };
         
         struct Entry
@@ -143,7 +144,17 @@ namespace crucio
         Entry **m_entries;
 
         // subproblems
+        void placeWord(const Word *word);
         void finishFilling();
+
+        Entry &getEntryAt(const unsigned i, const unsigned j)
+        {
+            return m_entries[i][j];
+        }
+        Entry &getEntryAt(const CellAddress &address)
+        {
+            return getEntryAt(address.m_row, address.m_column);
+        }
 
         // utilities
         static unsigned randomNumber(const unsigned min, const unsigned max)
