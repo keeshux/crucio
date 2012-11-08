@@ -999,8 +999,8 @@ CellAddress FillIn::randomCellAddress() const
 void FillIn::createDistribution(const unsigned min, const unsigned max, std::vector<unsigned> *distribution)
 {
     // hardcoded parameters
-    static unsigned knotsVals[3] = { 5, 10, 1 };
-//    static unsigned knotsVals[3] = { 2, 11, 1 };
+//    static unsigned knotsVals[3] = { 5, 10, 1 };
+    static unsigned knotsVals[3] = { 2, 11, 1 };
 
     // support variables
     unsigned buffer[200] = { 0 };
@@ -1012,8 +1012,8 @@ void FillIn::createDistribution(const unsigned min, const unsigned max, std::vec
     // interpolation
     const unsigned length = max - min;
     knots[0] = 0;
-    knots[1] = (unsigned)((float)length / 2.5);
-//    knots[1] = (unsigned)((float)length / 1.8);
+//    knots[1] = (unsigned)((float)length / 2.5);
+    knots[1] = (unsigned)((float)length / 1.8);
     knots[2] = length;
     
     //count = (range.length - i) / 2 + 1;
