@@ -75,7 +75,6 @@ Compiler::Result LetterCompiler::configure(const Walk& walk)
                 m_revDeps[li].push_back(*nbIt);
             }
         }
-
         if (isVerbose()) {
             *crucio_vout << "l" << li << endl;
             list<pair<uint32_t, LetterPosition> >::const_iterator dIt;
@@ -154,9 +153,7 @@ bool LetterCompiler::compileFrom(const uint32_t i)
 
         // admittable domain
         ABMask domainMask = m_domains[li];
-        if (isVerbose()) {
-            *crucio_vout << "domain for " << li << " = " << ABMaskString(m_alphabet, domainMask) << endl;
-        }
+        *crucio_vout << "domain for " << li << " = " << ABMaskString(m_alphabet, domainMask) << endl;
 
         // removal stack through forward checking
         stack<pair<uint32_t, ABMask> > remStack;
@@ -176,9 +173,7 @@ bool LetterCompiler::compileFrom(const uint32_t i)
             // chooses value to assign
             const char v = choose(&domainMask);
 
-            if (isVerbose()) {
-                *crucio_vout << "letter " << li << " = '" << v << "'" << endl;
-            }
+            *crucio_vout << "letter " << li << " = '" << v << "'" << endl;
 
             // tries to assign v to current variable
             if (!assign(li, v, &remStack, failedPtr)) {
@@ -186,11 +181,9 @@ bool LetterCompiler::compileFrom(const uint32_t i)
                 continue;
             }
 
-            if (isVerbose()) {
-                *crucio_vout << endl;
-                printModelGrid(*crucio_vout, *m_model);
-                *crucio_vout << endl;
-            }
+            *crucio_vout << endl;
+            printModelGrid(*crucio_vout, *m_model);
+            *crucio_vout << endl;
 
             // recursively solved?
             if (compileFrom(i + 1)) {
@@ -211,9 +204,7 @@ bool LetterCompiler::compileFrom(const uint32_t i)
             }
         }
 
-        if (isVerbose()) {
-            *crucio_vout << "letter " << li << " ... BACKTRACK!" << endl;
-        }
+        *crucio_vout << "letter " << li << " ... BACKTRACK!" << endl;
 
         // algorithm fails iff first variable backtracks
         if (i > 0) {
@@ -221,11 +212,9 @@ bool LetterCompiler::compileFrom(const uint32_t i)
             m_bj.jump(i, failedPtr);
 #endif
 
-            if (isVerbose()) {
-                *crucio_vout << "jump from " << m_order[m_bj.getOrigin()] <<
-                             " to " << m_order[m_bj.getDestination()] << endl;
-                *crucio_vout << endl;
-            }
+            *crucio_vout << "jump from " << m_order[m_bj.getOrigin()] <<
+                         " to " << m_order[m_bj.getDestination()] << endl;
+            *crucio_vout << endl;
         }
 
         return false;
@@ -307,10 +296,8 @@ bool LetterCompiler::assign(const uint32_t li,
         // word completed, constrains remaining words having same length
         if (isUnique() && w->isComplete()) {
 
-            if (isVerbose()) {
-                *crucio_vout << "completed word " <<
-                             *w->getDefinition() << ": " << w->get() << "" << endl;
-            }
+            *crucio_vout << "completed word " <<
+                         *w->getDefinition() << ": " << w->get() << "" << endl;
 
             // excluded word ID
             uint32_t excludedID = w->getID();
@@ -363,7 +350,7 @@ bool LetterCompiler::assign(const uint32_t li,
                     // puts removed values on the stack
                     remStack->push(make_pair(slwLi, remValues));
 
-                    if (isVerbose() && remValues.any()) {
+                    if (remValues.any()) {
                         *crucio_vout << "\tletter " << slwLi <<
                                      ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
                         *crucio_vout << "now " << ABMaskString(m_alphabet, *slwDom);
@@ -373,10 +360,9 @@ bool LetterCompiler::assign(const uint32_t li,
                     // current assignment invalidated in other words
                     const uint32_t vi = character2Index(m_alphabet, v);
                     if (((uint32_t)slwLi == li) && remValues.test(vi)) {
-                        if (isVerbose()) {
-                            *crucio_vout << "\tletter " << li <<
-                                         ": invalidated (UNIQUE)" << endl;
-                        }
+                        *crucio_vout << "\tletter " << li <<
+                                     ": invalidated (UNIQUE)" << endl;
+
                         return false;
                     }
 
@@ -386,10 +372,9 @@ bool LetterCompiler::assign(const uint32_t li,
                         // adds failed variable order
                         failed->insert(m_revOrder[slwLi]);
 #endif
-                        if (isVerbose()) {
-                            *crucio_vout << "\tFC failed at " <<
-                                         slwLi << " (UNIQUE)" << endl;
-                        }
+                        *crucio_vout << "\tFC failed at " <<
+                                     slwLi << " (UNIQUE)" << endl;
+
                         return false;
                     }
                 }
@@ -419,7 +404,7 @@ bool LetterCompiler::assign(const uint32_t li,
         // puts removed values on the stack
         remStack->push(make_pair(dLi, remValues));
 
-        if (isVerbose() && remValues.any()) {
+        if (remValues.any()) {
             *crucio_vout << "\tletter " << dLi <<
                          ": removed " << ABMaskString(m_alphabet, remValues) << ", ";
             *crucio_vout << "now " << ABMaskString(m_alphabet, *dDom) << endl;
@@ -431,9 +416,8 @@ bool LetterCompiler::assign(const uint32_t li,
             // adds failed variable order
             failed->insert(m_revOrder[dLi]);
 #endif
-            if (isVerbose()) {
-                *crucio_vout << "\tFC failed at " << dLi << endl;
-            }
+            *crucio_vout << "\tFC failed at " << dLi << endl;
+
             return false;
         }
     }

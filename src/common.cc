@@ -23,7 +23,12 @@
 using namespace crucio;
 using namespace std;
 
-ostream* crucio::crucio_vout = NULL;
+static nullbuf null_obj;
+static wnullbuf wnull_obj;
+ostream crucio::cnull(&null_obj);
+wostream crucio::wcnull(&wnull_obj);
+
+ostream* crucio::crucio_vout = &std::cerr;
 
 string crucio::ABMaskString(const Alphabet alphabet, const ABMask mask)
 {

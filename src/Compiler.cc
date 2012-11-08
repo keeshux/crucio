@@ -84,19 +84,17 @@ Compiler::Result Compiler::compile(Model* const model, const Walk& walk)
 
         // posterior check for non-determinism
         if (isDeterministic()) {
-            if (isVerbose()) {
-                *crucio_vout << "deterministic solution check ... ";
-            }
+            *crucio_vout << "deterministic solution check ... ";
+
             validSolution = isDeterministicSolution();
-            if (isVerbose()) {
-                if (validSolution) {
-                    *crucio_vout << "OK!" << endl;
-                } else {
-                    *crucio_vout << "FAILED!" << endl;
-                    *crucio_vout << "algorithm will now restart" << endl;
-                }
-                *crucio_vout << endl;
+
+            if (validSolution) {
+                *crucio_vout << "OK!" << endl;
+            } else {
+                *crucio_vout << "FAILED!" << endl;
+                *crucio_vout << "algorithm will now restart" << endl;
             }
+            *crucio_vout << endl;
         }
     } while (!validSolution);
 

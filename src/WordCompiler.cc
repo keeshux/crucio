@@ -179,10 +179,8 @@ bool WordCompiler::compileFrom(const uint32_t i)
 
         // admittable domain
         set<uint32_t> domainSet = m_domains[wi];
-        if (isVerbose()) {
-            *crucio_vout << "pattern for " << wi << " = \'" << w->get() <<
-                         "\' (" << domainSet.size() << " matchings)" << endl;
-        }
+        *crucio_vout << "pattern for " << wi << " = \'" << w->get() <<
+                     "\' (" << domainSet.size() << " matchings)" << endl;
 
         // current and previous assignment
         string v, oldV;
@@ -205,9 +203,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
             // chooses value to assign
             choose(wLen, &domainSet, &v);
 
-            if (isVerbose()) {
-                *crucio_vout << "word " << wi << " = '" << v << "'" << endl;
-            }
+            *crucio_vout << "word " << wi << " = '" << v << "'" << endl;
 
             // tries to assign v to current variable
             if (!assign(wi, v, &oldV, &remStack, failedPtr)) {
@@ -215,11 +211,9 @@ bool WordCompiler::compileFrom(const uint32_t i)
                 continue;
             }
 
-            if (isVerbose()) {
-                *crucio_vout << endl;
-                printModelGrid(*crucio_vout, *m_model);
-                *crucio_vout << endl;
-            }
+            *crucio_vout << endl;
+            printModelGrid(*crucio_vout, *m_model);
+            *crucio_vout << endl;
 
             // recursively solved?
             if (compileFrom(i + 1)) {
@@ -240,9 +234,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
             }
         }
 
-        if (isVerbose()) {
-            *crucio_vout << "word " << wi << " ... BACKTRACK!" << endl;
-        }
+        *crucio_vout << "word " << wi << " ... BACKTRACK!" << endl;
 
         // algorithm fails iff first variable backtracks
         if (i > 0) {
@@ -250,11 +242,9 @@ bool WordCompiler::compileFrom(const uint32_t i)
             m_bj.jump(i, failedPtr);
 #endif
 
-            if (isVerbose()) {
-                *crucio_vout << "jump from " << m_order[m_bj.getOrigin()] <<
-                             " to " << m_order[m_bj.getDestination()] << endl;
-                *crucio_vout << endl;
-            }
+            *crucio_vout << "jump from " << m_order[m_bj.getOrigin()] <<
+                         " to " << m_order[m_bj.getDestination()] << endl;
+            *crucio_vout << endl;
         }
 
         return false;
@@ -359,10 +349,9 @@ bool WordCompiler::assign(const uint32_t wi,
                 // adds failed variable order
                 failed->insert(m_revOrder[slWi]);
 #endif
-                if (isVerbose()) {
-                    *crucio_vout << "\tFC failed at " << slWi <<
-                                 " (UNIQUE)" << endl;
-                }
+                *crucio_vout << "\tFC failed at " << slWi <<
+                             " (UNIQUE)" << endl;
+
                 return false;
             }
         }
@@ -415,9 +404,8 @@ bool WordCompiler::assign(const uint32_t wi,
             // adds failed variable order
             failed->insert(m_revOrder[dWi]);
 #endif
-            if (isVerbose()) {
-                *crucio_vout << "\tFC failed at " << dWi << endl;
-            }
+            *crucio_vout << "\tFC failed at " << dWi << endl;
+
             return false;
         }
     }

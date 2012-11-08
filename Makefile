@@ -36,7 +36,7 @@ CRUCIOTEX_OBJS=WordSet.o Output.o cruciotex.o
 $(CRUCIOTEX_NAME): $(CRUCIOTEX_OBJS)
 	$(CPP) -o $(CRUCIOTEX_NAME) $(CRUCIOTEX_OBJS)
 
-FILLIN_OBJS=Grid.o FillIn.o fill-in.o
+FILLIN_OBJS=common.o Grid.o FillIn.o fill-in.o
 
 $(FILLIN_NAME): $(FILLIN_OBJS)
 	$(CPP) -o $(FILLIN_NAME) $(FILLIN_OBJS)

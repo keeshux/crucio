@@ -81,11 +81,11 @@ FillIn::FillIn(const GridStructure &structure, unsigned (*randomizer)()) :
 
     // prepare words distribution
     createDistribution(m_structure.m_minLength, m_structure.m_maxLength, &m_distribution);
-//    cerr << "distribution: { ";
+//    *crucio_vout << "distribution: { ";
 //    for (i = 0; i < m_distribution.size(); ++i) {
-//        cerr << m_distribution[i] << ", ";
+//        *crucio_vout << m_distribution[i] << ", ";
 //    }
-//    cerr << " }" << endl;
+//    *crucio_vout << " }" << endl;
 }
 
 FillIn::~FillIn()
@@ -114,13 +114,13 @@ void FillIn::layout()
 
         // 1) pick step from crossable
         
-        cerr << endl;
-        cerr << "steps count = " << crossable.size() << endl;
+        *crucio_vout << endl;
+        *crucio_vout << "steps count = " << crossable.size() << endl;
 
         // pick random step
 //        currentStep = crossable.begin();
         currentStep = randomElement(crossable.begin(), crossable.end());
-        cerr << "current step: " << *currentStep << endl;
+        *crucio_vout << "current step: " << *currentStep << endl;
 
         // related entry
         const Entry &currentEntry = currentStep->getEntry();
@@ -128,21 +128,21 @@ void FillIn::layout()
 
         // skip step in black cell
         if (currentEntry.m_value == ENTRY_VAL_BLACK) {
-            cerr << "\tskipping (black cell)" << endl;
+            *crucio_vout << "\tskipping (black cell)" << endl;
             crossable.erase(currentStep);
             continue;
         }
         
         // skip step under min length
         if (maxLength < m_structure.m_minLength) {
-            cerr << "\tskipping (under min length)" << endl;
+            *crucio_vout << "\tskipping (under min length)" << endl;
             crossable.erase(currentStep);
             continue;
         }
         
         // skip step overlapping existing word
         if (currentEntry.m_direction & currentStep->getDirection()) {
-            cerr << "\tskipping (overlapping existing word)" << endl;
+            *crucio_vout << "\tskipping (overlapping existing word)" << endl;
             crossable.erase(currentStep);
             continue;
         }
@@ -159,7 +159,7 @@ void FillIn::layout()
         blockSurroundingCells(&word);
 
         // print grid with new word
-        cerr << *this << endl;
+        *crucio_vout << *this << endl;
         
         // 3) add word cells as new steps (invert direction)
         
@@ -186,7 +186,7 @@ void FillIn::layout()
             stepCell.m_column = word.m_origin.m_column + x * dj;
             
             const Step step(this, stepCell, Entry::getOppositeDirection(word.m_direction));
-            cerr << "\tadding step: " << step << endl;
+            *crucio_vout << "\tadding step: " << step << endl;
 
             crossable.push_back(step);
         }
@@ -388,8 +388,8 @@ unsigned FillIn::Step::getBoundaries(CellAddress *lower, CellAddress *upper) con
     // global max length at most
     effectiveMaxLength = min(maxLength, globalMaxLength);
 
-    cerr << "\tmax word length is " << maxLength << endl;
-    cerr << "\tmax effective word length is " << effectiveMaxLength << endl;
+    *crucio_vout << "\tmax word length is " << maxLength << endl;
+    *crucio_vout << "\tmax effective word length is " << effectiveMaxLength << endl;
 
     return effectiveMaxLength;
 }
@@ -420,11 +420,11 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     //      lower->m_column      = m_cell.m_column  = upper->m_column
     //
     
-    cerr << "\twords can span from " << *lower << " to " << *upper << endl;
+    *crucio_vout << "\twords can span from " << *lower << " to " << *upper << endl;
     assert(*lower != *upper);
     
     preferredLength = m_fillIn->randomWordLengthFromDistribution();
-    cerr << "\tpreferred length is " << preferredLength << endl;
+    *crucio_vout << "\tpreferred length is " << preferredLength << endl;
     
     // word direction is step direction
     word->m_direction = m_direction;
@@ -467,7 +467,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                             (end.m_column >= m_cell.m_column) &&
                             (end.m_column <= upper->m_column)) {
 
-//                            cerr << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
+//                            *crucio_vout << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
 
                             // unique (TODO: set?)
                             if (find(possibleBegin.begin(), possibleBegin.end(), begin) == possibleBegin.end()) {
@@ -476,7 +476,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
 
                             // separate preferred begin cells
                             if (possibleLength == preferredLength) {
-//                                cerr << "\t\tpreferred may begin at " << begin << endl;
+//                                *crucio_vout << "\t\tpreferred may begin at " << begin << endl;
                                 preferredBegin.push_back(begin);
                             }
                         }
@@ -511,7 +511,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                             (end.m_row >= m_cell.m_row) &&
                             (end.m_row <= upper->m_row)) {
                             
-//                            cerr << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
+//                            *crucio_vout << "\t\tmay begin at " << begin << " (" << possibleLength << ")" << endl;
 
                             // unique (TODO: set?)
                             if (find(possibleBegin.begin(), possibleBegin.end(), begin) == possibleBegin.end()) {
@@ -520,7 +520,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                             
                             // separate preferred begin cells
                             if (possibleLength == preferredLength) {
-//                                cerr << "\t\tpreferred may begin at " << begin << endl;
+//                                *crucio_vout << "\t\tpreferred may begin at " << begin << endl;
                                 preferredBegin.push_back(begin);
                             }
                         }
@@ -546,15 +546,15 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
         defBegin = m_fillIn->randomElement(preferredBegin.begin(), preferredBegin.end());
         distance = preferredLength - 1;
 
-        cerr << "\tapplying preferred word length " << preferredLength << endl;
-        cerr << "\tchosen begin: " << *defBegin << endl;
+        *crucio_vout << "\tapplying preferred word length " << preferredLength << endl;
+        *crucio_vout << "\tchosen begin: " << *defBegin << endl;
     }
     // otherwise choose begin and find random end in possible
     else {
-        cerr << "\tcomputing random word length" << endl;
+        *crucio_vout << "\tcomputing random word length" << endl;
 
         defBegin = m_fillIn->randomElement(possibleBegin.begin(), possibleBegin.end());
-        cerr << "\tchosen begin: " << *defBegin << endl;
+        *crucio_vout << "\tchosen begin: " << *defBegin << endl;
         
         // step cell is upper bound, end here
         if (m_cell == *upper) {
@@ -575,11 +575,11 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                     }
                     max_end.m_column = min(defBegin->m_column + maxLength - 1, upper->m_column);
                     
-                    cerr << "\t\ttrying end range: " << min_end << " to " << max_end << endl;
+                    *crucio_vout << "\t\ttrying end range: " << min_end << " to " << max_end << endl;
                     
                     for (end.m_column = min_end.m_column; end.m_column <= max_end.m_column; ++end.m_column) {
                         if (isAcrossEnd(end)) {
-                            cerr << "\t\tmay end at " << end << endl;
+                            *crucio_vout << "\t\tmay end at " << end << endl;
 
                             // unique (TODO: set?)
                             if (find(possibleEnd.begin(), possibleEnd.end(), end) == possibleEnd.end()) {
@@ -598,11 +598,11 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                     }
                     max_end.m_row = min(defBegin->m_row + maxLength - 1, upper->m_row);
                     
-                    cerr << "\t\ttrying end range: " << min_end << " to " << max_end << endl;
+                    *crucio_vout << "\t\ttrying end range: " << min_end << " to " << max_end << endl;
                     
                     for (end.m_row = min_end.m_row; end.m_row <= max_end.m_row; ++end.m_row) {
                         if (isDownEnd(end)) {
-                            cerr << "\t\tmay end at " << end << endl;
+                            *crucio_vout << "\t\tmay end at " << end << endl;
                             
                             // unique (TODO: set?)
                             if (find(possibleEnd.begin(), possibleEnd.end(), end) == possibleEnd.end()) {
@@ -622,7 +622,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
         
         // choose one randomly
         defEnd = m_fillIn->randomElement(possibleEnd.begin(), possibleEnd.end());
-        cerr << "\tchosen end: " << *defEnd << endl;
+        *crucio_vout << "\tchosen end: " << *defEnd << endl;
 
         // length by begin/end distance
         switch (word->m_direction) {
@@ -647,7 +647,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     // ensure word is long enough
     assert(word->m_length >= minLength);
 
-    cerr << "\tchosen random word: " << *word << endl;
+    *crucio_vout << "\tchosen random word: " << *word << endl;
 }
 
 void FillIn::placeWord(const Word *word)
@@ -656,7 +656,7 @@ void FillIn::placeWord(const Word *word)
     CellAddress whiteCell, blackCell;
     unsigned x, di, dj;
     
-    cerr << "placing word: " << *word << endl;
+    *crucio_vout << "placing word: " << *word << endl;
     
     switch (word->m_direction) {
         case ENTRY_DIR_ACROSS: {
@@ -679,7 +679,7 @@ void FillIn::placeWord(const Word *word)
         whiteCell.m_row = origin->m_row + x * di;
         whiteCell.m_column = origin->m_column + x * dj;
         
-        cerr << "\tputting white cell in " << whiteCell << endl;
+        *crucio_vout << "\tputting white cell in " << whiteCell << endl;
 
         Entry &whiteEntry = getEntryAt(whiteCell);
         whiteEntry.m_value = ENTRY_VAL_WHITE;
@@ -694,7 +694,7 @@ void FillIn::placeWord(const Word *word)
                 blackCell.m_row = origin->m_row;
                 blackCell.m_column = origin->m_column - 1;
 
-                cerr << "\tputting black cell in " << blackCell << endl;
+                *crucio_vout << "\tputting black cell in " << blackCell << endl;
 
                 Entry &blackEntry = getEntryAt(blackCell);
                 assert(blackEntry.m_value != ENTRY_VAL_WHITE);
@@ -707,7 +707,7 @@ void FillIn::placeWord(const Word *word)
                 blackCell.m_row = origin->m_row;
                 blackCell.m_column = origin->m_column + word->m_length;
 
-                cerr << "\tputting black cell in " << blackCell << endl;
+                *crucio_vout << "\tputting black cell in " << blackCell << endl;
 
                 Entry &blackEntry = getEntryAt(blackCell);
                 assert(blackEntry.m_value != ENTRY_VAL_WHITE);
@@ -724,7 +724,7 @@ void FillIn::placeWord(const Word *word)
                 blackCell.m_row = origin->m_row - 1;
                 blackCell.m_column = origin->m_column;
 
-                cerr << "\tputting black cell in " << blackCell << endl;
+                *crucio_vout << "\tputting black cell in " << blackCell << endl;
 
                 Entry &blackEntry = getEntryAt(blackCell);
                 assert(blackEntry.m_value != ENTRY_VAL_WHITE);
@@ -737,7 +737,7 @@ void FillIn::placeWord(const Word *word)
                 blackCell.m_row = origin->m_row + word->m_length;
                 blackCell.m_column = origin->m_column;
 
-                cerr << "\tputting black cell in " << blackCell << endl;
+                *crucio_vout << "\tputting black cell in " << blackCell << endl;
 
                 Entry &blackEntry = getEntryAt(blackCell);
                 assert(blackEntry.m_value != ENTRY_VAL_WHITE);
@@ -761,7 +761,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     CellAddress from;
     unsigned top_row, bottom_row, left_column, right_column;
     
-    cerr << "block surrounding cells" << endl;
+    *crucio_vout << "block surrounding cells" << endl;
     
     top_row = bottom_row = left_column = right_column = UINT_MAX;
     
@@ -821,7 +821,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     }
     
     if (top_row != UINT_MAX) {
-        cerr << "\ttop row is " << top_row << endl;
+        *crucio_vout << "\ttop row is " << top_row << endl;
 
         from.m_row = top_row;
         from.m_column = origin->m_column;
@@ -830,7 +830,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     }
     
     if (bottom_row != UINT_MAX) {
-        cerr << "\tbottom row is " << bottom_row << endl;
+        *crucio_vout << "\tbottom row is " << bottom_row << endl;
 
         from.m_row = bottom_row;
         from.m_column = origin->m_column;
@@ -839,7 +839,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     }
     
     if (left_column != UINT_MAX) {
-        cerr << "\tleft column is " << left_column << endl;
+        *crucio_vout << "\tleft column is " << left_column << endl;
 
         from.m_row = origin->m_row;
         from.m_column = left_column;
@@ -848,7 +848,7 @@ void FillIn::blockSurroundingCells(const Word *word)
     }
     
     if (right_column != UINT_MAX) {
-        cerr << "\tright column is " << right_column << endl;
+        *crucio_vout << "\tright column is " << right_column << endl;
 
         from.m_row = origin->m_row;
         from.m_column = right_column;
@@ -873,7 +873,7 @@ void FillIn::blockRow(const CellAddress *from, const EntryDirection direction, u
             ++length;
         }
 
-        cerr << "\t\tshort blocking from " << cell << " for " << length << endl;
+        *crucio_vout << "\t\tshort blocking from " << cell << " for " << length << endl;
     }
     
     for (; x < length; ++x) {
@@ -900,7 +900,7 @@ void FillIn::blockColumn(const CellAddress *from, const EntryDirection direction
             ++length;
         }
 
-        cerr << "\t\tshort blocking from " << cell << " for " << length << endl;
+        *crucio_vout << "\t\tshort blocking from " << cell << " for " << length << endl;
     }
     
     for (; x < length; ++x) {
@@ -915,18 +915,18 @@ bool FillIn::blockCell(const CellAddress *cell)
 {
     Entry &entry = getEntryAt(*cell);
     
-//    cerr << "\t\tchecking cell " << *cell << endl;
+//    *crucio_vout << "\t\tchecking cell " << *cell << endl;
     
     // skip black cells
     if (entry.m_value != ENTRY_VAL_NONE) {
-        cerr << "\t\tskipping non-empty cell " << *cell << endl;
+        *crucio_vout << "\t\tskipping non-empty cell " << *cell << endl;
         return false;
     }
     
     // block dense cells
     if (isDenseCrossing(cell)) {
         entry.m_value = ENTRY_VAL_BLACK;
-        cerr << "\t\tblocked dense cell " << *cell << endl;
+        *crucio_vout << "\t\tblocked dense cell " << *cell << endl;
         return true;
     }
     

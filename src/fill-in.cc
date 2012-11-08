@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
     unsigned minLength;
     unsigned maxLength;
 
+    //crucio::setVerbose(false);
+
 #if 1
     rows = atoi(argv[1]);
     columns = atoi(argv[2]);
