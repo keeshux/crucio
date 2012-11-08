@@ -69,11 +69,25 @@ namespace crucio
         Result compile(Model* const model, const Walk& walk);
 
     protected:
+        
+        // TODO: convert subclasses to interface implementations
 
         // callbacks
         virtual Compiler::Result configure(const Walk& walk) = 0;
         virtual void reset() = 0;
         virtual bool compileFrom(const uint32_t i) = 0;
+        
+        // timeout to be checked periodically in subclasses
+        bool isTimeout() const
+        {
+            // 0 = no timeout
+            if (m_timeoutMillis == 0) {
+                return false;
+            }
+
+            // timeout millis elapsed
+            return ((time(NULL) - m_compileMillis) > m_timeoutMillis);
+        }
 
     private:
 
@@ -97,6 +111,7 @@ namespace crucio
         // parameters
         bool m_unique;
         bool m_deterministic;
+        time_t m_compileMillis;
         unsigned m_timeoutMillis;
 
         // determinism check

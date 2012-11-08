@@ -38,6 +38,9 @@ Compiler::~Compiler()
 Compiler::Result Compiler::compile(Model* const model, const Walk& walk)
 {
     assert(model != NULL);
+    
+    // timeout reference
+    m_compileMillis = time(NULL);
 
     // model reference
     m_model = model;
