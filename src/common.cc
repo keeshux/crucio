@@ -28,7 +28,7 @@ static wnullbuf wnull_obj;
 ostream crucio::cnull(&null_obj);
 wostream crucio::wcnull(&wnull_obj);
 
-ostream* crucio::crucio_vout = &std::cerr;
+ostream* crucio::crucio_vout = &cnull;
 
 string crucio::ABMaskString(const Alphabet alphabet, const ABMask mask)
 {
