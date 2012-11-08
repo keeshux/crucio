@@ -481,6 +481,11 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                             }
                         }
                     }
+
+                    // downgrade
+                    if (preferredBegin.empty() && (possibleLength == preferredLength)) {
+                        --preferredLength;
+                    }
                 }
             
                 break;
@@ -520,6 +525,11 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
                             }
                         }
                     }
+                    
+                    // downgrade
+                    if (preferredBegin.empty() && (possibleLength == preferredLength)) {
+                        --preferredLength;
+                    }
                 }
 
                 break;
@@ -541,7 +551,7 @@ void FillIn::Step::getRandomWord(Word *word, CellAddress *lower, CellAddress *up
     }
     // otherwise choose begin and find random end in possible
     else {
-        cerr << "\tcomputing random word length " << preferredLength << endl;
+        cerr << "\tcomputing random word length" << endl;
 
         defBegin = m_fillIn->randomElement(possibleBegin.begin(), possibleBegin.end());
         cerr << "\tchosen begin: " << *defBegin << endl;
@@ -990,6 +1000,7 @@ void FillIn::createDistribution(const unsigned min, const unsigned max, std::vec
 {
     // hardcoded parameters
     static unsigned knotsVals[3] = { 5, 10, 1 };
+//    static unsigned knotsVals[3] = { 2, 11, 1 };
 
     // support variables
     unsigned buffer[200] = { 0 };
@@ -1001,7 +1012,8 @@ void FillIn::createDistribution(const unsigned min, const unsigned max, std::vec
     // interpolation
     const unsigned length = max - min;
     knots[0] = 0;
-    knots[1] = length / 2.5;
+    knots[1] = (unsigned)((float)length / 2.5);
+//    knots[1] = (unsigned)((float)length / 1.8);
     knots[2] = length;
     
     //count = (range.length - i) / 2 + 1;
