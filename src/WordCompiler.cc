@@ -148,7 +148,7 @@ void WordCompiler::reset()
     m_domains = m_model->getInitWordsDomains();
 }
 
-bool WordCompiler::compileFrom(const uint32_t i)
+Compiler::Result WordCompiler::compileFrom(const uint32_t i)
 {
     // all variables instantiated?
     if (i == m_model->getWordsNum()) {
@@ -169,7 +169,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
             l->set(fw->getAt(fwPos));
         }
 
-        return true;
+        return Compiler::SUCCESS;
     } else {
 
         // maps variable from ordering
@@ -216,8 +216,8 @@ bool WordCompiler::compileFrom(const uint32_t i)
             *crucio_vout << endl;
 
             // recursively solved?
-            if (compileFrom(i + 1)) {
-                return true;
+            if (compileFrom(i + 1) == Compiler::SUCCESS) {
+                return Compiler::SUCCESS;
             } else {
 
                 // retires variable
@@ -228,7 +228,8 @@ bool WordCompiler::compileFrom(const uint32_t i)
                 // jump gets past current variable
                 if (m_bj.isExhausted() ||
                         (m_bj.getDestination() < i)) {
-                    return false;
+
+                    return Compiler::FAILURE_IMPOSSIBLE;
                 }
 #endif
             }
@@ -247,7 +248,7 @@ bool WordCompiler::compileFrom(const uint32_t i)
             *crucio_vout << endl;
         }
 
-        return false;
+        return Compiler::FAILURE_IMPOSSIBLE;
     }
 }
 

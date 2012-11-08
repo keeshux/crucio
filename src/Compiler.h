@@ -75,7 +75,7 @@ namespace crucio
         // callbacks
         virtual Compiler::Result configure(const Walk& walk) = 0;
         virtual void reset() = 0;
-        virtual bool compileFrom(const uint32_t i) = 0;
+        virtual Compiler::Result compileFrom(const uint32_t i) = 0;
         
         // timeout to be checked periodically in subclasses
         bool isTimeout() const

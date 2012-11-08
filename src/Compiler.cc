@@ -81,8 +81,9 @@ Compiler::Result Compiler::compile(Model* const model, const Walk& walk)
         validSolution = true;
 
         // starts backtracking from variable 0
-        if (!compileFrom(0)) {
-            return FAILURE_IMPOSSIBLE;
+        const Result result = compileFrom(0);
+        if (result != SUCCESS) {
+            return result;
         }
 
         // posterior check for non-determinism

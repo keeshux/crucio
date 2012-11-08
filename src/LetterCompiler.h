@@ -42,7 +42,7 @@ namespace crucio
     protected:
         virtual Compiler::Result configure(const Walk& walk);
         virtual void reset();
-        virtual bool compileFrom(const uint32_t i);
+        virtual Compiler::Result compileFrom(const uint32_t i);
 
     private:
 
