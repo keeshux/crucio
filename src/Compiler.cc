@@ -40,7 +40,7 @@ Compiler::Result Compiler::compile(Model* const model, const Walk& walk)
     assert(model != NULL);
     
     // timeout reference
-    m_compileMillis = time(NULL);
+    m_compileSeconds = time(NULL);
 
     // model reference
     m_model = model;

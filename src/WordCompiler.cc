@@ -233,6 +233,11 @@ Compiler::Result WordCompiler::compileFrom(const uint32_t i)
                 }
 #endif
             }
+
+            // timeout check
+            if (isTimeout()) {
+                return Compiler::FAILURE_TIMEOUT;
+            }
         }
 
         *crucio_vout << "word " << wi << " ... BACKTRACK!" << endl;

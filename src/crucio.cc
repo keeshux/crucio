@@ -128,6 +128,7 @@ int main(int argc, char* argv[])
         }
         inCpl->setUnique(uniqueArg.getValue());
         inCpl->setDeterministic(determArg.getValue());
+        inCpl->setTimeoutSeconds(0);
 
         // walk selection
         if (walkArg.getValue() == "bfs") {
@@ -176,6 +177,10 @@ int main(int argc, char* argv[])
             }
         case Compiler::FAILURE_ND_GRID: {
                 cout << "failure: grid layout forces non-determinism" << endl;
+                break;
+            }
+        case Compiler::FAILURE_TIMEOUT: {
+                cout << "failure: compilation timed out" << endl;
                 break;
             }
         }

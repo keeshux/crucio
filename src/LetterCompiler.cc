@@ -189,7 +189,7 @@ Compiler::Result LetterCompiler::compileFrom(const uint32_t i)
             if (compileFrom(i + 1) == Compiler::SUCCESS) {
                 return Compiler::SUCCESS;
             } else {
-
+                
                 // retires variable
                 retire(li, &remStack);
 
@@ -202,6 +202,11 @@ Compiler::Result LetterCompiler::compileFrom(const uint32_t i)
                     return Compiler::FAILURE_IMPOSSIBLE;
                 }
 #endif
+            }
+
+            // timeout check
+            if (isTimeout()) {
+                return Compiler::FAILURE_TIMEOUT;
             }
         }
 

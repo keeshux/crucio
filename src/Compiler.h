@@ -58,11 +58,11 @@ namespace crucio
         }
         
         // timeout constraint
-        void setTimeoutMillis(const unsigned timeoutMillis) {
-            m_timeoutMillis = timeoutMillis;
+        void setTimeoutSeconds(const unsigned timeoutSeconds) {
+            m_timeoutSeconds = timeoutSeconds;
         }
-        unsigned getTimeoutMillis() {
-            return m_timeoutMillis;
+        unsigned getTimeoutSeconds() {
+            return m_timeoutSeconds;
         }
 
         // algorithm execution
@@ -81,12 +81,16 @@ namespace crucio
         bool isTimeout() const
         {
             // 0 = no timeout
-            if (m_timeoutMillis == 0) {
+            if (m_timeoutSeconds == 0) {
                 return false;
             }
 
+            // elapsed millis so far
+            const time_t elapsedSeconds = time(NULL) - m_compileSeconds;
+            *crucio_vout << "elapsed seconds = " << elapsedSeconds << " (timeout = " << m_timeoutSeconds << ")" << std::endl;
+
             // timeout millis elapsed
-            return ((time(NULL) - m_compileMillis) > m_timeoutMillis);
+            return (elapsedSeconds > m_timeoutSeconds);
         }
 
     private:
@@ -111,8 +115,8 @@ namespace crucio
         // parameters
         bool m_unique;
         bool m_deterministic;
-        time_t m_compileMillis;
-        unsigned m_timeoutMillis;
+        time_t m_compileSeconds;
+        unsigned m_timeoutSeconds;
 
         // determinism check
         bool isDeterministicSolution() const;
