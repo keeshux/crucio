@@ -34,7 +34,8 @@ namespace crucio
             SUCCESS,
             FAILURE_IMPOSSIBLE,
             FAILURE_OVERCONSTRAINED,
-            FAILURE_ND_GRID
+            FAILURE_ND_GRID,
+            FAILURE_TIMEOUT
         };
 
         Compiler();
@@ -54,6 +55,14 @@ namespace crucio
         }
         bool isDeterministic() const {
             return m_deterministic;
+        }
+        
+        // timeout constraint
+        void setTimeoutMillis(const unsigned timeoutMillis) {
+            m_timeoutMillis = timeoutMillis;
+        }
+        unsigned getTimeoutMillis() {
+            return m_timeoutMillis;
         }
 
         // algorithm execution
@@ -88,6 +97,7 @@ namespace crucio
         // parameters
         bool m_unique;
         bool m_deterministic;
+        unsigned m_timeoutMillis;
 
         // determinism check
         bool isDeterministicSolution() const;
