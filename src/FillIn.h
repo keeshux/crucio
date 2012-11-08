@@ -158,6 +158,7 @@ namespace crucio
         }
 
         void layout();
+        void clear();
         Grid *createGrid() const;
         
         const Entry &getEntryAt(const unsigned i, const unsigned j) const

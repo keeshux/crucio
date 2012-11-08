@@ -202,6 +202,19 @@ void FillIn::layout()
     finishFilling();
 }
 
+void FillIn::clear()
+{
+    unsigned i, j;
+    
+    for (i = 0; i < m_structure.m_rows; ++i) {
+        for (j = 0; j < m_structure.m_columns; ++j) {
+            Entry &entry = getEntryAt(i, j);
+            entry.m_value = ENTRY_VAL_NONE;
+            entry.m_direction = ENTRY_DIR_NONE;
+        }
+    }
+}
+
 Grid *FillIn::createGrid() const
 {
     unsigned i, j;
