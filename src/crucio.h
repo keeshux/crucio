@@ -1,3 +1,8 @@
+//
+// Copyright (C) 2007 Davide De Rosa
+// License: http://www.gnu.org/licenses/gpl.html GPL version 3 or higher
+//
+
 #ifndef __CRUCIO_H
 #define __CRUCIO_H
 
