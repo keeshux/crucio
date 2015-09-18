@@ -137,7 +137,7 @@ bool Compiler::isDeterministicSolution() const
         }
 
         // computes chosen word index and gets related object
-        const uint32_t sWi = distance(solWords.begin(), swIt);
+        const uint32_t sWi = (uint32_t)distance(solWords.begin(), swIt);
         Word* const sw = solWords[sWi];
 
         // gets matchings object to reach domain only-value

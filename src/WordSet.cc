@@ -89,7 +89,7 @@ void WordSet::load(const vector<string>& words)
     for (uint32_t i = 0; i < m_cpBuckets; ++i) {
         const size_t length = cpEntries[i];
         IDArray* cpArray = (IDArray *) malloc(sizeof(IDArray) + length * sizeof(uint32_t));
-        cpArray->length = length;
+        cpArray->length = (uint32_t)length;
 
         // move to matrix
         m_cpMatrix[i] = cpArray;
@@ -190,7 +190,7 @@ WordSetIndex::WordSetIndex(const Alphabet alphabet, const uint32_t minLength, co
     m_maxLength(maxLength),
     m_wordSets(maxLength - minLength + 1)
 {
-    const uint32_t wsSize = m_wordSets.size();
+    const uint32_t wsSize = (uint32_t)m_wordSets.size();
     for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
         m_wordSets[wsi] = new WordSet(m_alphabet, getReverseHash(wsi));
     }
@@ -198,7 +198,7 @@ WordSetIndex::WordSetIndex(const Alphabet alphabet, const uint32_t minLength, co
 
 WordSetIndex::~WordSetIndex()
 {
-    const uint32_t wsSize = m_wordSets.size();
+    const uint32_t wsSize = (uint32_t)m_wordSets.size();
     for (uint32_t wsi = 0; wsi < wsSize; ++wsi) {
         delete m_wordSets[wsi];
     }

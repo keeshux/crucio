@@ -13,7 +13,7 @@ using namespace std;
 bool SolutionMatcher::isMatchingExclusion(const string& pattern,
         const string& exclusion)
 {
-    const uint32_t len = pattern.length();
+    const uint32_t len = (uint32_t)pattern.length();
     for (uint32_t pos = 0; pos < len; ++pos) {
         if ((pattern[pos] != ANY_CHAR) &&
                 (pattern[pos] != exclusion[pos])) {

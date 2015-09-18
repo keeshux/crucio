@@ -316,7 +316,7 @@ bool WordCompiler::assign(const uint32_t wi,
 
             // excludes domain value (no need for rematch)
             set<uint32_t>* const slDom = &m_domains[slWi];
-            const uint32_t slDomOldCount = slDom->size();
+            const uint32_t slDomOldCount = (uint32_t)slDom->size();
             slw->exclude(excludedID);
             slDom->erase(excludedID);
 
@@ -324,7 +324,7 @@ bool WordCompiler::assign(const uint32_t wi,
             remStack->push(make_pair(slWi, excludedID));
 
             if (isVerbose()) {
-                const uint32_t slDomNewCount = slDom->size();
+                const uint32_t slDomNewCount = (uint32_t)slDom->size();
                 const uint32_t slDomRemCount = slDomOldCount - slDomNewCount;
 
                 if (slDomRemCount > 0) {
@@ -367,7 +367,7 @@ bool WordCompiler::assign(const uint32_t wi,
 
         // intersects domain saving removed values
         set<uint32_t>* const dDom = &m_domains[dWi];
-        const uint32_t dDomOldCount = dDom->size();
+        const uint32_t dDomOldCount = (uint32_t)dDom->size();
         const MatchingResult* const dRes = dw->getMatchingResult();
         set<uint32_t> dRemDom;
         dRes->saveIDsIntersection(dDom, &dRemDom);
@@ -379,7 +379,7 @@ bool WordCompiler::assign(const uint32_t wi,
         }
 
         if (isVerbose()) {
-            const uint32_t dDomNewCount = dDom->size();
+            const uint32_t dDomNewCount = (uint32_t)dDom->size();
             const uint32_t dDomRemCount = dDomOldCount - dDomNewCount;
 
             if (dDomRemCount > 0) {

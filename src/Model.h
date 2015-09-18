@@ -87,7 +87,7 @@ namespace crucio
 
         // letters
         uint32_t getLettersNum() const {
-            return m_letters.size();
+            return (uint32_t)m_letters.size();
         }
         const std::vector<Letter*>& getLetters() const {
             return m_letters;
@@ -104,7 +104,7 @@ namespace crucio
 
         // words
         uint32_t getWordsNum() const {
-            return m_words.size();
+            return (uint32_t)m_words.size();
         }
         const std::vector<Word*>& getWords() const {
             return m_words;

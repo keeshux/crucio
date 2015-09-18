@@ -201,7 +201,7 @@ namespace crucio
             const size_t max = std::distance(begin, end);
 
             I result = begin;
-            std::advance(result, randomNumber(0, max - 1));
+            std::advance(result, randomNumber(0, (unsigned)(max - 1)));
             return result;
         }
 

@@ -382,7 +382,7 @@ void Grid::initGrid(const char** charsGrid,
 
                         // creates definition details
                         acrossDef = new Definition(this,
-                                                   m_acrossDefinitions.size(),
+                                                   (uint32_t)m_acrossDefinitions.size(),
                                                    Definition::ACROSS, defNumber, defLength);
 
                         // puts definitions into vector
@@ -405,7 +405,7 @@ void Grid::initGrid(const char** charsGrid,
 
                         // creates definition details
                         downDef = new Definition(this,
-                                                 m_downDefinitions.size(),
+                                                 (uint32_t)m_downDefinitions.size(),
                                                  Definition::DOWN, defNumber, defLength);
 
                         // puts definitions into vector

@@ -354,9 +354,9 @@ Output::Output(istream& in) :
 
     // grid size and content
     in.read(numBuf, 4);
-    m_rows = bytesToLong(numBuf);
+    m_rows = (uint32_t)bytesToLong(numBuf);
     in.read(numBuf, 4);
-    m_columns = bytesToLong(numBuf);
+    m_columns = (uint32_t)bytesToLong(numBuf);
     const unsigned long gridSize = m_rows * m_columns;
     char* const gridBuf = new char[2 * gridSize];
     in.read(gridBuf, 2 * gridSize);
@@ -389,9 +389,9 @@ Output::Output(istream& in) :
         const unsigned short dir = bytesToShort(numBuf);
         const unsigned short number = bytesToShort(numBuf + 2);
         in.read(numBuf, 4);
-        i = bytesToLong(numBuf);
+        i = (uint32_t)bytesToLong(numBuf);
         in.read(numBuf, 4);
-        j = bytesToLong(numBuf);
+        j = (uint32_t)bytesToLong(numBuf);
         in.read(numBuf, 4);
         const unsigned long length = bytesToLong(numBuf);
         in.read(wordBuf, length);
@@ -529,7 +529,7 @@ void Output::printLatex(ostream& out,
         map<uint32_t, multiset<string> > wordsByLength;
         for (defIt = m_defsData.begin(); defIt != m_defsData.end(); ++defIt) {
             const string& str = defIt->getString();
-            const uint32_t len = str.length();
+            const uint32_t len = (uint32_t)str.length();
 
             // inserts word in subset
             if (wordsByLength.find(len) == wordsByLength.end()) {

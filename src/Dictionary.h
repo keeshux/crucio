@@ -126,7 +126,7 @@ namespace crucio
 
         // results
         uint32_t getSize() const {
-            return m_IDs.size();
+            return (uint32_t)m_IDs.size();
         }
         bool isEmpty() const {
             return m_IDs.empty();

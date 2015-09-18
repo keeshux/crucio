@@ -28,8 +28,8 @@ Model::Model(Dictionary* const d, const Grid* const g) :
 {
     // letters and words indexes
     int li, wi;
-    const int lettersNum = m_letters.size();
-    const int wordsNum = m_words.size();
+    const int lettersNum = (int)m_letters.size();
+    const int wordsNum = (int)m_words.size();
 
     // matrices indexes
     uint32_t i, j, pos;
@@ -320,7 +320,7 @@ Model::~Model()
 
 void Model::computeLetterDomains()
 {
-    const int wordsNum = m_words.size();
+    const int wordsNum = (int)m_words.size();
     int wi;
     uint32_t pos;
 
@@ -347,7 +347,7 @@ void Model::computeLetterDomains()
 // WARNING: very high memory usage
 void Model::computeWordDomains()
 {
-    const int wordsNum = m_words.size();
+    const int wordsNum = (int)m_words.size();
     int wi;
 
     // initial domains

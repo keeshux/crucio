@@ -75,7 +75,7 @@ void LanguageMatcher::loadWords(WordSetIndex* const wsIndex) const
 
             // put into same length set (create if non-existing)
             const size_t len = upperWord.length();
-            map<uint32_t, vector<string> >::iterator refSet = wordsets.find(upperWord.length());
+            map<uint32_t, vector<string> >::iterator refSet = wordsets.find((uint32_t)len);
             if (refSet == wordsets.end()) {
                 refSet = wordsets.insert(make_pair(len, vector<string>())).first;
             }
@@ -142,7 +142,7 @@ void LanguageMatcher::loadFilename(WordSetIndex* const wsIndex) const
 
         // checks word's length and format
         if (isValidWord(word)) {
-            const size_t len = word.length();
+            const uint32_t len = (uint32_t)word.length();
             ++wordCount[len];
         }
     }
@@ -167,7 +167,7 @@ void LanguageMatcher::loadFilename(WordSetIndex* const wsIndex) const
             for_each(word.begin(), word.end(), upper);
 
             // put into same length set (create if non-existing)
-            const size_t len = word.length();
+            const uint32_t len = (uint32_t)word.length();
             map<uint32_t, vector<string>* >::iterator refSet = wordSets.find(len);
             if (refSet == wordSets.end()) {
                 vector<string>* subwords = new vector<string>();
@@ -267,7 +267,7 @@ bool LanguageMatcher::getMatchings(WordSetIndex* const wsIndex,
     MatchingResult* const res = word->getMatchings();
     const set<uint32_t>& exclusions = word->getExclusions();
 
-    const uint32_t len = pattern.length();
+    const uint32_t len = (uint32_t)pattern.length();
 
     // initially empty result
     res->clear();

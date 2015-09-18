@@ -1049,7 +1049,7 @@ void FillIn::createDistribution(const unsigned min, const unsigned max, std::vec
     }
     
     // reserve adequate size
-    const unsigned size = p - buffer;
+    const size_t size = p - buffer;
     distribution->resize(size);
     //DDLog(@"distribution of length %d", *length);
 

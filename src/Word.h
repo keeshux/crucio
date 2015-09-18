@@ -53,12 +53,12 @@ namespace crucio
         }
         void set(const std::string& mask) {
             m_mask = mask;
-            m_wildcards = count(m_mask.begin(), m_mask.end(),
-                                ANY_CHAR);
+            m_wildcards = (uint32_t)count(m_mask.begin(), m_mask.end(),
+                                          ANY_CHAR);
         }
         void unset() {
             std::fill(m_mask.begin(), m_mask.end(), ANY_CHAR);
-            m_wildcards = m_mask.length();
+            m_wildcards = (uint32_t)m_mask.length();
         }
 
         // pattern I/O
