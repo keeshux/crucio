@@ -222,7 +222,7 @@ Grid *FillIn::createGrid() const
     return grid;
 }
 
-#pragma mark - Subproblems
+// Subproblems
 
 FillIn::Step::Step(const FillIn *fillIn, const CellAddress &cell, const EntryDirection direction) :
         m_fillIn(fillIn),
@@ -982,7 +982,7 @@ void FillIn::finishFilling()
     }
 }
 
-#pragma mark - Utilities
+// Utilities
 
 CellAddress FillIn::randomCellAddress() const
 {
@@ -992,7 +992,7 @@ CellAddress FillIn::randomCellAddress() const
     return cell;
 }
 
-#pragma mark - Words distribution
+// Words distribution
 
 void FillIn::createDistribution(const unsigned min, const unsigned max, std::vector<unsigned> *distribution)
 {
@@ -1062,7 +1062,7 @@ unsigned FillIn::randomWordLengthFromDistribution() const
     return m_distribution[m_randomizer() % m_distribution.size()];
 }
 
-#pragma mark - Output
+// Output
 
 ostream &operator<<(ostream &out, const FillIn &fillIn)
 {
