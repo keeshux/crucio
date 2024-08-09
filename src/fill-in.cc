@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     if (argc > 5) {
         seed = atoi(argv[5]);
     } else {
-        seed = time(NULL);
+        seed = (unsigned)time(NULL);
     }
     srand(seed);
     
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     }
 
     // deallocation
-    delete defCount;
+    delete[] defCount;
     delete grid;
     
     return 0;
